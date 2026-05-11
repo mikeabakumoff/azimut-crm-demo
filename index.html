@@ -625,10 +625,11 @@ tbody tr:hover td { background: var(--bg3); }
         <div style="font-size:10px;color:var(--text3)" id="user-role-label">Менеджер</div>
       </div>
       <!-- Role switcher dropdown (demo only) -->
-      <div id="role-menu" style="display:none;position:absolute;top:42px;right:0;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:6px;min-width:160px;z-index:50;box-shadow:0 8px 24px rgba(0,0,0,0.4)">
+      <div id="role-menu" style="display:none;position:absolute;top:42px;right:0;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:6px;min-width:180px;z-index:50;box-shadow:0 8px 24px rgba(0,0,0,0.4)">
         <div style="font-size:10px;color:var(--text3);padding:4px 8px 6px;text-transform:uppercase;letter-spacing:0.06em">Роль (демо)</div>
         <div class="role-opt" onclick="setRole('manager')">👤 Менеджер</div>
         <div class="role-opt" onclick="setRole('director')">👑 Директор</div>
+        <div class="role-opt" onclick="setRole('admin')" style="border-top:1px solid var(--border);margin-top:4px;padding-top:8px;color:var(--amber)">⚡ Администратор</div>
       </div>
     </div>
   </div>
@@ -712,6 +713,26 @@ tbody tr:hover td { background: var(--bg3); }
     <div class="nav-section">
       <div class="nav-item" id="nav-pipeline-item" style="display:none" onclick="goPage('pipeline')">
         <span class="nav-ico">📈</span><span id="nav-pipeline-lbl">Pipeline</span>
+      </div>
+      <!-- Admin-only section -->
+      <div id="nav-admin-section" style="display:none">
+        <div style="height:1px;background:var(--border);margin:4px 0 8px"></div>
+        <div style="font-size:10px;font-weight:600;color:var(--amber);text-transform:uppercase;letter-spacing:0.08em;padding:0 10px;margin-bottom:4px">Администратор</div>
+        <div class="nav-item" onclick="goPage('admin')" style="color:var(--amber)">
+          <span class="nav-ico">⚡</span><span id="nav-admin-lbl">Панель админа</span>
+        </div>
+        <div class="nav-item nav-sub" onclick="goPage('admin-reports')">
+          <span class="nav-ico">📊</span><span id="nav-reports-lbl">Все отчёты</span>
+        </div>
+        <div class="nav-item nav-sub" onclick="goPage('admin-users')">
+          <span class="nav-ico">👥</span><span id="nav-users-lbl">Пользователи</span>
+        </div>
+        <div class="nav-item nav-sub" onclick="goPage('admin-integrations')">
+          <span class="nav-ico">🔗</span><span id="nav-integr-lbl">Интеграции</span>
+        </div>
+        <div class="nav-item nav-sub" onclick="goPage('admin-logs')">
+          <span class="nav-ico">📋</span><span id="nav-logs-lbl">Логи действий</span>
+        </div>
       </div>
       <div class="nav-item" onclick="showToast('⚙️ Настройки...')">
         <span class="nav-ico">⚙️</span><span id="nav-settings">Настройки</span>
@@ -1142,6 +1163,150 @@ tbody tr:hover td { background: var(--bg3); }
             <div class="dash-card-head"><span>🔑 Сделки Аренда — по стадиям</span></div>
             <div class="dash-card-body" id="pl-rent-stages"></div>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── ADMIN DASHBOARD ────────────────────────────────────────────────── -->
+    <div id="page-admin" class="page">
+      <div class="page-head">
+        <div>
+          <div class="page-title">⚡ Панель администратора</div>
+          <div class="page-subtitle">Полный доступ · Abakumov Mikhail</div>
+        </div>
+      </div>
+      <div class="stats-row" style="grid-template-columns:repeat(5,1fr)">
+        <div class="stat-card amber"><div class="stat-icon amber">👥</div><div class="stat-label">Всего клиентов</div><div class="stat-value amber">247</div></div>
+        <div class="stat-card green"><div class="stat-icon green">💰</div><div class="stat-label">Pipeline Продажа</div><div class="stat-value green">$2.4M</div></div>
+        <div class="stat-card blue"><div class="stat-icon blue">🔑</div><div class="stat-label">Pipeline Аренда</div><div class="stat-value blue">฿138k</div></div>
+        <div class="stat-card red"><div class="stat-icon red">❌</div><div class="stat-label">Потеряно</div><div class="stat-value red">0</div></div>
+        <div class="stat-card green"><div class="stat-icon green">🏆</div><div class="stat-label">Закрыто (мес)</div><div class="stat-value green">$220k</div></div>
+      </div>
+      <div class="page-body">
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:12px">
+          <div class="dash-card" style="cursor:pointer" onclick="goPage('admin-reports')">
+            <div class="dash-card-head"><span>📊 Все отчёты</span><span style="font-size:11px;color:var(--text3)">открыть →</span></div>
+            <div style="padding:14px;font-size:12px;color:var(--text2);line-height:1.8">
+              Продажи · Аренда · Менеджеры<br>Источники лидов · Конверсия<br>Комиссии · Потери
+            </div>
+          </div>
+          <div class="dash-card" style="cursor:pointer" onclick="goPage('admin-users')">
+            <div class="dash-card-head"><span>👥 Пользователи</span><span style="font-size:11px;color:var(--text3)">открыть →</span></div>
+            <div id="admin-users-preview" style="padding:4px 0"></div>
+          </div>
+          <div class="dash-card" style="cursor:pointer" onclick="goPage('admin-integrations')">
+            <div class="dash-card-head"><span>🔗 Интеграции</span><span style="font-size:11px;color:var(--text3)">открыть →</span></div>
+            <div style="padding:14px;display:flex;flex-direction:column;gap:8px">
+              <div style="display:flex;justify-content:space-between;font-size:12px"><span>🅰️ Авито</span><span style="color:var(--green)">● Активен</span></div>
+              <div style="display:flex;justify-content:space-between;font-size:12px"><span>📘 Facebook</span><span style="color:var(--green)">● Активен</span></div>
+              <div style="display:flex;justify-content:space-between;font-size:12px"><span>✈️ Telegram</span><span style="color:var(--green)">● Активен</span></div>
+              <div style="display:flex;justify-content:space-between;font-size:12px"><span>🌐 Сайт</span><span style="color:var(--red)">● Не настроен</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="dash-card" style="cursor:pointer" onclick="goPage('admin-logs')">
+          <div class="dash-card-head"><span>📋 Последние действия в системе</span><span style="font-size:11px;color:var(--text3)">открыть →</span></div>
+          <div id="admin-logs-preview"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── ADMIN REPORTS ───────────────────────────────────────────────────── -->
+    <div id="page-admin-reports" class="page">
+      <div class="page-head">
+        <div><div class="page-title">📊 Все отчёты</div><div class="page-subtitle">Полная аналитика системы</div></div>
+      </div>
+      <div class="stats-row" style="grid-template-columns:repeat(4,1fr)">
+        <div class="stat-card green"><div class="stat-icon green">💰</div><div class="stat-label">Выручка (месяц)</div><div class="stat-value green">$220k</div><div class="stat-sub">+18% vs прошлый</div></div>
+        <div class="stat-card blue"><div class="stat-icon blue">📥</div><div class="stat-label">Заявок получено</div><div class="stat-value blue">47</div><div class="stat-sub">Авито 21 · FB 14 · TG 12</div></div>
+        <div class="stat-card amber"><div class="stat-icon amber">🔄</div><div class="stat-label">Конверсия</div><div class="stat-value amber">23%</div><div class="stat-sub">заявка → сделка</div></div>
+        <div class="stat-card red"><div class="stat-icon red">💸</div><div class="stat-label">Комиссий ожидается</div><div class="stat-value red">2</div><div class="stat-sub">договор без оплаты</div></div>
+      </div>
+      <div class="page-body">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div class="dash-card">
+            <div class="dash-card-head"><span>📈 Заявки по источникам</span></div>
+            <div id="rep-sources"></div>
+          </div>
+          <div class="dash-card">
+            <div class="dash-card-head"><span>👤 Эффективность менеджеров</span></div>
+            <div id="rep-managers"></div>
+          </div>
+          <div class="dash-card">
+            <div class="dash-card-head"><span>💰 Сделки Продажа — по стадиям</span></div>
+            <div id="rep-sale-stages"></div>
+          </div>
+          <div class="dash-card">
+            <div class="dash-card-head"><span>🔑 Сделки Аренда — по стадиям</span></div>
+            <div id="rep-rent-stages"></div>
+          </div>
+          <div class="dash-card">
+            <div class="dash-card-head"><span>❌ Причины потерь</span></div>
+            <div id="rep-lost"></div>
+          </div>
+          <div class="dash-card">
+            <div class="dash-card-head"><span>💵 Комиссии</span></div>
+            <div id="rep-commissions"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── ADMIN USERS ─────────────────────────────────────────────────────── -->
+    <div id="page-admin-users" class="page">
+      <div class="page-head">
+        <div><div class="page-title">👥 Пользователи системы</div><div class="page-subtitle">Управление доступом</div></div>
+        <div class="head-actions">
+          <button class="btn primary" onclick="showToast('➕ Добавить пользователя')">+ Добавить</button>
+        </div>
+      </div>
+      <div class="page-body" style="padding-top:16px">
+        <div class="table-card">
+          <table><thead><tr>
+            <th>Пользователь</th><th>Роль</th><th>Сделок</th><th>Клиентов</th><th>Статус</th><th></th>
+          </tr></thead>
+          <tbody id="admin-users-table"></tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── ADMIN INTEGRATIONS ─────────────────────────────────────────────── -->
+    <div id="page-admin-integrations" class="page">
+      <div class="page-head">
+        <div><div class="page-title">🔗 Интеграции</div><div class="page-subtitle">Управление подключениями к площадкам</div></div>
+      </div>
+      <div class="page-body" style="padding-top:16px">
+        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px">
+          ${['🅰️ Авито|avito|Активен|green|12 объявлений · 21 заявка этот месяц',
+             '📘 Facebook Marketplace|fb|Активен|green|8 объявлений · 14 заявок',
+             '✈️ Telegram Bot|tg|Активен|green|Бот @azimut_realty_bot · 12 подписчиков',
+             '🌐 Сайт azimut.asia|site|Не настроен|red|Webhook не настроен'].map(s => {
+               const [ico, cls, status, color, detail] = s.split('|');
+               return `<div class="dash-card"><div style="padding:14px">
+                 <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+                   <span style="font-size:24px">${ico.split(' ')[0]}</span>
+                   <div><div style="font-weight:500;font-size:14px">${ico.split(' ').slice(1).join(' ')}</div>
+                   <div style="font-size:12px;color:var(--${color})">● ${status}</div></div>
+                   <button class="btn sm" style="margin-left:auto" onclick="showToast('⚙️ Настройки ${ico}')">${color==='green'?'Настроить':'Подключить'}</button>
+                 </div>
+                 <div style="font-size:12px;color:var(--text2)">${detail}</div>
+               </div></div>`;
+             }).join('')}
+        </div>
+      </div>
+    </div>
+
+    <!-- ── ADMIN LOGS ──────────────────────────────────────────────────────── -->
+    <div id="page-admin-logs" class="page">
+      <div class="page-head">
+        <div><div class="page-title">📋 Лог действий</div><div class="page-subtitle">История операций всех пользователей</div></div>
+      </div>
+      <div class="page-body" style="padding-top:16px">
+        <div class="table-card">
+          <table><thead><tr>
+            <th>Время</th><th>Пользователь</th><th>Действие</th><th>Объект</th>
+          </tr></thead>
+          <tbody id="admin-logs-table"></tbody></table>
         </div>
       </div>
     </div>
@@ -1797,27 +1962,47 @@ function renderSaleClients() {
 }
 
 // ── ROLE SYSTEM ───────────────────────────────────────────────────────────────
-let currentRole = 'manager'; // 'manager' | 'director'
+let currentRole = 'admin'; // Михаил — администратор
 
 function setRole(role) {
   currentRole = role;
-  currentRole = role;
   document.getElementById('role-menu').style.display = 'none';
+
+  const labels = { manager:'Менеджер', director:'Директор', admin:'Администратор' };
+  const labelsEn = { manager:'Manager', director:'Director', admin:'Admin' };
+  const labelsTh = { manager:'ผู้จัดการ', director:'ผู้อำนวยการ', admin:'แอดมิน' };
   document.getElementById('user-role-label').textContent =
-    role === 'director' ? (lang==='ru'?'Директор':lang==='th'?'ผู้อำนวยการ':'Director')
-                       : (lang==='ru'?'Менеджер':lang==='th'?'ผู้จัดการ':'Manager');
-  // Show/hide Pipeline nav item
+    lang==='th' ? labelsTh[role] : lang==='en' ? labelsEn[role] : labels[role];
+
+  // Avatar color by role
+  const avatar = document.querySelector('.user-avatar');
+  if (avatar) {
+    avatar.style.background =
+      role === 'admin'    ? 'linear-gradient(135deg,#F59E0B,#EF4444)' :
+      role === 'director' ? 'linear-gradient(135deg,#10B981,#3B82F6)' :
+                            'linear-gradient(135deg,var(--blue),#6366F1)';
+  }
+
+  // Pipeline: visible for director + admin
   const pipelineItem = document.getElementById('nav-pipeline-item');
-  pipelineItem.style.display = role === 'director' ? 'flex' : 'none';
-  // If director — highlight with subtle indicator
-  if (role === 'director') {
+  const showPipeline = role === 'director' || role === 'admin';
+  pipelineItem.style.display = showPipeline ? 'flex' : 'none';
+  if (showPipeline) {
     pipelineItem.style.background = 'rgba(52,211,153,0.08)';
     pipelineItem.style.borderRadius = 'var(--radius)';
-    pipelineItem.querySelector('span:last-child').style.color = 'var(--green)';
+    document.getElementById('nav-pipeline-lbl').style.color = 'var(--green)';
   }
-  showToast(role === 'director'
-    ? '👑 Режим: Директор — Pipeline доступен'
-    : '👤 Режим: Менеджер — Pipeline скрыт');
+
+  // Admin section: visible only for admin
+  const adminSection = document.getElementById('nav-admin-section');
+  adminSection.style.display = role === 'admin' ? 'block' : 'none';
+
+  const toasts = {
+    manager: '👤 Режим: Менеджер',
+    director: '👑 Режим: Директор — Pipeline доступен',
+    admin: '⚡ Режим: Администратор — полный доступ'
+  };
+  showToast(toasts[role]);
 }
 
 function toggleRoleMenu() {
@@ -1831,7 +2016,128 @@ document.addEventListener('click', e => {
   if (!chip) document.getElementById('role-menu').style.display = 'none';
 });
 
-// ── RENDER PIPELINE ───────────────────────────────────────────────────────────
+// ── RENDER ADMIN ──────────────────────────────────────────────────────────────
+const adminUsers = [
+  { name:'Абакумов Михаил', role:'admin',    deals:9,  clients:10, active:true  },
+  { name:'Алина Козлова',   role:'manager',  deals:5,  clients:6,  active:true  },
+  { name:'Наталья С.',      role:'manager',  deals:3,  clients:5,  active:true  },
+  { name:'Иван Петров',     role:'director', deals:0,  clients:0,  active:false },
+];
+
+const adminLogs = [
+  { time:'02.05 11:42', user:'Абакумов М.', action:'Создана сделка',          obj:'Вилла → Chen Wei' },
+  { time:'02.05 11:30', user:'Козлова А.',  action:'Добавлен клиент',         obj:'Андрей Козлов (Аренда)' },
+  { time:'02.05 10:55', user:'Абакумов М.', action:'Заявка конвертирована',   obj:'Emma Thompson → Клиент' },
+  { time:'02.05 10:20', user:'Наталья С.',  action:'Сделка перемещена',       obj:'Апарт. → Mitchell: Переговоры' },
+  { time:'01.05 18:34', user:'Козлова А.',  action:'Клиент отложен',          obj:'Дмитрий Орлов до 15.06' },
+  { time:'01.05 17:10', user:'Абакумов М.', action:'Договор сохранён',        obj:'Таунхаус → Müller' },
+  { time:'01.05 16:00', user:'Наталья С.',  action:'Задача выполнена',        obj:'Показ виллы Anderson' },
+  { time:'01.05 14:22', user:'Абакумов М.', action:'Удалена заявка',          obj:'[Авито] Неизвестный' },
+];
+
+function renderAdminDashboard() {
+  // Users preview
+  const up = document.getElementById('admin-users-preview');
+  if (up) up.innerHTML = adminUsers.map(u => `
+    <div class="dash-row">
+      <div class="avatar" style="width:24px;height:24px;font-size:10px">${u.name.split(' ').map(w=>w[0]).join('').slice(0,2)}</div>
+      <div class="dash-row-info"><div class="dash-row-title" style="font-size:12px">${u.name}</div></div>
+      <div><span class="badge ${u.role==='admin'?'hot':u.role==='director'?'active':'new'}" style="font-size:10px">${u.role==='admin'?'⚡ Админ':u.role==='director'?'👑 Директор':'👤 Менеджер'}</span></div>
+    </div>`).join('');
+
+  // Logs preview
+  const lp = document.getElementById('admin-logs-preview');
+  if (lp) lp.innerHTML = adminLogs.slice(0,4).map(l => `
+    <div class="dash-row">
+      <div style="font-size:11px;color:var(--text3);font-family:var(--mono);flex-shrink:0;width:80px">${l.time}</div>
+      <div class="dash-row-info"><div class="dash-row-title" style="font-size:12px">${l.action}</div><div class="dash-row-sub">${l.obj}</div></div>
+      <div style="font-size:11px;color:var(--text2)">${l.user}</div>
+    </div>`).join('');
+}
+
+function renderAdminReports() {
+  const sourceData = [
+    { src:'🅰️ Авито', cnt:21, pct:45 }, { src:'📘 Facebook', cnt:14, pct:30 },
+    { src:'✈️ Telegram', cnt:12, pct:25 }, { src:'🌐 Сайт', cnt:0, pct:0 },
+  ];
+  const managersData = [
+    { name:'Абакумов М.', deals:9, closed:2, conv:'22%' },
+    { name:'Козлова А.',  deals:5, closed:1, conv:'20%' },
+    { name:'Наталья С.',  deals:3, closed:0, conv:'0%'  },
+  ];
+  const stagesLabel = { new_lead:'Новая заявка', negotiation:'Переговоры', offer:'Предложение', viewing:'Просмотр', contract:'Договор', closed_won:'Закрыто' };
+
+  const el = (id) => document.getElementById(id);
+
+  if (el('rep-sources')) el('rep-sources').innerHTML = sourceData.map(s => `
+    <div class="dash-row">
+      <div class="dash-row-info"><div class="dash-row-title">${s.src}</div></div>
+      <div style="flex:1;margin:0 12px">
+        <div style="height:6px;background:var(--bg3);border-radius:4px;overflow:hidden">
+          <div style="height:100%;width:${s.pct}%;background:var(--blue);border-radius:4px;transition:width 0.4s"></div>
+        </div>
+      </div>
+      <div style="font-size:12px;font-weight:600;font-family:var(--mono);width:30px;text-align:right">${s.cnt}</div>
+    </div>`).join('');
+
+  if (el('rep-managers')) el('rep-managers').innerHTML = managersData.map(m => `
+    <div class="dash-row">
+      <div class="avatar" style="width:24px;height:24px;font-size:10px">${m.name.split(' ').map(w=>w[0]).join('').slice(0,2)}</div>
+      <div class="dash-row-info"><div class="dash-row-title">${m.name}</div><div class="dash-row-sub">${m.deals} сделок · закрыто ${m.closed}</div></div>
+      <div><span class="badge new" style="font-size:11px">${m.conv}</span></div>
+    </div>`).join('');
+
+  ['sale','rent'].forEach(type => {
+    const deals = dealsData[type];
+    const byStage = {};
+    deals.forEach(d => { if(d.stage!=='lost') byStage[d.stage] = (byStage[d.stage]||0)+1; });
+    const repEl = el(`rep-${type}-stages`);
+    if (repEl) repEl.innerHTML = Object.entries(byStage).map(([stage,cnt]) => `
+      <div class="dash-row">
+        <div class="dash-row-info"><div class="dash-row-title">${stagesLabel[stage]||stage}</div></div>
+        <span class="badge new" style="font-size:11px">${cnt}</span>
+      </div>`).join('') || '<div style="padding:16px;color:var(--text3);font-size:12px;text-align:center">Нет данных</div>';
+  });
+
+  if (el('rep-lost')) el('rep-lost').innerHTML =
+    '<div style="padding:16px;color:var(--text3);font-size:12px;text-align:center">Нет потерянных сделок</div>';
+
+  if (el('rep-commissions')) el('rep-commissions').innerHTML = [...dealsData.sale,...dealsData.rent]
+    .filter(d=>d.contract).map(d => `
+      <div class="dash-row">
+        <div class="dash-row-info"><div class="dash-row-title" style="font-size:12px">${d.t}</div><div class="dash-row-sub">${d.contract?.commission||'—'}</div></div>
+        <span class="badge ${d.contract?.commReceived===true?'active':d.contract?.commReceived===false?'warm':'new'}" style="font-size:10px">
+          ${d.contract?.commReceived===true?'✓ Получена':d.contract?.commReceived===false?'⏳ Ожидается':'📄 В работе'}
+        </span>
+      </div>`).join('') || '<div style="padding:16px;color:var(--text3);font-size:12px;text-align:center">Нет договоров</div>';
+}
+
+function renderAdminUsers() {
+  const roleLabel = { admin:'⚡ Администратор', director:'👑 Директор', manager:'👤 Менеджер' };
+  const el = document.getElementById('admin-users-table');
+  if (!el) return;
+  el.innerHTML = adminUsers.map(u => `<tr>
+    <td><div class="flex-cell"><div class="avatar">${u.name.split(' ').map(w=>w[0]).join('').slice(0,2)}</div><span style="font-weight:500">${u.name}</span></div></td>
+    <td><span class="badge ${u.role==='admin'?'hot':u.role==='director'?'active':'new'}">${roleLabel[u.role]}</span></td>
+    <td style="font-family:var(--mono)">${u.deals}</td>
+    <td style="font-family:var(--mono)">${u.clients}</td>
+    <td><span class="badge ${u.active?'active':'cold'}">${u.active?'● Активен':'○ Неактивен'}</span></td>
+    <td><button class="btn sm ghost" onclick="showToast('✏️ Редактировать: ${u.name}')">✏️</button></td>
+  </tr>`).join('');
+}
+
+function renderAdminLogs() {
+  const el = document.getElementById('admin-logs-table');
+  if (!el) return;
+  el.innerHTML = adminLogs.map(l => `<tr>
+    <td style="font-size:11px;font-family:var(--mono);color:var(--text3)">${l.time}</td>
+    <td style="font-size:12px;color:var(--text2)">${l.user}</td>
+    <td style="font-weight:500">${l.action}</td>
+    <td style="font-size:12px;color:var(--text2)">${l.obj}</td>
+  </tr>`).join('');
+}
+
+
 function renderPipeline() {
   const stageLabels = {
     new_lead:'Новая заявка', negotiation:'Переговоры', offer:'Предложение',
@@ -2438,8 +2744,16 @@ function goPage(name) {
   if (name === 'properties-sale' || name === 'properties-rent') renderProperties();
   if (name === 'deals-sale' || name === 'deals-rent') renderKanban();
   if (name === 'pipeline') {
-    if (currentRole !== 'director') { showToast('🔒 Доступ только для директора'); return; }
+    if (currentRole === 'manager') { showToast('🔒 Доступ только для директора и выше'); return; }
     renderPipeline();
+  }
+  if (name === 'admin' || name === 'admin-reports' || name === 'admin-users' ||
+      name === 'admin-integrations' || name === 'admin-logs') {
+    if (currentRole !== 'admin') { showToast('🔒 Доступ только для администратора'); return; }
+    if (name === 'admin')              renderAdminDashboard();
+    if (name === 'admin-reports')      renderAdminReports();
+    if (name === 'admin-users')        renderAdminUsers();
+    if (name === 'admin-logs')         renderAdminLogs();
   }
 }
 
@@ -2597,7 +2911,8 @@ function openClientModal(dealType) {
 
 // ── INIT ──────────────────────────────────────────────────────────────────────
 renderSidebar();
-renderRentClients();
+// Михаил — администратор по умолчанию
+setRole('admin');
 renderSaleClients();
 renderProperties();
 renderKanban();
