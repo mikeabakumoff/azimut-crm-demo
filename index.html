@@ -953,18 +953,19 @@ tbody tr:hover td { background: var(--bg3); }
     </div>
 
     <!-- ── DEALS SALE ─────────────────────────────────────────────────────── -->
+    <!-- ── DEALS SALE ─────────────────────────────────────────────────────── -->
     <div id="page-deals-sale" class="page">
       <div class="page-head">
         <div>
-          <div class="page-title" id="pt-deals-sale">Сделки — Продажа</div>
-          <div class="page-subtitle">Pipeline $2.4M</div>
+          <div class="page-title">💰 Сделки — Продажа</div>
+          <div class="page-subtitle" id="sub-deals-sale">Pipeline $2.4M</div>
         </div>
         <div class="head-actions">
-          <button class="btn primary" onclick="openModal('deal-modal')" id="btn-add-deal-s">+ Новая сделка</button>
+          <button class="btn primary" onclick="openNewDeal('sale')">+ Новая сделка</button>
         </div>
       </div>
       <div class="kanban-wrap">
-        <div class="kanban-board" id="kanban-board-sale"></div>
+        <div class="kanban-board" id="kanban-board-sale" style="grid-template-columns:repeat(6,minmax(190px,1fr))"></div>
       </div>
     </div>
 
@@ -972,15 +973,15 @@ tbody tr:hover td { background: var(--bg3); }
     <div id="page-deals-rent" class="page">
       <div class="page-head">
         <div>
-          <div class="page-title" id="pt-deals-rent">Сделки — Аренда</div>
-          <div class="page-subtitle">14 активных сделок</div>
+          <div class="page-title">🔑 Сделки — Аренда</div>
+          <div class="page-subtitle" id="sub-deals-rent">14 активных сделок</div>
         </div>
         <div class="head-actions">
-          <button class="btn primary" onclick="openModal('deal-modal')" id="btn-add-deal-r">+ Новая сделка</button>
+          <button class="btn primary" onclick="openNewDeal('rent')">+ Новая сделка</button>
         </div>
       </div>
       <div class="kanban-wrap">
-        <div class="kanban-board" id="kanban-board-rent"></div>
+        <div class="kanban-board" id="kanban-board-rent" style="grid-template-columns:repeat(6,minmax(190px,1fr))"></div>
       </div>
     </div>
 
@@ -1351,6 +1352,115 @@ tbody tr:hover td { background: var(--bg3); }
     <div class="modal-footer">
       <button class="btn" onclick="closeModal('deferred-modal')">Отмена</button>
       <button class="btn primary" onclick="saveDeferred()">⏸️ Отложить</button>
+    </div>
+  </div>
+</div>
+
+      <button class="btn" onclick="closeModal('deferred-modal')">Отмена</button>
+      <button class="btn primary" onclick="saveDeferred()">⏸️ Отложить</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── CONTRACT MODAL ────────────────────────────────────────────────────── -->
+<div class="modal-overlay" id="contract-modal">
+  <div class="modal" style="width:500px">
+    <div class="modal-head">
+      <div class="modal-title">📄 Договор</div>
+      <div class="modal-close" onclick="closeModal('contract-modal')">✕</div>
+    </div>
+    <div id="contract-deal-info" style="background:var(--bg3);border-radius:var(--radius);padding:10px 12px;margin-bottom:16px;font-size:13px;font-weight:500"></div>
+    <div style="font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px">Условия договора</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Комиссия</label>
+        <input id="contract-commission" type="text" placeholder="3% или 150,000 ฿">
+      </div>
+      <div class="form-group">
+        <label>Сумма бронирования</label>
+        <input id="contract-booking" type="text" placeholder="50,000 ฿">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Порядок расчёта</label>
+      <textarea id="contract-payment" rows="2" placeholder="50% при подписании, 50% при передаче ключей"></textarea>
+    </div>
+    <div style="height:1px;background:var(--border);margin:14px 0"></div>
+    <div style="font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px">Статус комиссии</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
+      <button id="comm-yes-btn" class="btn" style="padding:14px;font-size:14px;border-radius:var(--radius-lg)" onclick="setCommissionStatus(true)">
+        ✅ Да, получена
+      </button>
+      <button id="comm-no-btn" class="btn" style="padding:14px;font-size:14px;border-radius:var(--radius-lg)" onclick="setCommissionStatus(false)">
+        ⏳ Нет, не получена
+      </button>
+    </div>
+    <div id="contract-comm-hint" style="font-size:12px;color:var(--text2);padding:10px 12px;background:var(--bg3);border-radius:var(--radius);display:none;line-height:1.5"></div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('contract-modal')">Отмена</button>
+      <button class="btn primary" onclick="saveContract()">💾 Сохранить</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── LOST DEAL MODAL ───────────────────────────────────────────────────── -->
+<div class="modal-overlay" id="lost-modal">
+  <div class="modal" style="width:460px">
+    <div class="modal-head">
+      <div class="modal-title">❌ Сделка потеряна</div>
+      <div class="modal-close" onclick="closeModal('lost-modal')">✕</div>
+    </div>
+    <div id="lost-deal-info" style="background:var(--red-bg);border-radius:var(--radius);padding:10px 12px;margin-bottom:14px;font-size:13px;font-weight:500;color:var(--red)"></div>
+    <div class="form-group">
+      <label>На каком этапе потеряна *</label>
+      <select id="lost-stage" style="width:100%;padding:8px 11px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);font-size:13px;color:var(--text);font-family:var(--font)">
+        <option value="">— Выбрать этап —</option>
+        <option value="new_lead">Новая заявка</option>
+        <option value="negotiation">Переговоры</option>
+        <option value="offer">Предложение</option>
+        <option value="viewing">Просмотр</option>
+        <option value="contract">Договор</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Причина потери *</label>
+      <select id="lost-reason-sel" onchange="onLostReasonChange()" style="width:100%;padding:8px 11px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);font-size:13px;color:var(--text);font-family:var(--font);margin-bottom:8px">
+        <option value="">— Выбрать причину —</option>
+        <option>Нашёл другой объект</option>
+        <option>Не устроила цена</option>
+        <option>Изменились планы</option>
+        <option>Перестал выходить на связь</option>
+        <option>Ушёл к другому агентству</option>
+        <option>Другое</option>
+      </select>
+      <textarea id="lost-reason-text" rows="2" placeholder="Подробнее..." style="width:100%;padding:8px 11px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);font-size:13px;color:var(--text);font-family:var(--font);resize:none"></textarea>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('lost-modal')">Отмена</button>
+      <button class="btn" style="background:var(--red-bg);color:var(--red);border-color:transparent" onclick="saveLostDeal()">❌ Подтвердить</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── DEAL CARD MODAL ───────────────────────────────────────────────────── -->
+<div class="modal-overlay" id="deal-card-modal">
+  <div class="modal" style="width:460px">
+    <div class="modal-head">
+      <div class="modal-title" id="dcm-title">Сделка</div>
+      <div class="modal-close" onclick="closeModal('deal-card-modal')">✕</div>
+    </div>
+    <div id="dcm-info" style="background:var(--bg3);border-radius:var(--radius);padding:12px 14px;margin-bottom:16px">
+      <div style="font-size:12px;color:var(--text2)" id="dcm-client"></div>
+      <div style="font-size:15px;font-weight:600;font-family:var(--mono);color:var(--blue);margin-top:4px" id="dcm-price"></div>
+    </div>
+    <div style="font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px">Перенести на стадию</div>
+    <div id="dcm-stages" style="display:flex;flex-direction:column;gap:6px"></div>
+    <div style="height:1px;background:var(--border);margin:14px 0"></div>
+    <div id="dcm-lost-btn-wrap">
+      <button class="btn" style="width:100%;background:var(--red-bg);color:var(--red);border-color:transparent" onclick="openLostFromCard()">❌ Отметить как потерянную</button>
+    </div>
+    <div class="modal-footer" style="margin-top:12px">
+      <button class="btn" onclick="closeModal('deal-card-modal')">Закрыть</button>
     </div>
   </div>
 </div>
@@ -1729,34 +1839,294 @@ const kanbanDataRent = {
   'closed_lost':{label:()=>(lang==='ru'?'Потеряно':lang==='th'?'สูญเสีย':'Lost'), deals:[]},
 };
 
-function renderKanbanBoard(data, containerId) {
+// ── DEALS DATA ────────────────────────────────────────────────────────────────
+let dealsData = {
+  sale: [
+    { id:1, t:'Вилла → Chen Wei',   c:'Chen Wei',     p:'$850,000', d:'01.05', stage:'new_lead',    dealType:'sale' },
+    { id:2, t:'Кондо → Петров',     c:'А. Петров',    p:'$320,000', d:'02.05', stage:'negotiation', dealType:'sale' },
+    { id:3, t:'Вилла → Anderson',   c:'J. Anderson',  p:'$450,000', d:'30.04', stage:'offer',       dealType:'sale' },
+    { id:4, t:'Таунхаус → Müller',  c:'A. Müller',    p:'$290,000', d:'25.04', stage:'contract',    dealType:'sale',
+      contract:{ commission:'3%', booking:'฿50,000', payment:'50% при подписании, 50% ключи', commReceived:null } },
+    { id:5, t:'Кондо → Wang',       c:'Wang Lei',     p:'$220,000', d:'15.04', stage:'closed_won',  dealType:'sale' },
+  ],
+  rent: [
+    { id:6,  t:'Студия → Козлов',   c:'А. Козлов',    p:'฿25k/мес', d:'02.05', stage:'new_lead',    dealType:'rent' },
+    { id:7,  t:'Апарт. → Mitchell', c:'S. Mitchell',  p:'$600/мес', d:'01.05', stage:'negotiation', dealType:'rent' },
+    { id:8,  t:'Вилла → Смирнова',  c:'Н. Смирнова',  p:'฿80k/мес', d:'28.04', stage:'viewing',     dealType:'rent' },
+    { id:9,  t:'Кондо → Kaew',      c:'S. Kaew',      p:'฿18k/мес', d:'03.05', stage:'contract',    dealType:'rent',
+      contract:{ commission:'฿8,000', booking:'฿36,000', payment:'Депозит 2 мес + 1 мес вперёд', commReceived:null } },
+    { id:10, t:'Студия → Орлов',    c:'Д. Орлов',     p:'฿15k/мес', d:'20.04', stage:'closed_won',  dealType:'rent' },
+  ]
+};
+
+// Stages config: id, label fn, color, icon
+const STAGES_SALE = [
+  { id:'new_lead',    label:()=>lang==='ru'?'Новая заявка':lang==='th'?'ลีดใหม่':'New Lead',       icon:'📥', color:'var(--blue)' },
+  { id:'negotiation', label:()=>lang==='ru'?'Переговоры':lang==='th'?'เจรจา':'Negotiation',         icon:'🗣️', color:'var(--amber)' },
+  { id:'offer',       label:()=>lang==='ru'?'Предложение':lang==='th'?'เสนอราคา':'Offer',            icon:'📋', color:'var(--purple)' },
+  { id:'viewing',     label:()=>lang==='ru'?'Просмотр':lang==='th'?'ดูสถานที่':'Viewing',            icon:'👁️', color:'#F472B6' },
+  { id:'contract',    label:()=>lang==='ru'?'Договор':lang==='th'?'สัญญา':'Contract',                icon:'📄', color:'var(--green)' },
+  { id:'closed_won',  label:()=>lang==='ru'?'Закрыто ✓':lang==='th'?'ปิดได้':'Closed Won',           icon:'🏆', color:'var(--green)' },
+];
+const STAGES_RENT = [
+  { id:'new_lead',    label:()=>lang==='ru'?'Новая заявка':lang==='th'?'ลีดใหม่':'New Lead',         icon:'📥', color:'var(--blue)' },
+  { id:'negotiation', label:()=>lang==='ru'?'Переговоры':lang==='th'?'เจรจา':'Negotiation',           icon:'🗣️', color:'var(--amber)' },
+  { id:'offer',       label:()=>lang==='ru'?'Предложение':lang==='th'?'เสนอราคา':'Offer',              icon:'📋', color:'var(--purple)' },
+  { id:'viewing',     label:()=>lang==='ru'?'Просмотр':lang==='th'?'ดูสถานที่':'Viewing',              icon:'👁️', color:'#F472B6' },
+  { id:'contract',    label:()=>lang==='ru'?'Договор':lang==='th'?'สัญญา':'Contract',                  icon:'📄', color:'var(--green)' },
+  { id:'closed_won',  label:()=>lang==='ru'?'Закрыто ✓':lang==='th'?'ปิดได้':'Closed Won',             icon:'🏆', color:'var(--green)' },
+];
+
+let activeDeal = null; // currently open deal for modals
+let commissionStatus = null;
+
+function renderKanbanBoard(deals, stages, containerId) {
   const el = document.getElementById(containerId);
   if (!el) return;
-  const cls = { closed_won:'won', closed_lost:'lost' };
-  el.innerHTML = Object.entries(data).map(([key, col]) => `
-    <div class="kanban-col ${cls[key]||''}">
-      <div class="kanban-head">
-        <span class="kanban-stage">${col.label()}</span>
-        <span class="kanban-cnt">${col.deals.length}</span>
+
+  // Count lost deals
+  const lostDeals = deals.filter(d => d.stage === 'lost');
+
+  const stageHtml = stages.map(stage => {
+    const stageDeals = deals.filter(d => d.stage === stage.id);
+    return `
+      <div class="kanban-col">
+        <div class="kanban-head" style="border-top:2px solid ${stage.color}">
+          <span class="kanban-stage">${stage.icon} ${stage.label()}</span>
+          <span class="kanban-cnt">${stageDeals.length}</span>
+        </div>
+        <div class="kanban-cards">
+          ${stageDeals.map(d => dealCardHtml(d, stage)).join('')}
+        </div>
+      </div>`;
+  }).join('');
+
+  // Lost column — only if has deals
+  const lostHtml = lostDeals.length > 0 ? `
+    <div class="kanban-col lost">
+      <div class="kanban-head" style="border-top:2px solid var(--red)">
+        <span class="kanban-stage">❌ ${lang==='ru'?'Потеряно':lang==='th'?'สูญเสีย':'Lost'}</span>
+        <span class="kanban-cnt" style="background:var(--red-bg);color:var(--red)">${lostDeals.length}</span>
       </div>
       <div class="kanban-cards">
-        ${col.deals.map(d=>`
-          <div class="deal-card" onclick="showToast('💼 ${d.t}')">
+        ${lostDeals.map(d => `
+          <div class="deal-card" style="border-color:rgba(248,113,113,0.3);opacity:0.75" onclick="openDealCard(${d.id})">
             <div class="deal-card-title">${d.t}</div>
             <div class="deal-card-client">${d.c}</div>
-            <div class="deal-card-price">${d.p}</div>
-            <div class="deal-card-footer">
-              <span class="deal-card-date">${d.d}</span>
-              <span class="deal-card-avatar">${d.c[0]}</span>
+            <div style="font-size:11px;color:var(--red);margin-top:4px">
+              ${d.lostStage ? '⚠ '+stageLabel(d.lostStage) : ''}<br>
+              ${d.lostReason ? '📝 '+d.lostReason : ''}
             </div>
           </div>`).join('')}
       </div>
-    </div>`).join('');
+    </div>` : '';
+
+  el.innerHTML = stageHtml + lostHtml;
+}
+
+function dealCardHtml(d, stage) {
+  const contractBadge = d.contract ? (d.contract.commReceived === true
+    ? `<span style="font-size:10px;background:var(--green-bg);color:var(--green);padding:2px 6px;border-radius:20px">✓ Комиссия получена</span>`
+    : d.contract.commReceived === false
+    ? `<span style="font-size:10px;background:var(--amber-bg);color:var(--amber);padding:2px 6px;border-radius:20px">⏳ Комиссия ожидается</span>`
+    : `<span style="font-size:10px;background:var(--blue-bg);color:var(--blue);padding:2px 6px;border-radius:20px">📄 Договор</span>`) : '';
+  return `
+    <div class="deal-card" onclick="openDealCard(${d.id})">
+      <div class="deal-card-title">${d.t}</div>
+      <div class="deal-card-client">${d.c}</div>
+      <div class="deal-card-price">${d.p}</div>
+      ${contractBadge ? `<div style="margin-top:5px">${contractBadge}</div>` : ''}
+      <div class="deal-card-footer">
+        <span class="deal-card-date">${d.d}</span>
+        <span class="deal-card-avatar">${d.c[0]}</span>
+      </div>
+    </div>`;
+}
+
+function stageLabel(id) {
+  const all = [...STAGES_SALE];
+  const s = all.find(x=>x.id===id);
+  return s ? s.label() : id;
 }
 
 function renderKanban() {
-  renderKanbanBoard(kanbanDataSale, 'kanban-board-sale');
-  renderKanbanBoard(kanbanDataRent, 'kanban-board-rent');
+  renderKanbanBoard(dealsData.sale, STAGES_SALE, 'kanban-board-sale');
+  renderKanbanBoard(dealsData.rent, STAGES_RENT, 'kanban-board-rent');
+}
+
+// ── OPEN DEAL CARD ────────────────────────────────────────────────────────────
+function openDealCard(dealId) {
+  const deal = [...dealsData.sale, ...dealsData.rent].find(d=>d.id===dealId);
+  if (!deal) return;
+  activeDeal = deal;
+
+  document.getElementById('dcm-title').textContent = deal.t;
+  document.getElementById('dcm-client').textContent = '👤 ' + deal.c + '  ·  ' + (deal.dealType==='sale'?'💰 Продажа':'🔑 Аренда');
+  document.getElementById('dcm-price').textContent = deal.p;
+
+  const stages = deal.dealType === 'sale' ? STAGES_SALE : STAGES_RENT;
+  const stagesEl = document.getElementById('dcm-stages');
+  stagesEl.innerHTML = stages.map(s => {
+    const isCurrent = s.id === deal.stage;
+    const isContract = s.id === 'contract';
+    return `<button class="btn" style="text-align:left;justify-content:flex-start;gap:10px;${isCurrent?'background:var(--blue-bg);color:var(--blue);border-color:rgba(78,142,247,0.3);font-weight:500':''}"
+      onclick="${isContract ? `openContract(${deal.id})` : `moveDeal(${deal.id},'${s.id}')`}">
+      ${s.icon} ${s.label()} ${isCurrent?'<span style="font-size:10px;opacity:0.6;margin-left:auto">← текущая</span>':''}
+      ${isContract?'<span style="font-size:10px;color:var(--text3);margin-left:auto">заполнить →</span>':''}
+    </button>`;
+  }).join('');
+
+  openModal('deal-card-modal');
+}
+
+function moveDeal(dealId, newStage) {
+  const deal = [...dealsData.sale, ...dealsData.rent].find(d=>d.id===dealId);
+  if (!deal) return;
+
+  // Auto-create viewing task when moved to "offer"
+  if (newStage === 'offer' && deal.stage !== 'offer') {
+    const newTask = {
+      title: `📋 Просмотр объекта — ${deal.c}`,
+      due: 'Завтра', priority: 'high', done: false, overdue: false,
+      client: deal.c, autoCreated: true
+    };
+    tasks.unshift(newTask);
+    showToast(`✅ Задание на просмотр создано для ${deal.c}`);
+  }
+
+  deal.stage = newStage;
+  closeModal('deal-card-modal');
+  renderKanban();
+  renderTasks();
+}
+
+// ── CONTRACT ──────────────────────────────────────────────────────────────────
+function openContract(dealId) {
+  const deal = [...dealsData.sale, ...dealsData.rent].find(d=>d.id===dealId);
+  if (!deal) return;
+  activeDeal = deal;
+  closeModal('deal-card-modal');
+
+  document.getElementById('contract-deal-info').textContent = `💼 ${deal.t}  ·  ${deal.c}  ·  ${deal.p}`;
+  const c = deal.contract || {};
+  document.getElementById('contract-commission').value = c.commission || '';
+  document.getElementById('contract-booking').value    = c.booking || '';
+  document.getElementById('contract-payment').value    = c.payment || '';
+  commissionStatus = c.commReceived !== undefined ? c.commReceived : null;
+  updateCommBtns();
+  openModal('contract-modal');
+}
+
+function openNewDeal(type) {
+  openModal('deal-modal');
+  setTimeout(() => {
+    const sel = document.getElementById('f-d-stage');
+    if (sel) sel.value = 'new_lead';
+  }, 50);
+}
+
+function setCommissionStatus(received) {
+  commissionStatus = received;
+  updateCommBtns();
+  const hint = document.getElementById('contract-comm-hint');
+  hint.style.display = 'block';
+  if (received) {
+    hint.style.background = 'var(--green-bg)';
+    hint.style.color = 'var(--green)';
+    hint.textContent = '✅ После сохранения сделка будет перенесена в «Закрыто»';
+  } else {
+    hint.style.background = 'var(--amber-bg)';
+    hint.style.color = 'var(--amber)';
+    const tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate()+1);
+    const timeStr = `${tomorrow.getDate().toString().padStart(2,'0')}.${(tomorrow.getMonth()+1).toString().padStart(2,'0')} в 10:00`;
+    hint.textContent = `⏰ Будет создано напоминание на ${timeStr} — получить комиссию`;
+  }
+}
+
+function updateCommBtns() {
+  const yBtn = document.getElementById('comm-yes-btn');
+  const nBtn = document.getElementById('comm-no-btn');
+  yBtn.style.background = commissionStatus === true  ? 'var(--green-bg)' : 'var(--bg3)';
+  yBtn.style.color      = commissionStatus === true  ? 'var(--green)'    : 'var(--text)';
+  yBtn.style.borderColor= commissionStatus === true  ? 'rgba(52,211,153,0.4)' : 'var(--border2)';
+  nBtn.style.background = commissionStatus === false ? 'var(--amber-bg)' : 'var(--bg3)';
+  nBtn.style.color      = commissionStatus === false ? 'var(--amber)'    : 'var(--text)';
+  nBtn.style.borderColor= commissionStatus === false ? 'rgba(251,191,36,0.4)' : 'var(--border2)';
+}
+
+function saveContract() {
+  if (!activeDeal) return;
+  const commission = document.getElementById('contract-commission').value;
+  const booking    = document.getElementById('contract-booking').value;
+  const payment    = document.getElementById('contract-payment').value;
+
+  if (!commission || !booking || !payment) {
+    showToast('⚠️ Заполните все поля договора');
+    return;
+  }
+
+  activeDeal.contract = { commission, booking, payment, commReceived: commissionStatus };
+  activeDeal.stage = 'contract';
+
+  if (commissionStatus === true) {
+    // Move to closed_won
+    activeDeal.stage = 'closed_won';
+    closeModal('contract-modal');
+    showToast('🏆 Комиссия получена! Сделка закрыта.');
+  } else if (commissionStatus === false) {
+    // Create reminder for tomorrow 10:00
+    const tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate()+1);
+    const dateStr = `${tomorrow.getDate().toString().padStart(2,'0')}.${(tomorrow.getMonth()+1).toString().padStart(2,'0')} в 10:00`;
+    tasks.unshift({
+      title: `💰 Получить комиссию — ${activeDeal.c} (${activeDeal.t})`,
+      due: dateStr, priority: 'high', done: false, overdue: false,
+      client: activeDeal.c, autoCreated: true
+    });
+    closeModal('contract-modal');
+    showToast(`⏰ Напоминание создано на ${dateStr}`);
+    renderTasks();
+  } else {
+    closeModal('contract-modal');
+    showToast('📄 Договор сохранён');
+  }
+
+  renderKanban();
+}
+
+// ── LOST DEAL ─────────────────────────────────────────────────────────────────
+function openLostFromCard() {
+  if (!activeDeal) return;
+  closeModal('deal-card-modal');
+  document.getElementById('lost-deal-info').textContent = `💼 ${activeDeal.t}  ·  ${activeDeal.c}`;
+  document.getElementById('lost-stage').value = activeDeal.stage;
+  document.getElementById('lost-reason-sel').value = '';
+  document.getElementById('lost-reason-text').value = '';
+  openModal('lost-modal');
+}
+
+function onLostReasonChange() {
+  const sel = document.getElementById('lost-reason-sel').value;
+  if (sel === 'Другое') {
+    document.getElementById('lost-reason-text').focus();
+  }
+}
+
+function saveLostDeal() {
+  if (!activeDeal) return;
+  const stage  = document.getElementById('lost-stage').value;
+  const reason = document.getElementById('lost-reason-sel').value || document.getElementById('lost-reason-text').value;
+  const detail = document.getElementById('lost-reason-text').value;
+
+  if (!stage)  { showToast('⚠️ Укажите этап потери'); return; }
+  if (!reason) { showToast('⚠️ Укажите причину потери'); return; }
+
+  activeDeal.stage      = 'lost';
+  activeDeal.lostStage  = stage;
+  activeDeal.lostReason = reason + (detail && detail !== reason ? ': ' + detail : '');
+
+  closeModal('lost-modal');
+  showToast(`❌ Сделка «${activeDeal.t}» перенесена в Потеряно`);
+  renderKanban();
 }
 
 // ── RENDER TASKS ──────────────────────────────────────────────────────────────
