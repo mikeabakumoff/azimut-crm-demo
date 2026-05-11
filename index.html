@@ -607,8 +607,12 @@ tbody tr:hover td { background: var(--bg3); }
       <div class="nav-item active" onclick="goPage('dashboard')">
         <span class="nav-ico">📊</span><span data-t="nav_dashboard">Дашборд</span>
       </div>
-      <div class="nav-item" onclick="goPage('clients')">
-        <span class="nav-ico">👥</span><span data-t="nav_clients">Клиенты</span>
+      <div class="nav-item" onclick="goPage('clients-rent')">
+        <span class="nav-ico">🔑</span>Клиенты — Аренда
+        <span class="nav-badge">5</span>
+      </div>
+      <div class="nav-item" onclick="goPage('clients-sale')">
+        <span class="nav-ico">💰</span>Клиенты — Продажа
         <span class="nav-badge">3</span>
       </div>
       <div class="nav-item" onclick="goPage('properties')">
@@ -620,6 +624,10 @@ tbody tr:hover td { background: var(--bg3); }
       <div class="nav-item" onclick="goPage('tasks')">
         <span class="nav-ico">✅</span><span data-t="nav_tasks">Задачи</span>
         <span class="nav-badge">2</span>
+      </div>
+      <div class="nav-item" onclick="goPage('reminders')">
+        <span class="nav-ico">🔔</span>Напоминания
+        <span class="nav-badge red">4</span>
       </div>
     </div>
     <div class="nav-section">
@@ -659,7 +667,7 @@ tbody tr:hover td { background: var(--bg3); }
     <div id="page-dashboard" class="page active">
       <div class="page-head">
         <div>
-          <div class="page-title" data-t="nav_dashboard">Дашборд</div>
+          <div class="page-title">Дашборд</div>
           <div class="page-subtitle">Понедельник, 2 мая 2025 · Паттайя, Таиланд</div>
         </div>
         <div class="head-actions">
@@ -667,40 +675,33 @@ tbody tr:hover td { background: var(--bg3); }
         </div>
       </div>
       <div class="stats-row">
-        <div class="stat-card blue">
-          <div class="stat-icon blue">👥</div>
-          <div class="stat-label" data-t="stat_clients">Клиентов в базе</div>
-          <div class="stat-value blue">247</div>
-          <div class="stat-trend up">↑ +12 за месяц</div>
-        </div>
-        <div class="stat-card red">
-          <div class="stat-icon red">🔥</div>
-          <div class="stat-label" data-t="stat_hot">Горячих лидов</div>
-          <div class="stat-value red">18</div>
-          <div class="stat-sub">Требуют внимания</div>
-        </div>
-        <div class="stat-card green">
-          <div class="stat-icon green">💰</div>
-          <div class="stat-label" data-t="stat_pipeline">Pipeline</div>
-          <div class="stat-value green">$2.4M</div>
-          <div class="stat-trend up">↑ +340k vs прошлый мес</div>
-        </div>
         <div class="stat-card amber">
           <div class="stat-icon amber">✅</div>
-          <div class="stat-label" data-t="stat_tasks_today">Задач сегодня</div>
+          <div class="stat-label">Задач сегодня</div>
           <div class="stat-value amber">6</div>
           <div class="stat-sub">2 просрочены</div>
         </div>
+        <div class="stat-card blue">
+          <div class="stat-icon blue">🔑</div>
+          <div class="stat-label">Новые заявки аренда</div>
+          <div class="stat-value blue">8</div>
+          <div class="stat-sub">Авито / FB / TG / Сайт</div>
+        </div>
+        <div class="stat-card green">
+          <div class="stat-icon green">💰</div>
+          <div class="stat-label">Новые заявки продажа</div>
+          <div class="stat-value green">4</div>
+          <div class="stat-sub">Авито / FB / TG / Сайт</div>
+        </div>
+        <div class="stat-card red">
+          <div class="stat-icon red">🔔</div>
+          <div class="stat-label">Напоминания</div>
+          <div class="stat-value red">4</div>
+          <div class="stat-sub">Клиенты в статусе «Новый»</div>
+        </div>
       </div>
       <div class="page-body">
-        <div class="dash-grid">
-          <div class="dash-card">
-            <div class="dash-card-head">
-              <span>🔥 Горячие лиды</span>
-              <button class="btn sm ghost" onclick="goPage('leads')">Все →</button>
-            </div>
-            <div class="dash-card-body" id="dash-leads"></div>
-          </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
           <div class="dash-card">
             <div class="dash-card-head">
               <span>✅ Задачи на сегодня</span>
@@ -710,62 +711,126 @@ tbody tr:hover td { background: var(--bg3); }
           </div>
           <div class="dash-card">
             <div class="dash-card-head">
-              <span>💼 Активные сделки</span>
-              <button class="btn sm ghost" onclick="goPage('deals')">Канбан →</button>
+              <span>🔔 Напоминания по клиентам</span>
+              <button class="btn sm ghost" onclick="goPage('reminders')">Все →</button>
             </div>
-            <div class="dash-card-body" id="dash-deals"></div>
+            <div class="dash-card-body" id="dash-reminders"></div>
           </div>
           <div class="dash-card">
             <div class="dash-card-head">
-              <span>🏠 Последние объекты</span>
-              <button class="btn sm ghost" onclick="goPage('properties')">Все →</button>
+              <span>🔑 Новые заявки — Аренда</span>
+              <button class="btn sm ghost" onclick="goPage('leads')">Все →</button>
             </div>
-            <div class="dash-card-body" id="dash-props"></div>
+            <div class="dash-card-body" id="dash-rent-leads"></div>
+          </div>
+          <div class="dash-card">
+            <div class="dash-card-head">
+              <span>💰 Новые заявки — Продажа</span>
+              <button class="btn sm ghost" onclick="goPage('leads')">Все →</button>
+            </div>
+            <div class="dash-card-body" id="dash-sale-leads"></div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- ── CLIENTS ────────────────────────────────────────────────────────── -->
-    <div id="page-clients" class="page">
+    <!-- ── CLIENTS RENT ───────────────────────────────────────────────────── -->
+    <div id="page-clients-rent" class="page">
       <div class="page-head">
         <div>
-          <div class="page-title" data-t="nav_clients">Клиенты</div>
-          <div class="page-subtitle">247 клиентов в базе</div>
+          <div class="page-title">🔑 Клиенты — Аренда</div>
+          <div class="page-subtitle">143 клиента по аренде</div>
         </div>
         <div class="head-actions">
           <button class="btn" onclick="openModal('broadcast-modal')">📣 Рассылка</button>
           <button class="btn" onclick="showToast('📤 Экспорт CSV...')">Экспорт</button>
-          <button class="btn primary" onclick="openModal('client-modal')">+ Добавить клиента</button>
+          <button class="btn primary" onclick="openClientModal('rent')">+ Добавить клиента</button>
         </div>
       </div>
       <div class="page-body" style="padding-top:16px">
         <div class="table-card">
           <div class="table-toolbar">
-            <input type="text" placeholder="🔍  Поиск..." id="client-search" oninput="renderClients()">
-            <select id="client-status" onchange="renderClients()">
+            <input type="text" placeholder="🔍  Поиск..." id="rent-search" oninput="renderRentClients()">
+            <select id="rent-status" onchange="renderRentClients()">
               <option value="">Все статусы</option>
-              <option value="hot">Горячий</option>
-              <option value="warm">Тёплый</option>
-              <option value="new">Новый</option>
-              <option value="cold">Холодный</option>
+              <option value="new">🆕 Новый</option>
+              <option value="negotiation">🗣️ Ведутся переговоры</option>
+              <option value="booking">🔒 Бронь</option>
+              <option value="moved_in">✅ Заехал</option>
+              <option value="moved_out">🚪 Выехал</option>
+              <option value="deferred">⏸️ Отложен</option>
             </select>
-            <select id="client-source" onchange="renderClients()">
+            <select id="rent-source" onchange="renderRentClients()">
               <option value="">Все источники</option>
               <option value="Avito">Авито</option>
               <option value="Facebook">Facebook</option>
               <option value="Telegram">Telegram</option>
-              <option value="LINE">LINE</option>
               <option value="Сайт">Сайт</option>
             </select>
           </div>
           <table>
             <thead><tr>
-              <th>Клиент</th><th>Телефон</th><th>Запрос</th><th>Бюджет</th><th>Статус</th><th>Источник</th><th>Менеджер</th><th>Написать</th>
+              <th>Клиент</th><th>Телефон</th><th>Запрос</th><th>Бюджет</th><th>Статус</th><th>Источник</th><th>Написать</th><th>Действия</th>
             </tr></thead>
-            <tbody id="clients-body"></tbody>
+            <tbody id="rent-clients-body"></tbody>
           </table>
         </div>
+      </div>
+    </div>
+
+    <!-- ── CLIENTS SALE ───────────────────────────────────────────────────── -->
+    <div id="page-clients-sale" class="page">
+      <div class="page-head">
+        <div>
+          <div class="page-title">💰 Клиенты — Продажа</div>
+          <div class="page-subtitle">104 клиента по продаже</div>
+        </div>
+        <div class="head-actions">
+          <button class="btn" onclick="openModal('broadcast-modal')">📣 Рассылка</button>
+          <button class="btn" onclick="showToast('📤 Экспорт CSV...')">Экспорт</button>
+          <button class="btn primary" onclick="openClientModal('sale')">+ Добавить клиента</button>
+        </div>
+      </div>
+      <div class="page-body" style="padding-top:16px">
+        <div class="table-card">
+          <div class="table-toolbar">
+            <input type="text" placeholder="🔍  Поиск..." id="sale-search" oninput="renderSaleClients()">
+            <select id="sale-status" onchange="renderSaleClients()">
+              <option value="">Все статусы</option>
+              <option value="warm">🌡️ Тёплый</option>
+              <option value="advance">💵 Внесён аванс</option>
+              <option value="deposit">🏦 Депозит</option>
+              <option value="done">✅ Выполнено</option>
+              <option value="deferred">⏸️ Отложен</option>
+            </select>
+            <select id="sale-source" onchange="renderSaleClients()">
+              <option value="">Все источники</option>
+              <option value="Avito">Авито</option>
+              <option value="Facebook">Facebook</option>
+              <option value="Telegram">Telegram</option>
+              <option value="Сайт">Сайт</option>
+            </select>
+          </div>
+          <table>
+            <thead><tr>
+              <th>Клиент</th><th>Телефон</th><th>Запрос</th><th>Бюджет</th><th>Статус</th><th>Источник</th><th>Написать</th><th>Действия</th>
+            </tr></thead>
+            <tbody id="sale-clients-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── REMINDERS ──────────────────────────────────────────────────────── -->
+    <div id="page-reminders" class="page">
+      <div class="page-head">
+        <div>
+          <div class="page-title">🔔 Напоминания по клиентам</div>
+          <div class="page-subtitle">Клиенты в статусе «Новый» — требуют контакта</div>
+        </div>
+      </div>
+      <div class="page-body" style="padding-top:16px">
+        <div class="tasks-list" id="reminders-list"></div>
       </div>
     </div>
 
@@ -854,7 +919,7 @@ tbody tr:hover td { background: var(--bg3); }
           </div>
           <table>
             <thead><tr>
-              <th>Источник</th><th>Имя</th><th>Контакт</th><th>Сообщение</th><th>Получен</th><th></th>
+              <th>Источник</th><th>Тип</th><th>Имя</th><th>Контакт</th><th>Сообщение</th><th>Получен</th><th></th>
             </tr></thead>
             <tbody id="leads-body"></tbody>
           </table>
@@ -1104,6 +1169,40 @@ tbody tr:hover td { background: var(--bg3); }
   </div>
 </div>
 
+<div class="modal-overlay" id="deferred-modal">
+  <div class="modal" style="width:420px">
+    <div class="modal-head">
+      <div class="modal-title">⏸️ Отложить клиента</div>
+      <div class="modal-close" onclick="closeModal('deferred-modal')">✕</div>
+    </div>
+    <div id="deferred-client-name" style="font-size:14px;font-weight:500;margin-bottom:14px;padding:10px 12px;background:var(--bg3);border-radius:var(--radius)"></div>
+    <div class="form-group">
+      <label>Отложить до</label>
+      <input id="deferred-date" type="date">
+    </div>
+    <div class="form-group">
+      <label>Причина</label>
+      <select id="deferred-reason">
+        <option value="">— Выбрать причину —</option>
+        <option>Уехал в отпуск</option>
+        <option>Ждёт окончания аренды</option>
+        <option>Нет подходящих объектов</option>
+        <option>Нет финансирования сейчас</option>
+        <option>Рассматривает другие варианты</option>
+        <option>Другое</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Комментарий</label>
+      <textarea id="deferred-comment" rows="2" placeholder="Дополнительные детали..."></textarea>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('deferred-modal')">Отмена</button>
+      <button class="btn primary" onclick="saveDeferred()">⏸️ Отложить</button>
+    </div>
+  </div>
+</div>
+
 <script>
 // ── TRANSLATIONS ─────────────────────────────────────────────────────────────
 const T = {
@@ -1119,15 +1218,20 @@ function setLang(l) {
 }
 
 // ── DATA ──────────────────────────────────────────────────────────────────────
-const clients = [
-  { name:'Александр Петров', email:'petrov@mail.ru', phone:'+7 999 123-45-67', request:'Вилла 3 спальни, Паттайя', budget:'$250–400k', status:'hot',  source:'Avito',    manager:'МА', lang:'ru' },
-  { name:'Sarah Mitchell',   email:'sarah@gmail.com',phone:'+44 77 900 1234',  request:'Condo аренда, Bangkok',   budget:'$1.5k/мес', status:'warm', source:'Facebook', manager:'АК', lang:'en' },
-  { name:'Chen Wei',         email:'chen@qq.com',    phone:'+86 138 0013 8000',request:'Инвестиция 2+ объекта',   budget:'$1M+',      status:'hot',  source:'Telegram', manager:'МА', lang:'en' },
-  { name:'Мария Иванова',    email:'ivanova@ya.ru',  phone:'+7 495 555-12-34', request:'Апартаменты, Джомтьен',   budget:'$80–120k',  status:'new',  source:'Сайт',     manager:'НС', lang:'ru' },
-  { name:'James Anderson',   email:'james@hotm.com', phone:'+1 212 555-0100',  request:'Villa with pool, Samui',  budget:'$400–700k', status:'warm', source:'Facebook', manager:'АК', lang:'en' },
-  { name:'Наталья Смирнова', email:'nat@inbox.ru',   phone:'+7 812 444-56-78', request:'Долгосрочная аренда',     budget:'$800/мес',  status:'cold', source:'Avito',    manager:'НС', lang:'ru' },
-  { name:'Somchai Wiriyakit',email:'somchai@th.com', phone:'+66 81 234 5678',  request:'Townhouse, Chiang Mai',   budget:'$150–200k', status:'new',  source:'LINE',     manager:'МА', lang:'th' },
-  { name:'Anna Müller',      email:'anna@web.de',    phone:'+49 30 12345678',  request:'Villa Koh Samui',         budget:'$250–350k', status:'warm', source:'Facebook', manager:'АК', lang:'en' },
+const rentClients = [
+  { name:'Андрей Козлов',    email:'kozlov@mail.ru',  phone:'+7 916 555-12-34', request:'Квартира у моря, Паттайя',   budget:'฿25k/мес', status:'new',         source:'Avito',    manager:'МА', dealType:'rent' },
+  { name:'Sarah Mitchell',   email:'sarah@gmail.com', phone:'+44 77 900 1234',  request:'Condo 1br, Jomtien',         budget:'$600/мес',  status:'negotiation', source:'Facebook', manager:'АК', dealType:'rent' },
+  { name:'Наталья Смирнова', email:'nat@inbox.ru',    phone:'+7 812 444-56-78', request:'Долгосрочная аренда, вилла', budget:'฿80k/мес', status:'booking',     source:'Avito',    manager:'НС', dealType:'rent', bookingAmount:'80000', bookingCurrency:'THB' },
+  { name:'Siriporn Kaew',    email:'siri@th.com',     phone:'+66 81 234 5678',  request:'คอนโดใกล้ทะเล',             budget:'฿18k/мес', status:'new',         source:'Сайт',     manager:'МА', dealType:'rent' },
+  { name:'Emma Thompson',    email:'emma@uk.com',     phone:'+44 79 111 2233',  request:'2br apartment, Bangkok',     budget:'$800/мес',  status:'moved_in',    source:'Facebook', manager:'АК', dealType:'rent' },
+  { name:'Дмитрий Орлов',   email:'orlov@ya.ru',     phone:'+7 999 888-77-66', request:'Студия краткосрочно',        budget:'฿15k/мес', status:'deferred',    source:'Telegram', manager:'НС', dealType:'rent', deferredUntil:'15.06.2025', deferredReason:'Уехал в отпуск' },
+];
+
+const saleClients = [
+  { name:'Александр Петров', email:'petrov@mail.ru',  phone:'+7 999 123-45-67', request:'Вилла 3 спальни, Паттайя',  budget:'$250–400k', status:'warm',    source:'Avito',    manager:'МА', dealType:'sale' },
+  { name:'Chen Wei',         email:'chen@qq.com',     phone:'+86 138 0013 8000',request:'Инвестиция 2+ объекта',     budget:'$1M+',      status:'advance', source:'Telegram', manager:'МА', dealType:'sale' },
+  { name:'James Anderson',   email:'james@hotm.com',  phone:'+1 212 555-0100',  request:'Villa with pool, Samui',    budget:'$400–700k', status:'deposit', source:'Facebook', manager:'АК', dealType:'sale' },
+  { name:'Anna Müller',      email:'anna@web.de',     phone:'+49 30 12345678',  request:'Villa Koh Samui',           budget:'$250–350k', status:'warm',    source:'Facebook', manager:'АК', dealType:'sale' },
 ];
 
 const properties = [
@@ -1140,64 +1244,112 @@ const properties = [
 ];
 
 const kanbanData = {
-  'new_lead':    { label:'Новый лид',    deals:[{t:'Вилла → Chen Wei',   c:'Chen Wei',         p:'$850,000', d:'01.05'},{t:'Кондо → Petrov',    c:'А. Петров',        p:'$320,000', d:'02.05'}] },
-  'negotiation': { label:'Переговоры',   deals:[{t:'Апарт. → Иванова',   c:'М. Иванова',       p:'$98,000',  d:'28.04'},{t:'Вилла → Anderson', c:'J. Anderson',      p:'$450,000', d:'30.04'}] },
-  'viewing':     { label:'Просмотр',     deals:[{t:'Таунхаус → Wiriy.',  c:'S. Wiriyakit',     p:'$162,000', d:'03.05'}] },
-  'offer':       { label:'Предложение',  deals:[{t:'Вилла → Mitchell',   c:'S. Mitchell',      p:'Аренда',   d:'29.04'}] },
-  'contract':    { label:'Договор',      deals:[{t:'Кондо → Müller',     c:'A. Müller',        p:'$290,000', d:'25.04'}] },
-  'closed_won':  { label:'Закрыто ✓',   deals:[{t:'Студия → Смирнова',  c:'Н. Смирнова',      p:'$95,000',  d:'20.04'},{t:'Бунгало → Wang',  c:'Wang Lei',         p:'$220,000', d:'15.04'}] },
-  'closed_lost': { label:'Потеряно',     deals:[{t:'Вилла → Ivanov',     c:'P. Ivanov',        p:'$400,000', d:'10.04'}] },
+  'new_lead':    { label:'Новый лид',    deals:[{t:'Вилла → Chen Wei',   c:'Chen Wei',     p:'$850,000', d:'01.05'},{t:'Кондо → Petrov', c:'А. Петров',  p:'$320,000', d:'02.05'}] },
+  'negotiation': { label:'Переговоры',   deals:[{t:'Апарт. → Козлов',    c:'А. Козлов',    p:'$98,000',  d:'28.04'},{t:'Вилла → Anderson',c:'J. Anderson',p:'$450,000', d:'30.04'}] },
+  'viewing':     { label:'Просмотр',     deals:[{t:'Таунхаус → Wiriy.',  c:'S. Wiriyakit', p:'$162,000', d:'03.05'}] },
+  'offer':       { label:'Предложение',  deals:[{t:'Вилла → Mitchell',   c:'S. Mitchell',  p:'Аренда',   d:'29.04'}] },
+  'contract':    { label:'Договор',      deals:[{t:'Кондо → Müller',     c:'A. Müller',    p:'$290,000', d:'25.04'}] },
+  'closed_won':  { label:'Закрыто ✓',   deals:[{t:'Студия → Смирнова',  c:'Н. Смирнова',  p:'$95,000',  d:'20.04'},{t:'Бунгало → Wang', c:'Wang Lei',   p:'$220,000', d:'15.04'}] },
+  'closed_lost': { label:'Потеряно',     deals:[{t:'Вилла → Ivanov',     c:'P. Ivanov',    p:'$400,000', d:'10.04'}] },
 };
 
 const tasks = [
-  { title:'Позвонить Chen Wei — уточнить объём инвестиций', due:'Сегодня, 11:00', priority:'high',   done:false, overdue:false, client:'Chen Wei' },
-  { title:'Отправить договор Müller на подпись',             due:'Сегодня, 13:00', priority:'high',   done:false, overdue:false, client:'A. Müller' },
-  { title:'Показ виллы Anderson на Самуи',                   due:'Вчера, 16:00',   priority:'high',   done:false, overdue:true,  client:'J. Anderson' },
-  { title:'Follow-up: Иванова — апарты Джомтьен',           due:'30 апр, 10:00',  priority:'normal', done:false, overdue:true,  client:'М. Иванова' },
-  { title:'Встреча с застройщиком Laguna Pattaya',           due:'Завтра, 15:00',  priority:'normal', done:false, overdue:false, client:'' },
-  { title:'Обновить листинг: Вилла Пхукет на Авито',        due:'4 мая',          priority:'low',    done:false, overdue:false, client:'' },
-  { title:'Звонок Wiriyakit — финальное предложение',       due:'Сегодня, 17:00', priority:'normal', done:true,  overdue:false, client:'S. Wiriyakit' },
+  { title:'Позвонить Chen Wei — уточнить условия сделки', due:'Сегодня, 11:00', priority:'high',   done:false, overdue:false, client:'Chen Wei' },
+  { title:'Отправить договор Müller на подпись',          due:'Сегодня, 13:00', priority:'high',   done:false, overdue:false, client:'A. Müller' },
+  { title:'Показ виллы Anderson на Самуи',                due:'Вчера, 16:00',   priority:'high',   done:false, overdue:true,  client:'J. Anderson' },
+  { title:'Follow-up: Козлов — апарты Джомтьен',         due:'30 апр, 10:00',  priority:'normal', done:false, overdue:true,  client:'А. Козлов' },
+  { title:'Встреча с застройщиком Laguna Pattaya',        due:'Завтра, 15:00',  priority:'normal', done:false, overdue:false, client:'' },
+  { title:'Обновить листинг: Вилла Пхукет на Авито',     due:'4 мая',          priority:'low',    done:false, overdue:false, client:'' },
+  { title:'Звонок Wiriyakit — финальное предложение',    due:'Сегодня, 17:00', priority:'normal', done:true,  overdue:false, client:'S. Wiriyakit' },
 ];
 
-const leads = [
-  { source:'avito',    name:'Андрей Козлов',    contact:'+7 916 555-12-34', msg:'Ищу виллу 2-3 спальни в Паттайе до $300k',   date:'02.05 09:14' },
-  { source:'facebook', name:'Emma Thompson',    contact:'FB Messenger',     msg:'Looking for 2br condo near beach, budget $150k', date:'02.05 08:30' },
-  { source:'telegram', name:'@user_pattaya',    contact:'Telegram',         msg:'Есть квартиры у моря в аренду?',              date:'01.05 22:45' },
-  { source:'line',     name:'Siriporn Kaew',    contact:'LINE: siriporn',   msg:'ต้องการคอนโดใกล้ทะเล งบประมาณ 3 ล้าน',      date:'01.05 18:20' },
-  { source:'avito',    name:'Дмитрий Орлов',   contact:'+7 999 888-77-66', msg:'Интересует коммерческая недвижимость',        date:'01.05 15:10' },
+let leadsData = [
+  { id:1, source:'avito',    type:'rent', name:'Андрей Козлов',  contact:'+7 916 555-12-34', msg:'Ищу квартиру у моря, аренда, Паттайя',         date:'02.05 09:14' },
+  { id:2, source:'facebook', type:'sale', name:'Emma Thompson',  contact:'FB Messenger',     msg:'Looking for villa to buy, budget $300k',        date:'02.05 08:30' },
+  { id:3, source:'telegram', type:'rent', name:'@user_pattaya',  contact:'Telegram',         msg:'Есть квартиры у моря в аренду?',                date:'01.05 22:45' },
+  { id:4, source:'site',     type:'sale', name:'Siriporn Kaew',  contact:'+66 81 234 5678',  msg:'ต้องการซื้อคอนโด งบประมาณ 5 ล้านบาท',        date:'01.05 18:20' },
+  { id:5, source:'avito',    type:'rent', name:'Дмитрий Орлов',  contact:'+7 999 888-77-66', msg:'Долгосрочная аренда виллы с бассейном',         date:'01.05 15:10' },
 ];
 
-// ── RENDER CLIENTS ────────────────────────────────────────────────────────────
-const statusMap = { hot:'Горячий', warm:'Тёплый', new:'Новый', cold:'Холодный' };
-const srcIcon   = { Avito:'🅰️', Facebook:'📘', Telegram:'✈️', LINE:'💚', Сайт:'🌐', Реферал:'👤' };
+// Клиенты в статусе "Новый" дольше 2 дней — напоминания
+const reminders = [
+  { client:'Андрей Козлов',   phone:'+7 916 555-12-34', source:'Авито',    type:'rent', days:3, action:'Связаться в WhatsApp, уточнить параметры поиска' },
+  { client:'Siriporn Kaew',   phone:'+66 81 234 5678',  source:'Сайт',     type:'sale', days:5, action:'Позвонить, уточнить бюджет и предпочтения по локации' },
+  { client:'@user_pattaya',   phone:'Telegram',         source:'Telegram', type:'rent', days:2, action:'Написать в Telegram, предложить варианты аренды' },
+  { client:'Неизвестный клиент', phone:'+7 999 111-22-33', source:'Facebook', type:'rent', days:4, action:'Связаться в FB Messenger, уточнить условия' },
+];
 
-function renderClients() {
-  const q  = (document.getElementById('client-search')?.value || '').toLowerCase();
-  const st = document.getElementById('client-status')?.value || '';
-  const sr = document.getElementById('client-source')?.value || '';
-  const data = clients.filter(c =>
-    (!q  || c.name.toLowerCase().includes(q) || c.phone.includes(q) || c.request.toLowerCase().includes(q)) &&
-    (!st || c.status === st) &&
-    (!sr || c.source === sr)
-  );
-  document.getElementById('clients-body').innerHTML = data.map(c => `<tr onclick="showToast('👤 Открываем карточку: ${c.name}')">
-    <td><div class="flex-cell"><div class="avatar">${c.name.split(' ').map(w=>w[0]).slice(0,2).join('')}</div><div><div class="cell-name">${c.name}</div><div class="cell-sub">${c.email}</div></div></div></td>
-    <td style="color:var(--text2);font-family:var(--mono);font-size:12px">${c.phone}</td>
-    <td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text2)">${c.request}</td>
+// ── HELPERS ───────────────────────────────────────────────────────────────────
+const srcIcon = { Avito:'🅰️', Facebook:'📘', Telegram:'✈️', LINE:'💚', Сайт:'🌐', site:'🌐', avito:'🅰️', facebook:'📘', telegram:'✈️', line:'💚', Реферал:'👤' };
+
+const rentStatusMap = {
+  new:'🆕 Новый', negotiation:'🗣️ Переговоры', booking:'🔒 Бронь',
+  moved_in:'✅ Заехал', moved_out:'🚪 Выехал', deferred:'⏸️ Отложен'
+};
+const rentStatusBadge = {
+  new:'new', negotiation:'warm', booking:'amber',
+  moved_in:'active', moved_out:'cold', deferred:'cold'
+};
+const saleStatusMap = {
+  warm:'🌡️ Тёплый', advance:'💵 Внесён аванс', deposit:'🏦 Депозит',
+  done:'✅ Выполнено', deferred:'⏸️ Отложен'
+};
+const saleStatusBadge = {
+  warm:'warm', advance:'hot', deposit:'blue', done:'active', deferred:'cold'
+};
+
+function clientRow(c, statusMap, statusBadge) {
+  const st = statusMap[c.status] || c.status;
+  const bd = statusBadge[c.status] || 'new';
+  const deferredTag = c.status === 'deferred'
+    ? `<div style="font-size:10px;color:var(--amber);margin-top:2px">до ${c.deferredUntil} · ${c.deferredReason}</div>` : '';
+  const bookingTag = c.status === 'booking' && c.bookingAmount
+    ? `<div style="font-size:10px;color:var(--blue);margin-top:2px">Бронь: ${c.bookingAmount} ${c.bookingCurrency}</div>` : '';
+  return `<tr onclick="showToast('👤 ${c.name}')">
+    <td><div class="flex-cell"><div class="avatar">${c.name.split(' ').map(w=>w[0]).slice(0,2).join('')}</div><div>
+      <div class="cell-name">${c.name}</div><div class="cell-sub">${c.email}</div>
+    </div></div></td>
+    <td style="font-family:var(--mono);font-size:12px;color:var(--text2)">${c.phone}</td>
+    <td style="max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text2)">${c.request}</td>
     <td style="font-family:var(--mono);font-size:12px;font-weight:500">${c.budget}</td>
-    <td><span class="badge ${c.status}">${statusMap[c.status]}</span></td>
-    <td><span class="badge ${c.source.toLowerCase()}">${srcIcon[c.source]||''} ${c.source}</span></td>
-    <td><span style="font-size:12px;color:var(--text2);background:var(--bg3);padding:3px 8px;border-radius:20px">${c.manager}</span></td>
-    <td onclick="event.stopPropagation()">
-      <div style="display:flex;gap:4px">
-        <button class="btn sm ghost" title="WhatsApp" onclick="quickSend('whatsapp','${c.name}','${c.phone}')">📱</button>
-        <button class="btn sm ghost" title="Telegram" onclick="quickSend('telegram','${c.name}','${c.phone}')">✈️</button>
-        <button class="btn sm ghost" title="Email"    onclick="quickSend('email','${c.name}','${c.email}')">📧</button>
-        <button class="btn sm ghost" title="SMS"      onclick="quickSend('sms','${c.name}','${c.phone}')">💬</button>
-      </div>
-    </td>
-  </tr>`).join('');
+    <td><span class="badge ${bd}">${st}</span>${deferredTag}${bookingTag}</td>
+    <td><span class="badge ${(c.source||'').toLowerCase()}">${srcIcon[c.source]||''} ${c.source}</span></td>
+    <td onclick="event.stopPropagation()"><div style="display:flex;gap:3px">
+      <button class="btn sm ghost" title="WhatsApp" onclick="quickSend('whatsapp','${c.name}','${c.phone}')">📱</button>
+      <button class="btn sm ghost" title="Telegram" onclick="quickSend('telegram','${c.name}','${c.phone}')">✈️</button>
+      <button class="btn sm ghost" title="Email"    onclick="quickSend('email','${c.name}','${c.email}')">📧</button>
+    </div></td>
+    <td onclick="event.stopPropagation()"><div style="display:flex;gap:3px">
+      <button class="btn sm ghost" title="Отложить" onclick="openDeferred('${c.name}')">⏸️</button>
+      <button class="btn sm ghost" title="Редактировать" onclick="showToast('✏️ Редактирование: ${c.name}')">✏️</button>
+    </div></td>
+  </tr>`;
 }
+
+function renderRentClients() {
+  const q  = (document.getElementById('rent-search')?.value||'').toLowerCase();
+  const st = document.getElementById('rent-status')?.value||'';
+  const sr = document.getElementById('rent-source')?.value||'';
+  const data = rentClients.filter(c =>
+    (!q  || c.name.toLowerCase().includes(q)||c.request.toLowerCase().includes(q)) &&
+    (!st || c.status===st) && (!sr || c.source===sr)
+  );
+  document.getElementById('rent-clients-body').innerHTML = data.map(c=>clientRow(c,rentStatusMap,rentStatusBadge)).join('');
+}
+
+function renderSaleClients() {
+  const q  = (document.getElementById('sale-search')?.value||'').toLowerCase();
+  const st = document.getElementById('sale-status')?.value||'';
+  const sr = document.getElementById('sale-source')?.value||'';
+  const data = saleClients.filter(c =>
+    (!q  || c.name.toLowerCase().includes(q)||c.request.toLowerCase().includes(q)) &&
+    (!st || c.status===st) && (!sr || c.source===sr)
+  );
+  document.getElementById('sale-clients-body').innerHTML = data.map(c=>clientRow(c,saleStatusMap,saleStatusBadge)).join('');
+}
+
+// ── RENDER CLIENTS (legacy, keep for compatibility) ───────────────────────────
+function renderClients() { renderRentClients(); renderSaleClients(); }
 
 // ── RENDER PROPERTIES ─────────────────────────────────────────────────────────
 function renderProperties() {
@@ -1267,52 +1419,122 @@ function toggleTask(i) { tasks[i].done = !tasks[i].done; renderTasks(); }
 
 // ── RENDER LEADS ──────────────────────────────────────────────────────────────
 function renderLeads() {
-  const srcBadge = { avito:'avito 🅰️ Авито', facebook:'fb 📘 Facebook', telegram:'tg ✈️ Telegram', line:'line 💚 LINE' };
-  document.getElementById('leads-body').innerHTML = leads.map(l => `<tr>
-    <td><span class="badge ${srcBadge[l.source].split(' ')[0]}">${srcBadge[l.source].split(' ').slice(1).join(' ')}</span></td>
+  const srcBadge = { avito:'avito 🅰️ Авито', facebook:'fb 📘 Facebook', telegram:'tg ✈️ Telegram', line:'line 💚 LINE', site:'new 🌐 Сайт' };
+  document.getElementById('leads-body').innerHTML = leadsData.map(l => `<tr>
+    <td><span class="badge ${srcBadge[l.source]?.split(' ')[0]||'new'}">${srcBadge[l.source]?.split(' ').slice(1).join(' ')||l.source}</span></td>
+    <td><span class="badge ${l.type==='rent'?'rent':'sale'}">${l.type==='rent'?'🔑 Аренда':'💰 Продажа'}</span></td>
     <td style="font-weight:500">${l.name}</td>
     <td style="font-size:12px;color:var(--text2);font-family:var(--mono)">${l.contact}</td>
-    <td style="max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text2);font-size:12px">${l.msg}</td>
+    <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text2);font-size:12px">${l.msg}</td>
     <td style="color:var(--text3);font-size:11px;font-family:var(--mono)">${l.date}</td>
-    <td><button class="btn sm primary" onclick="showToast('✅ Лид конвертирован в клиента!')">→ Клиент</button></td>
+    <td><div style="display:flex;gap:4px">
+      <button class="btn sm primary" onclick="convertLead(${l.id})">→ Клиент</button>
+      <button class="btn sm" style="background:var(--red-bg);color:var(--red);border-color:var(--red-bg)" onclick="deleteLead(${l.id})">🗑</button>
+    </div></td>
   </tr>`).join('');
 }
 
-// ── DASHBOARD WIDGETS ─────────────────────────────────────────────────────────
+function convertLead(id) {
+  const l = leadsData.find(x=>x.id===id);
+  if (!l) return;
+  showToast(`✅ Лид конвертирован: ${l.name} → добавлен как клиент (${l.type==='rent'?'Аренда':'Продажа'})`);
+  leadsData = leadsData.filter(x=>x.id!==id);
+  renderLeads();
+}
+
+function deleteLead(id) {
+  if (!confirm('Удалить лид?')) return;
+  leadsData = leadsData.filter(x=>x.id!==id);
+  renderLeads();
+  showToast('🗑 Лид удалён');
+}
+
+// ── RENDER REMINDERS ──────────────────────────────────────────────────────────
+function renderReminders() {
+  const el = document.getElementById('reminders-list');
+  if (!el) return;
+  el.innerHTML = reminders.map(r => `
+    <div class="task-item">
+      <div style="width:36px;height:36px;border-radius:var(--radius);background:var(--red-bg);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">🔔</div>
+      <div class="task-body">
+        <div class="task-title">Связаться с <b>${r.client}</b></div>
+        <div class="task-meta">
+          <span class="overdue">В статусе «Новый» уже ${r.days} дн.</span>
+          <span>· ${srcIcon[r.source]||''} ${r.source}</span>
+          <span>· <span class="badge ${r.type==='rent'?'rent':'sale'}" style="font-size:10px;padding:1px 6px">${r.type==='rent'?'Аренда':'Продажа'}</span></span>
+        </div>
+        <div style="font-size:12px;color:var(--text2);margin-top:4px">📋 ${r.action}</div>
+        <div style="font-size:12px;color:var(--text3);margin-top:2px">📞 ${r.phone}</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:4px;flex-shrink:0">
+        <button class="btn sm ghost" onclick="quickSend('whatsapp','${r.client}','${r.phone}')">📱 WA</button>
+        <button class="btn sm ghost" onclick="quickSend('telegram','${r.client}','${r.phone}')">✈️ TG</button>
+      </div>
+    </div>`).join('');
+}
+
+// ── DASHBOARD ─────────────────────────────────────────────────────────────────
 function renderDashboard() {
-  document.getElementById('dash-leads').innerHTML = clients.filter(c => c.status === 'hot').map(c => `
-    <div class="dash-row" onclick="goPage('clients')">
-      <div class="avatar">${c.name.split(' ').map(w=>w[0]).slice(0,2).join('')}</div>
-      <div class="dash-row-info"><div class="dash-row-title">${c.name}</div><div class="dash-row-sub">${c.request}</div></div>
-      <div class="dash-row-right"><div class="dash-row-val">${c.budget}</div><div class="dash-row-date">${srcIcon[c.source]||''} ${c.source}</div></div>
-    </div>`).join('');
-  document.getElementById('dash-tasks').innerHTML = tasks.filter(t => !t.done).slice(0,4).map(t => `
+  // Задачи
+  document.getElementById('dash-tasks').innerHTML = tasks.filter(t=>!t.done).slice(0,4).map(t=>`
     <div class="dash-row">
-      <span style="font-size:16px">${t.overdue ? '⚠️' : t.priority==='high' ? '🔴' : '🟡'}</span>
-      <div class="dash-row-info"><div class="dash-row-title">${t.title}</div><div class="dash-row-sub ${t.overdue?'overdue':''}">${t.due}</div></div>
+      <span style="font-size:16px">${t.overdue?'⚠️':t.priority==='high'?'🔴':'🟡'}</span>
+      <div class="dash-row-info">
+        <div class="dash-row-title">${t.title}</div>
+        <div class="dash-row-sub ${t.overdue?'overdue':''}">${t.due}${t.client?' · '+t.client:''}</div>
+      </div>
     </div>`).join('');
-  const activeDeals = Object.values(kanbanData).flatMap(c => c.deals).slice(0,4);
-  document.getElementById('dash-deals').innerHTML = activeDeals.map(d => `
-    <div class="dash-row" onclick="goPage('deals')">
-      <div class="dash-row-info"><div class="dash-row-title">${d.t}</div><div class="dash-row-sub">${d.c}</div></div>
-      <div class="dash-row-right"><div class="dash-row-val">${d.p}</div><div class="dash-row-date">${d.d}</div></div>
+
+  // Напоминания
+  document.getElementById('dash-reminders').innerHTML = reminders.slice(0,4).map(r=>`
+    <div class="dash-row" onclick="goPage('reminders')">
+      <span style="font-size:16px">🔔</span>
+      <div class="dash-row-info">
+        <div class="dash-row-title">Связаться: ${r.client}</div>
+        <div class="dash-row-sub overdue">В статусе «Новый» ${r.days} дн. · ${r.source}</div>
+      </div>
+      <div class="dash-row-right">
+        <span class="badge ${r.type==='rent'?'rent':'sale'}" style="font-size:10px">${r.type==='rent'?'Аренда':'Продажа'}</span>
+      </div>
     </div>`).join('');
-  document.getElementById('dash-props').innerHTML = properties.slice(0,4).map(p => `
-    <div class="dash-row" onclick="goPage('properties')">
-      <span style="font-size:20px">${p.emoji}</span>
-      <div class="dash-row-info"><div class="dash-row-title">${p.title_ru}</div><div class="dash-row-sub">${p.loc}</div></div>
-      <div class="dash-row-right"><div class="dash-row-val">${p.price}</div><div class="dash-row-date">${p.type}</div></div>
-    </div>`).join('');
+
+  // Новые заявки аренда
+  document.getElementById('dash-rent-leads').innerHTML = leadsData.filter(l=>l.type==='rent').map(l=>`
+    <div class="dash-row" onclick="goPage('leads')">
+      <span style="font-size:16px">${srcIcon[l.source]||'📥'}</span>
+      <div class="dash-row-info">
+        <div class="dash-row-title">${l.name}</div>
+        <div class="dash-row-sub">${l.msg.slice(0,45)}${l.msg.length>45?'...':''}</div>
+      </div>
+      <div class="dash-row-right"><div class="dash-row-date">${l.date}</div></div>
+    </div>`).join('') || '<div class="empty-state" style="padding:20px"><div class="empty-icon">📥</div>Нет новых</div>';
+
+  // Новые заявки продажа
+  document.getElementById('dash-sale-leads').innerHTML = leadsData.filter(l=>l.type==='sale').map(l=>`
+    <div class="dash-row" onclick="goPage('leads')">
+      <span style="font-size:16px">${srcIcon[l.source]||'📥'}</span>
+      <div class="dash-row-info">
+        <div class="dash-row-title">${l.name}</div>
+        <div class="dash-row-sub">${l.msg.slice(0,45)}${l.msg.length>45?'...':''}</div>
+      </div>
+      <div class="dash-row-right"><div class="dash-row-date">${l.date}</div></div>
+    </div>`).join('') || '<div class="empty-state" style="padding:20px"><div class="empty-icon">📥</div>Нет новых</div>';
 }
 
 // ── NAV ───────────────────────────────────────────────────────────────────────
 function goPage(name) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  document.getElementById('page-' + name)?.classList.add('active');
+  const page = document.getElementById('page-' + name);
+  if (page) page.classList.add('active');
   document.querySelectorAll('.nav-item').forEach(n => {
     if (n.getAttribute('onclick') === `goPage('${name}')`) n.classList.add('active');
   });
+  if (name === 'dashboard')     renderDashboard();
+  if (name === 'clients-rent')  renderRentClients();
+  if (name === 'clients-sale')  renderSaleClients();
+  if (name === 'reminders')     renderReminders();
+  if (name === 'leads')         renderLeads();
 }
 
 // ── MODAL ─────────────────────────────────────────────────────────────────────
@@ -1441,12 +1663,40 @@ function quickSend(channel, name, contact) {
   showToast(`📱 Быстрое сообщение → ${name} через ${ch}`);
 }
 
+// ── DEFERRED ──────────────────────────────────────────────────────────────────
+function openDeferred(name) {
+  document.getElementById('deferred-client-name').textContent = '👤 ' + name;
+  document.getElementById('deferred-date').value = '';
+  document.getElementById('deferred-reason').value = '';
+  document.getElementById('deferred-comment').value = '';
+  openModal('deferred-modal');
+}
+
+function saveDeferred() {
+  const date   = document.getElementById('deferred-date').value;
+  const reason = document.getElementById('deferred-reason').value;
+  if (!date) { showToast('⚠️ Укажите дату'); return; }
+  closeModal('deferred-modal');
+  showToast(`⏸️ Клиент отложен до ${date}${reason?' · '+reason:''}`);
+}
+
+// ── OPEN CLIENT MODAL WITH PRESET DEAL TYPE ───────────────────────────────────
+function openClientModal(dealType) {
+  openModal('client-modal');
+  setTimeout(() => {
+    const sel = document.getElementById('f-c-deal-type');
+    if (sel) { sel.value = dealType; onDealTypeChange(); }
+  }, 50);
+}
+
 // ── INIT ──────────────────────────────────────────────────────────────────────
-renderClients();
+renderRentClients();
+renderSaleClients();
 renderProperties();
 renderKanban();
 renderTasks();
 renderLeads();
+renderReminders();
 renderDashboard();
 </script>
 </body>
