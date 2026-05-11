@@ -51,6 +51,20 @@ body {
   flex-direction: column;
 }
 
+.suggest-list {
+  position: absolute; top: 100%; left: 0; right: 0;
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: var(--radius); z-index: 100; max-height: 180px;
+  overflow-y: auto; box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+}
+.suggest-item {
+  padding: 9px 12px; cursor: pointer; font-size: 13px;
+  border-bottom: 1px solid var(--border); transition: background 0.1s;
+}
+.suggest-item:last-child { border-bottom: none; }
+.suggest-item:hover { background: var(--bg3); }
+.suggest-item .sub { font-size: 11px; color: var(--text3); margin-top: 2px; }
+
 .role-opt {
   padding: 8px 10px; border-radius: var(--radius); cursor: pointer;
   font-size: 13px; color: var(--text2); transition: background 0.15s;
@@ -653,6 +667,9 @@ tbody tr:hover td { background: var(--bg3); }
       <div class="nav-item" onclick="goPage('reminders')">
         <span class="nav-ico">🔔</span><span id="nav-reminders">Напоминания</span>
         <span class="nav-badge red">4</span>
+      </div>
+      <div class="nav-item" onclick="goPage('agents')">
+        <span class="nav-ico">🤝</span><span id="nav-agents">Агенты</span>
       </div>
     </div>
 
@@ -1311,6 +1328,30 @@ tbody tr:hover td { background: var(--bg3); }
       </div>
     </div>
 
+    <!-- ── AGENTS ─────────────────────────────────────────────────────────── -->
+    <div id="page-agents" class="page">
+      <div class="page-head">
+        <div>
+          <div class="page-title">🤝 Агенты</div>
+          <div class="page-subtitle">Внешние агенты по чужим объектам</div>
+        </div>
+        <div class="head-actions">
+          <button class="btn primary" onclick="openAgentModal('standalone')">+ Добавить агента</button>
+        </div>
+      </div>
+      <div class="page-body" style="padding-top:16px">
+        <div class="table-card">
+          <div class="table-toolbar">
+            <input type="text" placeholder="🔍 Поиск..." id="agents-search" oninput="renderAgents()" style="flex:1;max-width:280px">
+          </div>
+          <table><thead><tr>
+            <th>Агент</th><th>Телефон</th><th>Объект</th><th>Комиссия</th><th>Сделок</th><th></th>
+          </tr></thead>
+          <tbody id="agents-table-body"></tbody></table>
+        </div>
+      </div>
+    </div>
+
   </div><!-- /content -->
 </div><!-- /layout -->
 
@@ -1532,6 +1573,168 @@ tbody tr:hover td { background: var(--bg3); }
   </div>
 </div>
 
+<!-- ── DEAL MODAL RENT ────────────────────────────────────────────────────── -->
+<div class="modal-overlay" id="deal-modal-rent">
+  <div class="modal" style="width:520px;max-height:88vh;overflow-y:auto">
+    <div class="modal-head">
+      <div class="modal-title">🔑 Новая сделка — Аренда</div>
+      <div class="modal-close" onclick="closeModal('deal-modal-rent')">✕</div>
+    </div>
+    <div class="form-group">
+      <label>Клиент *</label>
+      <div style="position:relative">
+        <input id="rd-client" placeholder="Начните вводить имя..." oninput="searchClientSuggest(this,'rd-client-list')" autocomplete="off">
+        <div id="rd-client-list" class="suggest-list"></div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Объект аренды *</label>
+      <select id="rd-property">
+        <option value="">— Выбрать объект —</option>
+        <option>Студия Ocean View, Паттайя Пратамнак</option>
+        <option>Бунгало на берегу, Самуи Чавенг</option>
+        <option>Апартаменты 2BR, Джомтьен</option>
+        <option>Кондо с видом на море, Пратамнак</option>
+        <option>Вилла с бассейном, Хуа Хин</option>
+      </select>
+    </div>
+    <div style="margin-bottom:14px">
+      <button class="btn" style="width:100%;background:var(--amber-bg);color:var(--amber);border-color:rgba(251,191,36,0.3)" onclick="openAgentModal('rent')">
+        🤝 Чужой объект — добавить агента
+      </button>
+      <div id="rd-agent-info" style="display:none;margin-top:8px;padding:10px 12px;background:var(--amber-bg);border-radius:var(--radius);font-size:12px;color:var(--amber)"></div>
+    </div>
+    <div class="form-group">
+      <label>Статус</label>
+      <select id="rd-status" onchange="onRentStatusChange()">
+        <option value="new_lead">🆕 Новый</option>
+        <option value="negotiation">🗣️ Переговоры</option>
+        <option value="booking">🔒 Бронирование</option>
+        <option value="checkin">✅ Заезд</option>
+        <option value="checkout">🚪 Выезд</option>
+      </select>
+    </div>
+    <div id="rd-booking-block" style="display:none">
+      <div style="height:1px;background:var(--border);margin:4px 0 12px"></div>
+      <div style="font-size:11px;font-weight:600;color:var(--blue);text-transform:uppercase;margin-bottom:8px">🔒 Детали бронирования</div>
+      <div class="form-group"><label>Сумма бронирования</label><input id="rd-booking-amount" placeholder="฿ 25,000"></div>
+    </div>
+    <div id="rd-checkin-block" style="display:none">
+      <div style="height:1px;background:var(--border);margin:4px 0 12px"></div>
+      <div style="font-size:11px;font-weight:600;color:var(--green);text-transform:uppercase;margin-bottom:8px">✅ Детали заезда</div>
+      <div class="form-row">
+        <div class="form-group"><label>Дата заезда</label><input id="rd-checkin-date" type="date"></div>
+        <div class="form-group"><label>Дата выезда</label><input id="rd-checkout-plan-date" type="date"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Сумма аренды</label><input id="rd-rent-amount" placeholder="฿ 80,000/мес"></div>
+        <div class="form-group"><label>Депозит</label><input id="rd-deposit" placeholder="฿ 160,000"></div>
+      </div>
+    </div>
+    <div id="rd-checkout-block" style="display:none">
+      <div style="height:1px;background:var(--border);margin:4px 0 12px"></div>
+      <div style="font-size:11px;font-weight:600;color:var(--purple);text-transform:uppercase;margin-bottom:8px">🚪 Детали выезда</div>
+      <div class="form-group">
+        <label>Статус возврата депозита</label>
+        <select id="rd-deposit-status">
+          <option value="">— Выбрать —</option>
+          <option value="full">✅ Возвращён полностью</option>
+          <option value="partial">⚠️ Возвращён частично</option>
+          <option value="withheld">❌ Удержан (повреждения)</option>
+          <option value="pending">⏳ Ожидает решения</option>
+        </select>
+      </div>
+      <div style="font-size:11px;font-weight:500;color:var(--text2);margin-bottom:8px">📊 Показания счётчиков при выезде</div>
+      <div class="form-row">
+        <div class="form-group"><label>⚡ Электричество, кВт·ч</label><input id="rd-electric" type="number" placeholder="1234"></div>
+        <div class="form-group"><label>💧 Вода, м³</label><input id="rd-water" type="number" placeholder="456"></div>
+      </div>
+      <div class="form-group"><label>Комментарий</label><textarea id="rd-checkout-note" rows="2" placeholder="Состояние объекта, замечания..."></textarea></div>
+    </div>
+    <div class="form-group" style="margin-top:8px"><label>Примечание</label><textarea id="rd-note" rows="2" placeholder="Детали..."></textarea></div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('deal-modal-rent')">Отмена</button>
+      <button class="btn primary" onclick="createDealRent()">💼 Создать сделку</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── DEAL MODAL SALE ────────────────────────────────────────────────────── -->
+<div class="modal-overlay" id="deal-modal-sale">
+  <div class="modal" style="width:540px;max-height:88vh;overflow-y:auto">
+    <div class="modal-head">
+      <div class="modal-title">💰 Новая сделка — Продажа</div>
+      <div class="modal-close" onclick="closeModal('deal-modal-sale')">✕</div>
+    </div>
+    <div class="form-group">
+      <label>Клиент * (только из базы)</label>
+      <div style="position:relative">
+        <input id="sd-client" placeholder="Начните вводить имя..." oninput="searchClientSuggest(this,'sd-client-list')" autocomplete="off">
+        <div id="sd-client-list" class="suggest-list"></div>
+      </div>
+      <div id="sd-client-selected" style="display:none;margin-top:6px;padding:8px 12px;background:var(--blue-bg);border-radius:var(--radius);font-size:12px;color:var(--blue)"></div>
+    </div>
+    <div class="form-group">
+      <label>Тип недвижимости *</label>
+      <select id="sd-prop-type" onchange="onSalePropTypeChange()">
+        <option value="">— Выбрать тип —</option>
+        <option value="new">🏗️ Новостройка</option>
+        <option value="secondary">🏠 Вторичка</option>
+        <option value="house">🏡 Дом</option>
+        <option value="land">🌿 Земля</option>
+        <option value="reassign">📋 Переуступка</option>
+      </select>
+    </div>
+    <div id="sd-prop-select-wrap" style="display:none" class="form-group">
+      <label id="sd-prop-select-label">Выбрать объект из базы</label>
+      <select id="sd-prop-select"><option value="">— Выбрать —</option></select>
+    </div>
+    <div id="sd-reassign-wrap" style="display:none">
+      <div style="font-size:11px;font-weight:600;color:var(--amber);text-transform:uppercase;margin-bottom:8px">📋 Данные объекта (переуступка)</div>
+      <div class="form-group"><label>Название</label><input id="sd-reassign-name" placeholder="ЖК / название"></div>
+      <div class="form-row">
+        <div class="form-group"><label>Адрес / локация</label><input id="sd-reassign-addr" placeholder="Паттайя, Джомтьен"></div>
+        <div class="form-group"><label>Цена</label><input id="sd-reassign-price" placeholder="฿ 0"></div>
+      </div>
+      <div class="form-group"><label>Описание</label><textarea id="sd-reassign-desc" rows="2" placeholder="Площадь, этаж, особенности..."></textarea></div>
+    </div>
+    <div style="margin-bottom:14px">
+      <button class="btn" style="width:100%;background:var(--amber-bg);color:var(--amber);border-color:rgba(251,191,36,0.3)" onclick="openAgentModal('sale')">
+        🤝 Чужой объект — добавить агента
+      </button>
+      <div id="sd-agent-info" style="display:none;margin-top:8px;padding:10px 12px;background:var(--amber-bg);border-radius:var(--radius);font-size:12px;color:var(--amber)"></div>
+    </div>
+    <div class="form-group"><label>Сумма сделки</label><input id="sd-amount" placeholder="฿ 0"></div>
+    <div class="form-group"><label>Примечание</label><textarea id="sd-note" rows="2" placeholder="Детали..."></textarea></div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('deal-modal-sale')">Отмена</button>
+      <button class="btn primary" onclick="createDealSale()">💼 Создать сделку</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── AGENT MODAL ────────────────────────────────────────────────────────── -->
+<div class="modal-overlay" id="agent-modal">
+  <div class="modal" style="width:440px">
+    <div class="modal-head">
+      <div class="modal-title">🤝 Добавить агента</div>
+      <div class="modal-close" onclick="closeModal('agent-modal')">✕</div>
+    </div>
+    <div id="agent-dup-warning" style="display:none;padding:10px 12px;background:var(--amber-bg);border-radius:var(--radius);margin-bottom:12px;font-size:13px;color:var(--amber)"></div>
+    <div class="form-group"><label>ФИО агента *</label><input id="ag-name" placeholder="Иванов Иван Иванович"></div>
+    <div class="form-group">
+      <label>Телефон * (проверка на дубль)</label>
+      <input id="ag-phone" type="tel" placeholder="+66 81 234 5678" oninput="checkAgentDuplicate()">
+    </div>
+    <div class="form-group"><label>Объект недвижимости *</label><input id="ag-property" placeholder="Название, адрес объекта"></div>
+    <div class="form-group"><label>Комиссия агента</label><input id="ag-commission" placeholder="3% или ฿ 50,000"></div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('agent-modal')">Отмена</button>
+      <button class="btn primary" onclick="saveAgent()">✅ Сохранить агента</button>
+    </div>
+  </div>
+</div>
+
 <div class="modal-overlay" id="deal-modal">
   <div class="modal">
     <div class="modal-head">
@@ -1540,12 +1743,12 @@ tbody tr:hover td { background: var(--bg3); }
     </div>
     <div class="form-group"><label>Название сделки*</label><input placeholder="Вилла → Петров"></div>
     <div class="form-row">
-      <div class="form-group"><label>Сумма ($)</label><input type="number" placeholder="0"></div>
+      <div class="form-group"><label>Сумма</label><input type="number" placeholder="0"></div>
       <div class="form-group"><label>Стадия</label>
-        <select><option>Новый лид</option><option>Переговоры</option><option>Просмотр</option><option>Предложение</option><option>Договор</option></select>
+        <select id="f-d-stage"><option value="new_lead">Новый</option><option value="negotiation">Переговоры</option><option value="viewing">Просмотр</option><option value="offer">Предложение</option><option value="contract">Договор</option></select>
       </div>
     </div>
-    <div class="form-group"><label>Примечание</label><textarea rows="2" placeholder="Детали сделки..."></textarea></div>
+    <div class="form-group"><label>Примечание</label><textarea rows="2" placeholder="Детали..."></textarea></div>
     <div class="modal-footer">
       <button class="btn" onclick="closeModal('deal-modal')">Отмена</button>
       <button class="btn primary" onclick="closeModal('deal-modal');showToast('💼 Сделка создана!')">Создать</button>
@@ -2211,6 +2414,7 @@ function renderSidebar() {
     'nav-deals-rent':  lang==='ru'?'Сделки':lang==='th'?'ดีล':'Deals',
     'nav-tasks':       lang==='ru'?'Задачи':lang==='th'?'งาน':'Tasks',
     'nav-reminders':   lang==='ru'?'Напоминания':lang==='th'?'การแจ้งเตือน':'Reminders',
+    'nav-agents':      lang==='ru'?'Агенты':lang==='th'?'ตัวแทน':'Agents',
     'nav-settings':    lang==='ru'?'Настройки':lang==='th'?'ตั้งค่า':'Settings',
     'nav-logout':      lang==='ru'?'Выйти':lang==='th'?'ออกจากระบบ':'Logout',
     'nav-dashboard':   lang==='ru'?'Дашборд':lang==='th'?'แดชบอร์ด':'Dashboard',
@@ -2273,7 +2477,254 @@ const kanbanDataRent = {
   'closed_lost':{label:()=>(lang==='ru'?'Потеряно':lang==='th'?'สูญเสีย':'Lost'), deals:[]},
 };
 
-// ── DEALS DATA ────────────────────────────────────────────────────────────────
+// ── AGENTS DATA ───────────────────────────────────────────────────────────────
+let agentsData = [
+  { id:1, name:'Сомчай Виттая',    phone:'+66 81 111 2233', property:'Кондо «The Base», Паттайя Центр', commission:'3%',       deals:2 },
+  { id:2, name:'Анна Ли',          phone:'+66 82 333 4455', property:'Вилла Rawai, Пхукет',              commission:'฿80,000',  deals:1 },
+  { id:3, name:'Дмитрий Павлов',   phone:'+7 916 777 8899', property:'ЖК «Laguna», Паттайя',            commission:'2.5%',     deals:3 },
+];
+
+let agentDealContext = null; // 'rent' | 'sale' | 'standalone'
+let selectedAgentForDeal = null;
+
+// ── RENDER AGENTS ─────────────────────────────────────────────────────────────
+function renderAgents() {
+  const q = (document.getElementById('agents-search')?.value||'').toLowerCase();
+  const data = agentsData.filter(a =>
+    !q || a.name.toLowerCase().includes(q) || a.phone.includes(q) || a.property.toLowerCase().includes(q)
+  );
+  const el = document.getElementById('agents-table-body');
+  if (!el) return;
+  el.innerHTML = data.length ? data.map(a => `<tr>
+    <td><div class="flex-cell"><div class="avatar">${a.name.split(' ').map(w=>w[0]).slice(0,2).join('')}</div>
+      <div class="cell-name">${a.name}</div></div></td>
+    <td style="font-family:var(--mono);font-size:12px;color:var(--text2)">${a.phone}</td>
+    <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text2)">${a.property}</td>
+    <td style="font-weight:500;color:var(--amber)">${a.commission}</td>
+    <td style="font-family:var(--mono)">${a.deals}</td>
+    <td><div style="display:flex;gap:4px">
+      <button class="btn sm ghost" onclick="editAgent(${a.id})">✏️</button>
+      <button class="btn sm" style="background:var(--red-bg);color:var(--red);border-color:transparent" onclick="deleteAgent(${a.id})">Удалить</button>
+    </div></td>
+  </tr>`).join('') :
+    `<tr><td colspan="6" class="empty-state" style="padding:32px;text-align:center;color:var(--text3)">Агентов нет</td></tr>`;
+}
+
+function editAgent(id) {
+  const a = agentsData.find(x=>x.id===id);
+  if (!a) return;
+  document.getElementById('ag-name').value       = a.name;
+  document.getElementById('ag-phone').value      = a.phone;
+  document.getElementById('ag-property').value   = a.property;
+  document.getElementById('ag-commission').value = a.commission;
+  agentDealContext = 'standalone';
+  openModal('agent-modal');
+}
+
+function deleteAgent(id) {
+  if (!confirm(t('confirm_delete'))) return;
+  agentsData = agentsData.filter(a=>a.id!==id);
+  renderAgents();
+  showToast('🗑 Агент удалён');
+}
+
+// ── AGENT MODAL ───────────────────────────────────────────────────────────────
+function openAgentModal(context) {
+  agentDealContext = context;
+  document.getElementById('ag-name').value       = '';
+  document.getElementById('ag-phone').value      = '';
+  document.getElementById('ag-property').value   = '';
+  document.getElementById('ag-commission').value = '';
+  document.getElementById('agent-dup-warning').style.display = 'none';
+  openModal('agent-modal');
+}
+
+function checkAgentDuplicate() {
+  const phone = document.getElementById('ag-phone').value.replace(/\s/g,'');
+  if (phone.length < 7) { document.getElementById('agent-dup-warning').style.display = 'none'; return; }
+  const dup = agentsData.find(a => a.phone.replace(/\s/g,'') === phone);
+  const warn = document.getElementById('agent-dup-warning');
+  if (dup) {
+    warn.style.display = 'block';
+    warn.textContent = `⚠️ Агент с этим номером уже есть: ${dup.name} — ${dup.property}. При сохранении он будет добавлен к сделке.`;
+    // Pre-fill name and property
+    document.getElementById('ag-name').value     = dup.name;
+    document.getElementById('ag-property').value = dup.property;
+    document.getElementById('ag-commission').value = dup.commission;
+  } else {
+    warn.style.display = 'none';
+  }
+}
+
+function saveAgent() {
+  const name     = document.getElementById('ag-name').value.trim();
+  const phone    = document.getElementById('ag-phone').value.trim();
+  const property = document.getElementById('ag-property').value.trim();
+  const comm     = document.getElementById('ag-commission').value.trim();
+
+  if (!name)     { showToast('⚠️ Укажите ФИО агента'); return; }
+  if (!phone)    { showToast('⚠️ Укажите телефон'); return; }
+  if (!property) { showToast('⚠️ Укажите объект'); return; }
+
+  // Check duplicate
+  const dup = agentsData.find(a => a.phone.replace(/\s/g,'') === phone.replace(/\s/g,''));
+  let agent;
+  if (dup) {
+    agent = dup;
+  } else {
+    agent = { id: agentsData.length + 1, name, phone, property, commission: comm, deals: 0 };
+    agentsData.push(agent);
+  }
+
+  selectedAgentForDeal = agent;
+  closeModal('agent-modal');
+
+  // Apply agent to the deal form
+  if (agentDealContext === 'rent') {
+    const info = document.getElementById('rd-agent-info');
+    info.style.display = 'block';
+    info.innerHTML = `🤝 <b>${agent.name}</b> · ${agent.phone}<br>📍 ${agent.property}${agent.commission?' · '+agent.commission:''}`;
+    // Auto-set status to negotiation
+    document.getElementById('rd-status').value = 'negotiation';
+    onRentStatusChange();
+    showToast(`✅ Агент добавлен. Статус → Переговоры`);
+  } else if (agentDealContext === 'sale') {
+    const info = document.getElementById('sd-agent-info');
+    info.style.display = 'block';
+    info.innerHTML = `🤝 <b>${agent.name}</b> · ${agent.phone}<br>📍 ${agent.property}${agent.commission?' · '+agent.commission:''}`;
+    showToast(`✅ Агент добавлен. Статус → Переговоры`);
+  } else {
+    showToast(`✅ Агент «${agent.name}» сохранён`);
+    renderAgents();
+  }
+}
+
+// ── CLIENT SUGGEST ────────────────────────────────────────────────────────────
+const allClients = [
+  ...rentClients.map(c=>({...c})),
+  ...saleClients.map(c=>({...c})),
+];
+
+function searchClientSuggest(input, listId) {
+  const q = input.value.toLowerCase();
+  const list = document.getElementById(listId);
+  if (!list) return;
+  if (!q) { list.innerHTML = ''; return; }
+  const matches = allClients.filter(c =>
+    c.name.toLowerCase().includes(q) || c.phone.includes(q) || c.email.toLowerCase().includes(q)
+  ).slice(0, 6);
+  if (!matches.length) { list.innerHTML = ''; return; }
+  list.innerHTML = matches.map(c => `
+    <div class="suggest-item" onclick="selectClient('${input.id}','${listId}','${c.name}','${c.phone}')">
+      <div style="font-weight:500">${c.name}</div>
+      <div class="sub">${c.phone} · ${c.email}</div>
+    </div>`).join('');
+}
+
+function selectClient(inputId, listId, name, phone) {
+  document.getElementById(inputId).value = name;
+  document.getElementById(listId).innerHTML = '';
+  // Show selected badge for sale form
+  const sel = document.getElementById('sd-client-selected');
+  if (sel) { sel.style.display='block'; sel.textContent = `✓ Выбран: ${name} · ${phone}`; }
+}
+
+// ── RENT STATUS CHANGE ────────────────────────────────────────────────────────
+function onRentStatusChange() {
+  const status = document.getElementById('rd-status')?.value;
+  document.getElementById('rd-booking-block').style.display  = status === 'booking'  ? 'block' : 'none';
+  document.getElementById('rd-checkin-block').style.display  = status === 'checkin'  ? 'block' : 'none';
+  document.getElementById('rd-checkout-block').style.display = status === 'checkout' ? 'block' : 'none';
+}
+
+// ── SALE PROP TYPE CHANGE ─────────────────────────────────────────────────────
+const propLists = {
+  new:       ['ЖК Laguna Beach Resort, Паттайя', 'ЖК The Base, Паттайя Центр', 'ЖК Riviera Monaco, Паттайя', 'ЖК The Riviera Jomtien'],
+  secondary: ['Кондо 2BR, The Riviera, Паттайя', 'Апарт. 1BR, Джомтьен', 'Кондо Studio, Наклуа', 'Кондо 3BR, Пратамнак'],
+  house:     ['Дом 3BR+пул, Восток Паттайи', 'Вилла 4BR, Хуа Хин', 'Дом 2BR, Паньянг', 'Вилла 5BR, Банглaмунг'],
+  land:      ['Участок 400 м², Паттайя Восток', 'Земля 800 м², Хуа Хин', 'Участок 1 рай, Чонбури', 'Земля 2 рай, Банг Ламунг'],
+};
+
+function onSalePropTypeChange() {
+  const type = document.getElementById('sd-prop-type').value;
+  const selectWrap = document.getElementById('sd-prop-select-wrap');
+  const reassignWrap = document.getElementById('sd-reassign-wrap');
+  const sel = document.getElementById('sd-prop-select');
+  const lbl = document.getElementById('sd-prop-select-label');
+
+  if (type === 'reassign') {
+    selectWrap.style.display   = 'none';
+    reassignWrap.style.display = 'block';
+    return;
+  }
+  reassignWrap.style.display = 'none';
+
+  if (type && propLists[type]) {
+    selectWrap.style.display = 'block';
+    const typeName = { new:'Новостройка', secondary:'Вторичка', house:'Дом', land:'Земля' };
+    lbl.textContent = `Выбрать объект — ${typeName[type]}`;
+    sel.innerHTML = `<option value="">— Выбрать из базы —</option>` +
+      propLists[type].map(p => `<option>${p}</option>`).join('');
+  } else {
+    selectWrap.style.display = 'none';
+  }
+}
+
+// ── CREATE DEALS ──────────────────────────────────────────────────────────────
+function createDealRent() {
+  const client   = document.getElementById('rd-client').value.trim();
+  const property = document.getElementById('rd-property').value;
+  const status   = document.getElementById('rd-status').value;
+
+  if (!client)   { showToast('⚠️ Укажите клиента'); return; }
+  if (!property) { showToast('⚠️ Выберите объект'); return; }
+
+  const finalStatus = selectedAgentForDeal ? 'negotiation' : status;
+  const newDeal = {
+    id: Math.max(...dealsData.rent.map(d=>d.id), 20) + 1,
+    t: `${property.split(',')[0]} → ${client.split(' ')[0]}`,
+    c: client, p: '—', d: new Date().toLocaleDateString('ru').slice(0,5),
+    stage: finalStatus, dealType: 'rent',
+    agent: selectedAgentForDeal ? { ...selectedAgentForDeal } : null,
+  };
+  dealsData.rent.push(newDeal);
+  selectedAgentForDeal = null;
+  closeModal('deal-modal-rent');
+  renderKanban();
+  showToast(`✅ Сделка создана: ${newDeal.t}${finalStatus==='negotiation'?' → Переговоры':''}`);
+}
+
+function createDealSale() {
+  const client  = document.getElementById('sd-client').value.trim();
+  const propType = document.getElementById('sd-prop-type').value;
+
+  if (!client)   { showToast('⚠️ Укажите клиента из базы'); return; }
+  if (!propType) { showToast('⚠️ Выберите тип недвижимости'); return; }
+
+  let propName = '';
+  if (propType === 'reassign') {
+    propName = document.getElementById('sd-reassign-name').value || 'Переуступка';
+  } else {
+    propName = document.getElementById('sd-prop-select').value || propType;
+  }
+
+  const finalStatus = selectedAgentForDeal ? 'negotiation' : 'new_lead';
+  const newDeal = {
+    id: Math.max(...dealsData.sale.map(d=>d.id), 10) + 1,
+    t: `${propName.split(',')[0]} → ${client.split(' ')[0]}`,
+    c: client, p: document.getElementById('sd-amount').value || '—',
+    d: new Date().toLocaleDateString('ru').slice(0,5),
+    stage: finalStatus, dealType: 'sale',
+    agent: selectedAgentForDeal ? { ...selectedAgentForDeal } : null,
+  };
+  dealsData.sale.push(newDeal);
+  selectedAgentForDeal = null;
+  closeModal('deal-modal-sale');
+  renderKanban();
+  showToast(`✅ Сделка создана: ${newDeal.t}${finalStatus==='negotiation'?' → Переговоры':''}`);
+}
+
+
 let dealsData = {
   sale: [
     { id:1, t:'Вилла → Chen Wei',   c:'Chen Wei',     p:'$850,000', d:'01.05', stage:'new_lead',    dealType:'sale' },
@@ -2452,11 +2903,32 @@ function openContract(dealId) {
 }
 
 function openNewDeal(type) {
-  openModal('deal-modal');
-  setTimeout(() => {
-    const sel = document.getElementById('f-d-stage');
-    if (sel) sel.value = 'new_lead';
-  }, 50);
+  selectedAgentForDeal = null;
+  if (type === 'rent') {
+    // Reset form
+    document.getElementById('rd-client').value = '';
+    document.getElementById('rd-client-list').innerHTML = '';
+    document.getElementById('rd-property').value = '';
+    document.getElementById('rd-status').value = 'new_lead';
+    document.getElementById('rd-agent-info').style.display = 'none';
+    document.getElementById('rd-booking-block').style.display  = 'none';
+    document.getElementById('rd-checkin-block').style.display  = 'none';
+    document.getElementById('rd-checkout-block').style.display = 'none';
+    document.getElementById('rd-note').value = '';
+    openModal('deal-modal-rent');
+  } else {
+    // Reset form
+    document.getElementById('sd-client').value = '';
+    document.getElementById('sd-client-list').innerHTML = '';
+    document.getElementById('sd-client-selected').style.display = 'none';
+    document.getElementById('sd-prop-type').value = '';
+    document.getElementById('sd-prop-select-wrap').style.display   = 'none';
+    document.getElementById('sd-reassign-wrap').style.display      = 'none';
+    document.getElementById('sd-agent-info').style.display = 'none';
+    document.getElementById('sd-amount').value = '';
+    document.getElementById('sd-note').value = '';
+    openModal('deal-modal-sale');
+  }
 }
 
 function setCommissionStatus(received) {
@@ -2742,6 +3214,7 @@ function goPage(name) {
   if (name === 'leads' || name === 'leads-rent') renderLeadsByType('rent', 'leads-rent-body', 'sub-leads-rent');
   if (name === 'leads')            renderLeads();
   if (name === 'properties-sale' || name === 'properties-rent') renderProperties();
+  if (name === 'agents') renderAgents();
   if (name === 'deals-sale' || name === 'deals-rent') renderKanban();
   if (name === 'pipeline') {
     if (currentRole === 'manager') { showToast('🔒 Доступ только для директора и выше'); return; }
