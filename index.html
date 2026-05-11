@@ -1,0 +1,1453 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Azimut Realty CRM</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ── RESET & TOKENS ────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:       #0F1117;
+  --bg2:      #181C24;
+  --bg3:      #1E2330;
+  --bg4:      #252B3B;
+  --border:   rgba(255,255,255,0.07);
+  --border2:  rgba(255,255,255,0.12);
+  --text:     #E8EAF0;
+  --text2:    #8B90A0;
+  --text3:    #555B6E;
+  --blue:     #4E8EF7;
+  --blue-d:   #1A5DE8;
+  --blue-bg:  rgba(78,142,247,0.1);
+  --blue-bg2: rgba(78,142,247,0.18);
+  --green:    #34D399;
+  --green-bg: rgba(52,211,153,0.1);
+  --red:      #F87171;
+  --red-bg:   rgba(248,113,113,0.1);
+  --amber:    #FBBF24;
+  --amber-bg: rgba(251,191,36,0.1);
+  --purple:   #A78BFA;
+  --purple-bg:rgba(167,139,250,0.1);
+  --radius:   8px;
+  --radius-lg:12px;
+  --radius-xl:16px;
+  --font:     'DM Sans', sans-serif;
+  --mono:     'DM Mono', monospace;
+  --sidebar:  220px;
+  --topbar:   52px;
+}
+
+html, body { height: 100%; overflow: hidden; }
+body {
+  font-family: var(--font);
+  font-size: 13px;
+  background: var(--bg);
+  color: var(--text);
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── SCROLLBAR ─────────────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--bg4); border-radius: 4px; }
+
+/* ── TOPBAR ────────────────────────────────────────────────────────────────── */
+.topbar {
+  height: var(--topbar);
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 16px 0 0;
+  flex-shrink: 0;
+  gap: 0;
+}
+.topbar-logo {
+  width: var(--sidebar);
+  min-width: var(--sidebar);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 16px;
+}
+.logo-icon {
+  width: 32px; height: 32px;
+  background: linear-gradient(135deg, var(--blue), #6366F1);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; flex-shrink: 0;
+}
+.logo-text { font-size: 14px; font-weight: 600; letter-spacing: -0.3px; }
+.logo-sub  { font-size: 10px; color: var(--text3); margin-top: 1px; font-weight: 400; }
+
+.topbar-search {
+  flex: 1;
+  max-width: 380px;
+  margin-left: 16px;
+}
+.search-input {
+  width: 100%;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 7px 12px 7px 34px;
+  font-size: 13px;
+  color: var(--text);
+  font-family: var(--font);
+  position: relative;
+}
+.search-wrap { position: relative; }
+.search-icon {
+  position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
+  color: var(--text3); font-size: 14px; pointer-events: none;
+}
+.search-input:focus { outline: none; border-color: var(--blue); }
+.search-input::placeholder { color: var(--text3); }
+
+.topbar-right {
+  margin-left: auto;
+  display: flex; align-items: center; gap: 8px;
+}
+.lang-switcher { display: flex; gap: 3px; }
+.lang-btn {
+  padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 500;
+  cursor: pointer; border: 1px solid var(--border); background: transparent;
+  color: var(--text2); transition: all 0.15s; font-family: var(--font);
+}
+.lang-btn.active { background: var(--blue-bg2); color: var(--blue); border-color: rgba(78,142,247,0.3); }
+.lang-btn:hover:not(.active) { background: var(--bg3); color: var(--text); }
+
+.notif-btn {
+  width: 34px; height: 34px; border-radius: var(--radius);
+  background: var(--bg3); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; font-size: 16px; position: relative;
+  transition: background 0.15s;
+}
+.notif-btn:hover { background: var(--bg4); }
+.notif-dot {
+  position: absolute; top: 6px; right: 6px;
+  width: 7px; height: 7px; background: var(--red);
+  border-radius: 50%; border: 1.5px solid var(--bg2);
+}
+
+.user-chip {
+  display: flex; align-items: center; gap: 8px;
+  padding: 4px 10px 4px 4px;
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 20px; cursor: pointer;
+  transition: background 0.15s;
+}
+.user-chip:hover { background: var(--bg4); }
+.user-avatar {
+  width: 26px; height: 26px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--blue), #6366F1);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 600; color: #fff;
+}
+.user-name { font-size: 12px; font-weight: 500; }
+
+/* ── LAYOUT ────────────────────────────────────────────────────────────────── */
+.layout {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* ── SIDEBAR ───────────────────────────────────────────────────────────────── */
+.sidebar {
+  width: var(--sidebar);
+  min-width: var(--sidebar);
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  padding: 10px 8px;
+  overflow-y: auto;
+}
+.nav-section { margin-bottom: 20px; }
+.nav-label {
+  font-size: 10px; font-weight: 600; color: var(--text3);
+  text-transform: uppercase; letter-spacing: 0.08em;
+  padding: 0 8px; margin-bottom: 4px;
+}
+.nav-item {
+  display: flex; align-items: center; gap: 9px;
+  padding: 8px 10px; border-radius: var(--radius);
+  cursor: pointer; font-size: 13px; font-weight: 400;
+  color: var(--text2); transition: all 0.15s;
+  position: relative; user-select: none;
+}
+.nav-item:hover { background: var(--bg3); color: var(--text); }
+.nav-item.active {
+  background: var(--blue-bg2);
+  color: var(--blue);
+  font-weight: 500;
+}
+.nav-item.active::before {
+  content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%);
+  width: 3px; height: 16px; background: var(--blue); border-radius: 0 2px 2px 0;
+}
+.nav-ico { font-size: 15px; width: 18px; text-align: center; flex-shrink: 0; }
+.nav-badge {
+  margin-left: auto; font-size: 10px; font-weight: 600;
+  background: var(--red-bg); color: var(--red);
+  padding: 1px 6px; border-radius: 20px; min-width: 18px; text-align: center;
+}
+.nav-badge.blue { background: var(--blue-bg); color: var(--blue); }
+
+.sidebar-footer {
+  margin-top: auto;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+/* ── CONTENT ───────────────────────────────────────────────────────────────── */
+.content { flex: 1; overflow: hidden; display: flex; flex-direction: column; }
+.page { display: none; flex-direction: column; height: 100%; overflow: hidden; }
+.page.active { display: flex; }
+
+.page-head {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg2);
+  display: flex; align-items: center; justify-content: space-between;
+  flex-shrink: 0;
+}
+.page-title { font-size: 15px; font-weight: 600; letter-spacing: -0.3px; }
+.page-subtitle { font-size: 12px; color: var(--text2); margin-top: 2px; }
+.head-actions { display: flex; gap: 8px; align-items: center; }
+
+/* ── BUTTONS ───────────────────────────────────────────────────────────────── */
+.btn {
+  padding: 7px 14px; border-radius: var(--radius); font-size: 13px;
+  cursor: pointer; border: 1px solid var(--border2);
+  background: var(--bg3); color: var(--text);
+  transition: all 0.15s; font-family: var(--font); font-weight: 500;
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.btn:hover { background: var(--bg4); border-color: var(--border2); }
+.btn.primary {
+  background: var(--blue); color: #fff; border-color: var(--blue);
+}
+.btn.primary:hover { background: var(--blue-d); border-color: var(--blue-d); }
+.btn.sm { padding: 5px 10px; font-size: 12px; }
+.btn.ghost { background: transparent; border-color: transparent; }
+.btn.ghost:hover { background: var(--bg3); }
+
+/* ── STATS ROW ─────────────────────────────────────────────────────────────── */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  padding: 16px 20px;
+  flex-shrink: 0;
+}
+.stat-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 14px 16px;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+.stat-card:hover { border-color: var(--border2); }
+.stat-card::after {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+.stat-card.blue::after  { background: var(--blue); }
+.stat-card.green::after { background: var(--green); }
+.stat-card.red::after   { background: var(--red); }
+.stat-card.amber::after { background: var(--amber); }
+
+.stat-icon {
+  width: 32px; height: 32px; border-radius: var(--radius);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; margin-bottom: 10px;
+}
+.stat-icon.blue   { background: var(--blue-bg);   }
+.stat-icon.green  { background: var(--green-bg);  }
+.stat-icon.red    { background: var(--red-bg);    }
+.stat-icon.amber  { background: var(--amber-bg);  }
+
+.stat-label { font-size: 11px; color: var(--text2); margin-bottom: 4px; }
+.stat-value { font-size: 24px; font-weight: 600; line-height: 1; letter-spacing: -0.5px; }
+.stat-value.blue   { color: var(--blue); }
+.stat-value.green  { color: var(--green); }
+.stat-value.red    { color: var(--red); }
+.stat-value.amber  { color: var(--amber); }
+.stat-sub { font-size: 11px; color: var(--text3); margin-top: 5px; }
+.stat-trend { font-size: 11px; margin-top: 5px; }
+.stat-trend.up   { color: var(--green); }
+.stat-trend.down { color: var(--red); }
+
+/* ── PAGE BODY ─────────────────────────────────────────────────────────────── */
+.page-body { flex: 1; overflow-y: auto; padding: 0 20px 20px; }
+
+/* ── TABLE CARD ────────────────────────────────────────────────────────────── */
+.table-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+.table-toolbar {
+  display: flex; gap: 8px; align-items: center;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
+}
+.table-toolbar input, .table-toolbar select {
+  padding: 6px 10px;
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: var(--radius); font-size: 12px;
+  color: var(--text); font-family: var(--font);
+}
+.table-toolbar input { flex: 1; max-width: 260px; }
+.table-toolbar input:focus, .table-toolbar select:focus {
+  outline: none; border-color: var(--blue);
+}
+.table-toolbar select option { background: var(--bg3); }
+
+table { width: 100%; border-collapse: collapse; }
+thead th {
+  text-align: left; padding: 10px 14px;
+  font-size: 11px; font-weight: 500; color: var(--text3);
+  border-bottom: 1px solid var(--border);
+  background: var(--bg); text-transform: uppercase; letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+tbody td {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px; vertical-align: middle;
+}
+tbody tr:last-child td { border-bottom: none; }
+tbody tr { transition: background 0.1s; cursor: pointer; }
+tbody tr:hover td { background: var(--bg3); }
+
+/* ── BADGE ─────────────────────────────────────────────────────────────────── */
+.badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 3px 8px; border-radius: 20px;
+  font-size: 11px; font-weight: 500; white-space: nowrap;
+}
+.badge::before { content: ''; width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+.badge.hot    { background: var(--red-bg);    color: var(--red);    } .badge.hot::before    { background: var(--red); }
+.badge.warm   { background: var(--amber-bg);  color: var(--amber);  } .badge.warm::before   { background: var(--amber); }
+.badge.new    { background: var(--blue-bg);   color: var(--blue);   } .badge.new::before    { background: var(--blue); }
+.badge.cold   { background: var(--bg4);       color: var(--text2);  } .badge.cold::before   { background: var(--text3); }
+.badge.active { background: var(--green-bg);  color: var(--green);  } .badge.active::before { background: var(--green); }
+.badge.sale   { background: var(--blue-bg);   color: var(--blue);   } .badge.sale::before   { background: var(--blue); }
+.badge.rent   { background: var(--purple-bg); color: var(--purple); } .badge.rent::before   { background: var(--purple); }
+.badge.done   { background: var(--green-bg);  color: var(--green);  } .badge.done::before   { background: var(--green); }
+.badge.tg     { background: rgba(41,182,246,0.12); color: #29B6F6; }
+.badge.avito  { background: rgba(255,107,53,0.12);  color: #FF6B35; }
+.badge.fb     { background: rgba(66,103,178,0.12);  color: #4267B2; }
+.badge.line   { background: rgba(0,195,91,0.12);    color: #00C35B; }
+
+/* ── AVATAR ────────────────────────────────────────────────────────────────── */
+.avatar {
+  width: 30px; height: 30px; border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 600; flex-shrink: 0;
+  background: linear-gradient(135deg, var(--blue), #6366F1);
+  color: #fff;
+}
+.flex-cell { display: flex; align-items: center; gap: 10px; }
+.cell-name  { font-weight: 500; font-size: 13px; }
+.cell-sub   { font-size: 11px; color: var(--text3); margin-top: 1px; }
+
+/* ── KANBAN ────────────────────────────────────────────────────────────────── */
+.kanban-wrap {
+  flex: 1; overflow-x: auto; overflow-y: hidden;
+  padding: 0 20px 20px;
+}
+.kanban-board {
+  display: grid;
+  grid-template-columns: repeat(7, 220px);
+  gap: 10px;
+  height: 100%;
+  min-height: 400px;
+}
+.kanban-col {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  display: flex; flex-direction: column;
+  overflow: hidden;
+}
+.kanban-head {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.kanban-stage {
+  font-size: 11px; font-weight: 600; color: var(--text2);
+  text-transform: uppercase; letter-spacing: 0.07em;
+}
+.kanban-cnt {
+  font-size: 11px; font-weight: 600;
+  background: var(--bg4); color: var(--text2);
+  padding: 1px 7px; border-radius: 20px;
+}
+.kanban-col.won .kanban-head { background: var(--green-bg); }
+.kanban-col.won .kanban-stage { color: var(--green); }
+.kanban-col.won .kanban-cnt  { background: var(--green-bg); color: var(--green); }
+.kanban-col.lost .kanban-head { background: var(--red-bg); }
+.kanban-col.lost .kanban-stage { color: var(--red); }
+
+.kanban-cards { flex: 1; overflow-y: auto; padding: 8px; display: flex; flex-direction: column; gap: 6px; }
+
+.deal-card {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 10px 12px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.deal-card:hover { border-color: var(--blue); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+.deal-card-title { font-size: 12px; font-weight: 500; margin-bottom: 3px; line-height: 1.35; }
+.deal-card-client { font-size: 11px; color: var(--text2); margin-bottom: 6px; }
+.deal-card-price { font-size: 12px; font-weight: 600; color: var(--blue); font-family: var(--mono); }
+.deal-card-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 8px; }
+.deal-card-date { font-size: 10px; color: var(--text3); }
+.deal-card-avatar { width: 20px; height: 20px; border-radius: 50%; background: linear-gradient(135deg, var(--blue),#6366F1); display: flex; align-items: center; justify-content: center; font-size: 9px; color: #fff; font-weight: 600; }
+
+/* ── PROPS GRID ────────────────────────────────────────────────────────────── */
+.prop-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+.prop-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.prop-card:hover { border-color: var(--blue); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
+.prop-thumb {
+  height: 110px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 36px;
+  position: relative;
+}
+.prop-thumb-badge { position: absolute; top: 8px; left: 8px; }
+.prop-thumb-price {
+  position: absolute; bottom: 8px; right: 8px;
+  background: rgba(0,0,0,0.7); backdrop-filter: blur(4px);
+  color: #fff; font-size: 12px; font-weight: 600;
+  padding: 3px 9px; border-radius: 20px;
+  font-family: var(--mono);
+}
+.prop-body { padding: 12px 14px; }
+.prop-title { font-size: 13px; font-weight: 600; margin-bottom: 3px; }
+.prop-loc { font-size: 11px; color: var(--text2); margin-bottom: 8px; display: flex; align-items: center; gap: 4px; }
+.prop-specs { display: flex; gap: 12px; }
+.prop-spec { font-size: 11px; color: var(--text2); display: flex; align-items: center; gap: 3px; }
+.prop-integrations { display: flex; gap: 4px; margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border); }
+
+/* ── TASKS ─────────────────────────────────────────────────────────────────── */
+.tasks-list { display: flex; flex-direction: column; gap: 6px; }
+.task-item {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 12px 14px;
+  display: flex; align-items: flex-start; gap: 12px;
+  transition: border-color 0.15s;
+}
+.task-item:hover { border-color: var(--border2); }
+.task-item.done { opacity: 0.4; }
+.task-check {
+  width: 17px; height: 17px; border-radius: 5px;
+  border: 1.5px solid var(--border2);
+  cursor: pointer; flex-shrink: 0; margin-top: 1px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; color: #fff; transition: all 0.15s;
+}
+.task-check:hover { border-color: var(--blue); background: var(--blue-bg); }
+.task-check.checked { background: var(--blue); border-color: var(--blue); }
+.task-body { flex: 1; }
+.task-title { font-size: 13px; font-weight: 500; margin-bottom: 4px; }
+.task-meta { font-size: 11px; color: var(--text2); display: flex; gap: 10px; }
+.task-meta .overdue { color: var(--red); }
+.task-priority { margin-left: auto; }
+.pri-high { background: var(--red-bg);   color: var(--red);   padding: 2px 7px; border-radius: 20px; font-size: 10px; font-weight: 500; }
+.pri-norm { background: var(--bg4);      color: var(--text2); padding: 2px 7px; border-radius: 20px; font-size: 10px; }
+.pri-low  { background: var(--green-bg); color: var(--green); padding: 2px 7px; border-radius: 20px; font-size: 10px; }
+
+/* ── MODAL ─────────────────────────────────────────────────────────────────── */
+.modal-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
+  z-index: 200; align-items: center; justify-content: center;
+}
+.modal-overlay.open { display: flex; }
+.modal {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: var(--radius-xl); padding: 24px;
+  width: 480px; max-width: 95vw; max-height: 88vh; overflow-y: auto;
+  animation: modalIn 0.2s ease;
+}
+@keyframes modalIn { from { opacity:0; transform:scale(0.96) translateY(8px); } to { opacity:1; transform:none; } }
+.modal-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.modal-title { font-size: 15px; font-weight: 600; }
+.modal-close { width: 28px; height: 28px; border-radius: 8px; background: var(--bg3); border: 1px solid var(--border); cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--text2); font-size: 16px; }
+.modal-close:hover { background: var(--bg4); color: var(--text); }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.form-group { margin-bottom: 12px; }
+.form-group label { display: block; font-size: 11px; font-weight: 500; color: var(--text2); margin-bottom: 5px; }
+.form-group input, .form-group select, .form-group textarea {
+  width: 100%; padding: 8px 11px;
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: var(--radius); font-size: 13px; color: var(--text);
+  font-family: var(--font); transition: border-color 0.15s;
+}
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+  outline: none; border-color: var(--blue);
+}
+.form-group select option { background: var(--bg3); }
+.modal-footer { display: flex; justify-content: flex-end; gap: 8px; margin-top: 18px; }
+
+/* ── TOAST ─────────────────────────────────────────────────────────────────── */
+.toast {
+  position: fixed; bottom: 20px; right: 20px;
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 12px 16px;
+  font-size: 13px; z-index: 999;
+  animation: toastIn 0.2s ease;
+  display: flex; align-items: center; gap: 8px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+}
+@keyframes toastIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:none; } }
+
+/* ── EMPTY ─────────────────────────────────────────────────────────────────── */
+.empty-state { text-align: center; padding: 48px; color: var(--text3); }
+.empty-state .empty-icon { font-size: 40px; margin-bottom: 12px; }
+.empty-state p { font-size: 13px; }
+
+/* ── DASHBOARD GRID ────────────────────────────────────────────────────────── */
+.dash-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.dash-card {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); overflow: hidden;
+}
+.dash-card-head {
+  padding: 12px 14px; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  font-size: 13px; font-weight: 500;
+}
+.dash-card-body { padding: 4px 0; }
+.dash-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 14px; border-bottom: 1px solid var(--border);
+  transition: background 0.1s; cursor: pointer;
+}
+.dash-row:last-child { border-bottom: none; }
+.dash-row:hover { background: var(--bg3); }
+.dash-row-info { flex: 1; min-width: 0; }
+.dash-row-title { font-size: 13px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.dash-row-sub { font-size: 11px; color: var(--text2); margin-top: 1px; }
+.dash-row-right { text-align: right; flex-shrink: 0; }
+.dash-row-val { font-size: 12px; font-weight: 600; color: var(--blue); font-family: var(--mono); }
+.dash-row-date { font-size: 10px; color: var(--text3); margin-top: 2px; }
+</style>
+</head>
+<body>
+
+<!-- ── TOPBAR ────────────────────────────────────────────────────────────── -->
+<div class="topbar">
+  <div class="topbar-logo">
+    <div class="logo-icon">🌴</div>
+    <div>
+      <div class="logo-text">Azimut Realty</div>
+      <div class="logo-sub">CRM Platform</div>
+    </div>
+  </div>
+  <div class="topbar-search">
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input class="search-input" type="text" placeholder="Поиск клиентов, объектов, сделок...">
+    </div>
+  </div>
+  <div class="topbar-right">
+    <div class="lang-switcher">
+      <button class="lang-btn active" onclick="setLang('ru')">RU</button>
+      <button class="lang-btn" onclick="setLang('en')">EN</button>
+      <button class="lang-btn" onclick="setLang('th')">TH</button>
+    </div>
+    <div class="notif-btn" onclick="showToast('📬 2 новых лида с Авито')">
+      🔔<div class="notif-dot"></div>
+    </div>
+    <div class="user-chip">
+      <div class="user-avatar">МА</div>
+      <div class="user-name">Михаил А.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── MAIN LAYOUT ───────────────────────────────────────────────────────── -->
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="nav-section">
+      <div class="nav-label" data-t="nav_main">Основное</div>
+      <div class="nav-item active" onclick="goPage('dashboard')">
+        <span class="nav-ico">📊</span><span data-t="nav_dashboard">Дашборд</span>
+      </div>
+      <div class="nav-item" onclick="goPage('clients')">
+        <span class="nav-ico">👥</span><span data-t="nav_clients">Клиенты</span>
+        <span class="nav-badge">3</span>
+      </div>
+      <div class="nav-item" onclick="goPage('properties')">
+        <span class="nav-ico">🏠</span><span data-t="nav_properties">Объекты</span>
+      </div>
+      <div class="nav-item" onclick="goPage('deals')">
+        <span class="nav-ico">💼</span><span data-t="nav_deals">Сделки</span>
+      </div>
+      <div class="nav-item" onclick="goPage('tasks')">
+        <span class="nav-ico">✅</span><span data-t="nav_tasks">Задачи</span>
+        <span class="nav-badge">2</span>
+      </div>
+    </div>
+    <div class="nav-section">
+      <div class="nav-label" data-t="nav_sources">Площадки</div>
+      <div class="nav-item" onclick="goPage('leads')">
+        <span class="nav-ico">📥</span><span data-t="nav_leads">Лиды</span>
+        <span class="nav-badge blue">5</span>
+      </div>
+      <div class="nav-item" onclick="showToast('✈️ Telegram интеграция активна')">
+        <span class="nav-ico">✈️</span>Telegram
+        <span class="nav-badge blue">OK</span>
+      </div>
+      <div class="nav-item" onclick="showToast('🅰️ Авито: 12 активных объявлений')">
+        <span class="nav-ico">🅰️</span>Авито
+      </div>
+      <div class="nav-item" onclick="showToast('📘 Facebook: авторизован')">
+        <span class="nav-ico">📘</span>Facebook
+      </div>
+    </div>
+    <div class="nav-section">
+      <div class="nav-label">Система</div>
+      <div class="nav-item" onclick="showToast('⚙️ Открываем настройки...')">
+        <span class="nav-ico">⚙️</span>Настройки
+      </div>
+    </div>
+    <div class="sidebar-footer">
+      <div class="nav-item" onclick="showToast('👋 До свидания!')">
+        <span class="nav-ico">🚪</span><span style="color:var(--text2)">Выйти</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- ── DASHBOARD ──────────────────────────────────────────────────────── -->
+    <div id="page-dashboard" class="page active">
+      <div class="page-head">
+        <div>
+          <div class="page-title" data-t="nav_dashboard">Дашборд</div>
+          <div class="page-subtitle">Понедельник, 2 мая 2025 · Паттайя, Таиланд</div>
+        </div>
+        <div class="head-actions">
+          <button class="btn" onclick="showToast('📊 Экспорт отчёта...')">📊 Отчёт</button>
+        </div>
+      </div>
+      <div class="stats-row">
+        <div class="stat-card blue">
+          <div class="stat-icon blue">👥</div>
+          <div class="stat-label" data-t="stat_clients">Клиентов в базе</div>
+          <div class="stat-value blue">247</div>
+          <div class="stat-trend up">↑ +12 за месяц</div>
+        </div>
+        <div class="stat-card red">
+          <div class="stat-icon red">🔥</div>
+          <div class="stat-label" data-t="stat_hot">Горячих лидов</div>
+          <div class="stat-value red">18</div>
+          <div class="stat-sub">Требуют внимания</div>
+        </div>
+        <div class="stat-card green">
+          <div class="stat-icon green">💰</div>
+          <div class="stat-label" data-t="stat_pipeline">Pipeline</div>
+          <div class="stat-value green">$2.4M</div>
+          <div class="stat-trend up">↑ +340k vs прошлый мес</div>
+        </div>
+        <div class="stat-card amber">
+          <div class="stat-icon amber">✅</div>
+          <div class="stat-label" data-t="stat_tasks_today">Задач сегодня</div>
+          <div class="stat-value amber">6</div>
+          <div class="stat-sub">2 просрочены</div>
+        </div>
+      </div>
+      <div class="page-body">
+        <div class="dash-grid">
+          <div class="dash-card">
+            <div class="dash-card-head">
+              <span>🔥 Горячие лиды</span>
+              <button class="btn sm ghost" onclick="goPage('leads')">Все →</button>
+            </div>
+            <div class="dash-card-body" id="dash-leads"></div>
+          </div>
+          <div class="dash-card">
+            <div class="dash-card-head">
+              <span>✅ Задачи на сегодня</span>
+              <button class="btn sm ghost" onclick="goPage('tasks')">Все →</button>
+            </div>
+            <div class="dash-card-body" id="dash-tasks"></div>
+          </div>
+          <div class="dash-card">
+            <div class="dash-card-head">
+              <span>💼 Активные сделки</span>
+              <button class="btn sm ghost" onclick="goPage('deals')">Канбан →</button>
+            </div>
+            <div class="dash-card-body" id="dash-deals"></div>
+          </div>
+          <div class="dash-card">
+            <div class="dash-card-head">
+              <span>🏠 Последние объекты</span>
+              <button class="btn sm ghost" onclick="goPage('properties')">Все →</button>
+            </div>
+            <div class="dash-card-body" id="dash-props"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── CLIENTS ────────────────────────────────────────────────────────── -->
+    <div id="page-clients" class="page">
+      <div class="page-head">
+        <div>
+          <div class="page-title" data-t="nav_clients">Клиенты</div>
+          <div class="page-subtitle">247 клиентов в базе</div>
+        </div>
+        <div class="head-actions">
+          <button class="btn" onclick="openModal('broadcast-modal')">📣 Рассылка</button>
+          <button class="btn" onclick="showToast('📤 Экспорт CSV...')">Экспорт</button>
+          <button class="btn primary" onclick="openModal('client-modal')">+ Добавить клиента</button>
+        </div>
+      </div>
+      <div class="page-body" style="padding-top:16px">
+        <div class="table-card">
+          <div class="table-toolbar">
+            <input type="text" placeholder="🔍  Поиск..." id="client-search" oninput="renderClients()">
+            <select id="client-status" onchange="renderClients()">
+              <option value="">Все статусы</option>
+              <option value="hot">Горячий</option>
+              <option value="warm">Тёплый</option>
+              <option value="new">Новый</option>
+              <option value="cold">Холодный</option>
+            </select>
+            <select id="client-source" onchange="renderClients()">
+              <option value="">Все источники</option>
+              <option value="Avito">Авито</option>
+              <option value="Facebook">Facebook</option>
+              <option value="Telegram">Telegram</option>
+              <option value="LINE">LINE</option>
+              <option value="Сайт">Сайт</option>
+            </select>
+          </div>
+          <table>
+            <thead><tr>
+              <th>Клиент</th><th>Телефон</th><th>Запрос</th><th>Бюджет</th><th>Статус</th><th>Источник</th><th>Менеджер</th><th>Написать</th>
+            </tr></thead>
+            <tbody id="clients-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── PROPERTIES ─────────────────────────────────────────────────────── -->
+    <div id="page-properties" class="page">
+      <div class="page-head">
+        <div>
+          <div class="page-title" data-t="nav_properties">Объекты недвижимости</div>
+          <div class="page-subtitle">84 объекта · 52 на продажу · 32 в аренду</div>
+        </div>
+        <div class="head-actions">
+          <button class="btn" onclick="showToast('🅰️ Публикация на Авито...')">🅰️ На Авито</button>
+          <button class="btn" onclick="showToast('📘 Публикация на Facebook...')">📘 На Facebook</button>
+          <button class="btn primary" onclick="openModal('prop-modal')">+ Добавить объект</button>
+        </div>
+      </div>
+      <div class="page-body" style="padding-top:16px">
+        <div class="table-toolbar" style="background:transparent;padding:0 0 12px;border:none">
+          <input type="text" placeholder="🔍  Поиск объектов..." style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:7px 12px;font-size:13px;color:var(--text);font-family:var(--font);flex:none;width:280px">
+          <select style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:7px 10px;font-size:13px;color:var(--text);font-family:var(--font)">
+            <option>Все типы</option><option>Villa</option><option>Condo</option><option>Apartment</option>
+          </select>
+          <select style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:7px 10px;font-size:13px;color:var(--text);font-family:var(--font)">
+            <option>Все регионы</option><option>Pattaya</option><option>Phuket</option><option>Bangkok</option><option>Samui</option>
+          </select>
+        </div>
+        <div class="prop-grid" id="prop-grid"></div>
+      </div>
+    </div>
+
+    <!-- ── DEALS ──────────────────────────────────────────────────────────── -->
+    <div id="page-deals" class="page">
+      <div class="page-head">
+        <div>
+          <div class="page-title" data-t="nav_deals">Воронка сделок</div>
+          <div class="page-subtitle">23 активных сделки · Pipeline $2.4M</div>
+        </div>
+        <div class="head-actions">
+          <button class="btn primary" onclick="openModal('deal-modal')">+ Новая сделка</button>
+        </div>
+      </div>
+      <div class="kanban-wrap">
+        <div class="kanban-board" id="kanban-board"></div>
+      </div>
+    </div>
+
+    <!-- ── TASKS ──────────────────────────────────────────────────────────── -->
+    <div id="page-tasks" class="page">
+      <div class="page-head">
+        <div>
+          <div class="page-title" data-t="nav_tasks">Задачи</div>
+          <div class="page-subtitle">6 задач на сегодня · 2 просрочены</div>
+        </div>
+        <div class="head-actions">
+          <button class="btn" onclick="openModal('broadcast-modal')">📣 Рассылка</button>
+          <button class="btn primary" onclick="openModal('task-modal')">+ Новая задача</button>
+        </div>
+      </div>
+      <div class="page-body" style="padding-top:16px">
+        <div class="tasks-list" id="tasks-list"></div>
+      </div>
+    </div>
+
+    <!-- ── LEADS ──────────────────────────────────────────────────────────── -->
+    <div id="page-leads" class="page">
+      <div class="page-head">
+        <div>
+          <div class="page-title" data-t="nav_leads">Входящие лиды</div>
+          <div class="page-subtitle">5 новых лидов с площадок</div>
+        </div>
+        <div class="head-actions">
+          <button class="btn" onclick="showToast('🅰️ Парсинг Авито...')">🅰️ Авито-парсер</button>
+          <button class="btn primary" onclick="showToast('➕ Добавить лид вручную')">+ Добавить</button>
+        </div>
+      </div>
+      <div class="page-body" style="padding-top:16px">
+        <div class="table-card">
+          <div class="table-toolbar">
+            <select>
+              <option>Все источники</option>
+              <option>Авито</option><option>Facebook</option><option>Telegram</option><option>LINE</option>
+            </select>
+            <select>
+              <option>Все статусы</option><option>Новые</option><option>В работе</option><option>Конвертированы</option>
+            </select>
+          </div>
+          <table>
+            <thead><tr>
+              <th>Источник</th><th>Имя</th><th>Контакт</th><th>Сообщение</th><th>Получен</th><th></th>
+            </tr></thead>
+            <tbody id="leads-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /layout -->
+
+<!-- ── MODALS ────────────────────────────────────────────────────────────── -->
+<div class="modal-overlay" id="broadcast-modal">
+  <div class="modal" style="width:520px">
+    <div class="modal-head">
+      <div class="modal-title">📣 Рассылка сообщений</div>
+      <div class="modal-close" onclick="closeModal('broadcast-modal')">✕</div>
+    </div>
+
+    <!-- Кому -->
+    <div style="margin-bottom:14px">
+      <div style="font-size:11px;font-weight:500;color:var(--text2);margin-bottom:8px">КОМУ ОТПРАВИТЬ</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap" id="broadcast-targets">
+        <label style="display:flex;align-items:center;gap:6px;padding:6px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);cursor:pointer;font-size:13px">
+          <input type="checkbox" checked> Все клиенты (247)
+        </label>
+        <label style="display:flex;align-items:center;gap:6px;padding:6px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);cursor:pointer;font-size:13px">
+          <input type="checkbox"> 🔥 Горячие (18)
+        </label>
+        <label style="display:flex;align-items:center;gap:6px;padding:6px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);cursor:pointer;font-size:13px">
+          <input type="checkbox"> 🌡️ Тёплые (54)
+        </label>
+        <label style="display:flex;align-items:center;gap:6px;padding:6px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);cursor:pointer;font-size:13px">
+          <input type="checkbox"> 🇷🇺 RU-клиенты
+        </label>
+        <label style="display:flex;align-items:center;gap:6px;padding:6px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);cursor:pointer;font-size:13px">
+          <input type="checkbox"> 🇬🇧 EN-клиенты
+        </label>
+        <label style="display:flex;align-items:center;gap:6px;padding:6px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);cursor:pointer;font-size:13px">
+          <input type="checkbox"> 🇹🇭 TH-клиенты
+        </label>
+      </div>
+    </div>
+
+    <!-- Канал -->
+    <div style="margin-bottom:14px">
+      <div style="font-size:11px;font-weight:500;color:var(--text2);margin-bottom:8px">КАНАЛ ОТПРАВКИ</div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
+        <div class="channel-btn active" onclick="selectChannel(this,'whatsapp')" style="display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 8px;background:rgba(37,211,102,0.12);border:2px solid #25D366;border-radius:var(--radius);cursor:pointer;transition:all 0.15s">
+          <span style="font-size:22px">📱</span>
+          <span style="font-size:12px;font-weight:500;color:#25D366">WhatsApp</span>
+        </div>
+        <div class="channel-btn" onclick="selectChannel(this,'telegram')" style="display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 8px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);cursor:pointer;transition:all 0.15s">
+          <span style="font-size:22px">✈️</span>
+          <span style="font-size:12px;font-weight:500;color:var(--text2)">Telegram</span>
+        </div>
+        <div class="channel-btn" onclick="selectChannel(this,'email')" style="display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 8px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);cursor:pointer;transition:all 0.15s">
+          <span style="font-size:22px">📧</span>
+          <span style="font-size:12px;font-weight:500;color:var(--text2)">Email</span>
+        </div>
+        <div class="channel-btn" onclick="selectChannel(this,'sms')" style="display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 8px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);cursor:pointer;transition:all 0.15s">
+          <span style="font-size:22px">💬</span>
+          <span style="font-size:12px;font-weight:500;color:var(--text2)">SMS</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Шаблон -->
+    <div style="margin-bottom:14px">
+      <div style="font-size:11px;font-weight:500;color:var(--text2);margin-bottom:6px">ШАБЛОН</div>
+      <select id="broadcast-template" onchange="applyTemplate()" style="width:100%;padding:8px 11px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);font-size:13px;color:var(--text);font-family:var(--font);margin-bottom:8px">
+        <option value="">— Выбрать шаблон —</option>
+        <option value="new_obj">🏠 Новый объект поступил</option>
+        <option value="price_drop">📉 Снижение цены на объект</option>
+        <option value="follow">👋 Follow-up: как дела с поиском?</option>
+        <option value="promo">🎁 Специальное предложение</option>
+      </select>
+    </div>
+
+    <!-- Текст -->
+    <div class="form-group">
+      <label>ТЕКСТ СООБЩЕНИЯ</label>
+      <textarea id="broadcast-text" rows="5" placeholder="Введите текст сообщения...&#10;&#10;Доступные переменные: {name}, {phone}, {budget}" style="resize:vertical"></textarea>
+    </div>
+
+    <div style="font-size:11px;color:var(--text3);margin-bottom:14px">
+      💡 Переменные: <code style="background:var(--bg4);padding:1px 5px;border-radius:4px">{name}</code> — имя клиента,
+      <code style="background:var(--bg4);padding:1px 5px;border-radius:4px">{budget}</code> — бюджет,
+      <code style="background:var(--bg4);padding:1px 5px;border-radius:4px">{manager}</code> — менеджер
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('broadcast-modal')">Отмена</button>
+      <button class="btn" onclick="previewBroadcast()" style="background:var(--blue-bg);color:var(--blue);border-color:rgba(78,142,247,0.3)">👁 Предпросмотр</button>
+      <button class="btn primary" onclick="sendBroadcast()">📣 Отправить</button>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal-overlay" id="client-modal">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title">Добавить клиента</div>
+      <div class="modal-close" onclick="closeModal('client-modal')">✕</div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group"><label>Имя*</label><input id="f-c-name" placeholder="Иван Петров"></div>
+      <div class="form-group"><label>Телефон</label><input id="f-c-phone" placeholder="+7 999 123-45-67"></div>
+    </div>
+    <div class="form-group"><label>Email</label><input id="f-c-email" type="email" placeholder="ivan@email.com"></div>
+
+    <div class="form-row">
+      <div class="form-group"><label>Источник</label>
+        <select id="f-c-source">
+          <option>Авито</option><option>Facebook</option><option>Telegram</option>
+          <option>LINE</option><option>Сайт</option><option>Реферал</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Тип сделки</label>
+        <select id="f-c-deal-type" onchange="onDealTypeChange()">
+          <option value="">— Выбрать —</option>
+          <option value="rent">🔑 Аренда</option>
+          <option value="sale">💰 Продажа</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Статус — появляется после выбора типа сделки -->
+    <div id="f-c-status-wrap" style="display:none" class="form-group">
+      <label>Статус</label>
+      <select id="f-c-status" onchange="onStatusChange()">
+      </select>
+    </div>
+
+    <!-- Доп. поля для Брони (только аренда + статус "Бронь") -->
+    <div id="f-c-booking-wrap" style="display:none">
+      <div style="height:1px;background:var(--border);margin:4px 0 12px"></div>
+      <div style="font-size:11px;font-weight:600;color:var(--amber);margin-bottom:8px;display:flex;align-items:center;gap:6px">
+        🔒 ДЕТАЛИ БРОНИ
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Сумма брони</label>
+          <input id="f-c-booking-amount" type="number" placeholder="50000">
+        </div>
+        <div class="form-group">
+          <label>Валюта</label>
+          <select id="f-c-booking-currency">
+            <option value="THB">฿ THB (бат)</option>
+            <option value="USD">$ USD</option>
+            <option value="EUR">€ EUR</option>
+            <option value="RUB">₽ RUB</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group"><label>Запрос / Пожелания</label>
+      <input id="f-c-request" placeholder="Вилла 3 спальни, Паттайя, бассейн...">
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Бюджет от</label><input type="number" placeholder="100000"></div>
+      <div class="form-group"><label>Бюджет до</label><input type="number" placeholder="300000"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('client-modal')">Отмена</button>
+      <button class="btn primary" onclick="saveClient()">Сохранить</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="task-modal">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title">Новая задача</div>
+      <div class="modal-close" onclick="closeModal('task-modal')">✕</div>
+    </div>
+    <div class="form-group"><label>Задача*</label><input placeholder="Позвонить клиенту..."></div>
+    <div class="form-row">
+      <div class="form-group"><label>Дата и время</label><input type="datetime-local"></div>
+      <div class="form-group"><label>Приоритет</label>
+        <select><option value="high">🔴 Высокий</option><option value="normal" selected>🟡 Обычный</option><option value="low">🟢 Низкий</option></select>
+      </div>
+    </div>
+    <div class="form-group"><label>Примечание</label><textarea rows="2" placeholder="Детали..."></textarea></div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('task-modal')">Отмена</button>
+      <button class="btn primary" onclick="closeModal('task-modal');showToast('✅ Задача создана!')">Создать</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="prop-modal">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title">Добавить объект</div>
+      <div class="modal-close" onclick="closeModal('prop-modal')">✕</div>
+    </div>
+    <div class="form-group"><label>Название (RU)</label><input placeholder="Вилла с бассейном, Паттайя"></div>
+    <div class="form-group"><label>Title (EN)</label><input placeholder="Pool Villa, Pattaya"></div>
+    <div class="form-group"><label>ชื่อ (TH)</label><input placeholder="วิลล่าพร้อมสระว่ายน้ำ พัทยา"></div>
+    <div class="form-row">
+      <div class="form-group"><label>Тип</label>
+        <select><option>Villa</option><option>Condo</option><option>Apartment</option><option>Townhouse</option><option>Land</option></select>
+      </div>
+      <div class="form-group"><label>Тип сделки</label>
+        <select><option value="sale">Продажа</option><option value="rent">Аренда</option></select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Цена</label><input type="number" placeholder="0"></div>
+      <div class="form-group"><label>Валюта</label>
+        <select><option>THB ฿</option><option>USD $</option><option>EUR €</option><option>RUB ₽</option></select>
+      </div>
+    </div>
+    <div class="form-group"><label>Локация</label><input placeholder="Pattaya, Jomtien Beach"></div>
+    <div class="form-row">
+      <div class="form-group"><label>Спальни</label><input type="number" value="2" min="0"></div>
+      <div class="form-group"><label>м²</label><input type="number" placeholder="0"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('prop-modal')">Отмена</button>
+      <button class="btn primary" onclick="closeModal('prop-modal');showToast('🏠 Объект добавлен!')">Сохранить</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="deal-modal">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title">Новая сделка</div>
+      <div class="modal-close" onclick="closeModal('deal-modal')">✕</div>
+    </div>
+    <div class="form-group"><label>Название сделки*</label><input placeholder="Вилла → Петров"></div>
+    <div class="form-row">
+      <div class="form-group"><label>Сумма ($)</label><input type="number" placeholder="0"></div>
+      <div class="form-group"><label>Стадия</label>
+        <select><option>Новый лид</option><option>Переговоры</option><option>Просмотр</option><option>Предложение</option><option>Договор</option></select>
+      </div>
+    </div>
+    <div class="form-group"><label>Примечание</label><textarea rows="2" placeholder="Детали сделки..."></textarea></div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('deal-modal')">Отмена</button>
+      <button class="btn primary" onclick="closeModal('deal-modal');showToast('💼 Сделка создана!')">Создать</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── TRANSLATIONS ─────────────────────────────────────────────────────────────
+const T = {
+  ru: { nav_dashboard:'Дашборд', nav_clients:'Клиенты', nav_properties:'Объекты', nav_deals:'Сделки', nav_tasks:'Задачи', nav_leads:'Лиды', nav_main:'Основное', nav_sources:'Площадки', stat_clients:'Клиентов в базе', stat_hot:'Горячих лидов', stat_pipeline:'Pipeline', stat_tasks_today:'Задач сегодня' },
+  en: { nav_dashboard:'Dashboard', nav_clients:'Clients', nav_properties:'Properties', nav_deals:'Deals', nav_tasks:'Tasks', nav_leads:'Leads', nav_main:'Main', nav_sources:'Platforms', stat_clients:'Total clients', stat_hot:'Hot leads', stat_pipeline:'Pipeline', stat_tasks_today:'Tasks today' },
+  th: { nav_dashboard:'แดชบอร์ด', nav_clients:'ลูกค้า', nav_properties:'อสังหาฯ', nav_deals:'ดีล', nav_tasks:'งาน', nav_leads:'ลีด', nav_main:'หลัก', nav_sources:'แพลตฟอร์ม', stat_clients:'ลูกค้าทั้งหมด', stat_hot:'ลีดร้อน', stat_pipeline:'ไปป์ไลน์', stat_tasks_today:'งานวันนี้' },
+};
+let lang = 'ru';
+function setLang(l) {
+  lang = l;
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.textContent === l.toUpperCase()));
+  document.querySelectorAll('[data-t]').forEach(el => { const k = el.dataset.t; if (T[l][k]) el.textContent = T[l][k]; });
+}
+
+// ── DATA ──────────────────────────────────────────────────────────────────────
+const clients = [
+  { name:'Александр Петров', email:'petrov@mail.ru', phone:'+7 999 123-45-67', request:'Вилла 3 спальни, Паттайя', budget:'$250–400k', status:'hot',  source:'Avito',    manager:'МА', lang:'ru' },
+  { name:'Sarah Mitchell',   email:'sarah@gmail.com',phone:'+44 77 900 1234',  request:'Condo аренда, Bangkok',   budget:'$1.5k/мес', status:'warm', source:'Facebook', manager:'АК', lang:'en' },
+  { name:'Chen Wei',         email:'chen@qq.com',    phone:'+86 138 0013 8000',request:'Инвестиция 2+ объекта',   budget:'$1M+',      status:'hot',  source:'Telegram', manager:'МА', lang:'en' },
+  { name:'Мария Иванова',    email:'ivanova@ya.ru',  phone:'+7 495 555-12-34', request:'Апартаменты, Джомтьен',   budget:'$80–120k',  status:'new',  source:'Сайт',     manager:'НС', lang:'ru' },
+  { name:'James Anderson',   email:'james@hotm.com', phone:'+1 212 555-0100',  request:'Villa with pool, Samui',  budget:'$400–700k', status:'warm', source:'Facebook', manager:'АК', lang:'en' },
+  { name:'Наталья Смирнова', email:'nat@inbox.ru',   phone:'+7 812 444-56-78', request:'Долгосрочная аренда',     budget:'$800/мес',  status:'cold', source:'Avito',    manager:'НС', lang:'ru' },
+  { name:'Somchai Wiriyakit',email:'somchai@th.com', phone:'+66 81 234 5678',  request:'Townhouse, Chiang Mai',   budget:'$150–200k', status:'new',  source:'LINE',     manager:'МА', lang:'th' },
+  { name:'Anna Müller',      email:'anna@web.de',    phone:'+49 30 12345678',  request:'Villa Koh Samui',         budget:'$250–350k', status:'warm', source:'Facebook', manager:'АК', lang:'en' },
+];
+
+const properties = [
+  { emoji:'🏖️', title_ru:'Вилла у моря, 3 спальни',   loc:'Паттайя, Джомтьен',  type:'Villa',    deal:'sale', price:'฿ 14,500,000', beds:3, baths:3, sqm:280, avito:true,  fb:true,  color:'linear-gradient(135deg,#1e3a5f,#2563eb)' },
+  { emoji:'🏙️', title_ru:'Кондо в центре',             loc:'Бангкок, Сукхумвит',  type:'Condo',    deal:'sale', price:'฿ 6,200,000',  beds:2, baths:2, sqm:65,  avito:false, fb:true,  color:'linear-gradient(135deg,#1a1a2e,#6366f1)' },
+  { emoji:'🌴', title_ru:'Студия Ocean View',           loc:'Паттайя, Пратамнак', type:'Apartment',deal:'rent', price:'฿ 22,000/мес', beds:0, baths:1, sqm:35,  avito:true,  fb:false, color:'linear-gradient(135deg,#0f4c75,#1b6ca8)' },
+  { emoji:'🌺', title_ru:'Вилла с бассейном, Пхукет',  loc:'Пхукет, Раваи',      type:'Villa',    deal:'sale', price:'฿ 18,900,000', beds:4, baths:4, sqm:350, avito:false, fb:true,  color:'linear-gradient(135deg,#1a3a2a,#2d6a4f)' },
+  { emoji:'🏝️', title_ru:'Бунгало на берегу, Самуи',   loc:'Самуи, Чавенг',      type:'Villa',    deal:'rent', price:'฿ 85,000/мес', beds:3, baths:2, sqm:180, avito:false, fb:true,  color:'linear-gradient(135deg,#3d1a00,#d97706)' },
+  { emoji:'🏗️', title_ru:'Таунхаус, Чиангмай',         loc:'Чиангмай, Нимман',   type:'Townhouse',deal:'sale', price:'฿ 5,800,000',  beds:3, baths:3, sqm:160, avito:true,  fb:false, color:'linear-gradient(135deg,#1a1a1a,#4a4a4a)' },
+];
+
+const kanbanData = {
+  'new_lead':    { label:'Новый лид',    deals:[{t:'Вилла → Chen Wei',   c:'Chen Wei',         p:'$850,000', d:'01.05'},{t:'Кондо → Petrov',    c:'А. Петров',        p:'$320,000', d:'02.05'}] },
+  'negotiation': { label:'Переговоры',   deals:[{t:'Апарт. → Иванова',   c:'М. Иванова',       p:'$98,000',  d:'28.04'},{t:'Вилла → Anderson', c:'J. Anderson',      p:'$450,000', d:'30.04'}] },
+  'viewing':     { label:'Просмотр',     deals:[{t:'Таунхаус → Wiriy.',  c:'S. Wiriyakit',     p:'$162,000', d:'03.05'}] },
+  'offer':       { label:'Предложение',  deals:[{t:'Вилла → Mitchell',   c:'S. Mitchell',      p:'Аренда',   d:'29.04'}] },
+  'contract':    { label:'Договор',      deals:[{t:'Кондо → Müller',     c:'A. Müller',        p:'$290,000', d:'25.04'}] },
+  'closed_won':  { label:'Закрыто ✓',   deals:[{t:'Студия → Смирнова',  c:'Н. Смирнова',      p:'$95,000',  d:'20.04'},{t:'Бунгало → Wang',  c:'Wang Lei',         p:'$220,000', d:'15.04'}] },
+  'closed_lost': { label:'Потеряно',     deals:[{t:'Вилла → Ivanov',     c:'P. Ivanov',        p:'$400,000', d:'10.04'}] },
+};
+
+const tasks = [
+  { title:'Позвонить Chen Wei — уточнить объём инвестиций', due:'Сегодня, 11:00', priority:'high',   done:false, overdue:false, client:'Chen Wei' },
+  { title:'Отправить договор Müller на подпись',             due:'Сегодня, 13:00', priority:'high',   done:false, overdue:false, client:'A. Müller' },
+  { title:'Показ виллы Anderson на Самуи',                   due:'Вчера, 16:00',   priority:'high',   done:false, overdue:true,  client:'J. Anderson' },
+  { title:'Follow-up: Иванова — апарты Джомтьен',           due:'30 апр, 10:00',  priority:'normal', done:false, overdue:true,  client:'М. Иванова' },
+  { title:'Встреча с застройщиком Laguna Pattaya',           due:'Завтра, 15:00',  priority:'normal', done:false, overdue:false, client:'' },
+  { title:'Обновить листинг: Вилла Пхукет на Авито',        due:'4 мая',          priority:'low',    done:false, overdue:false, client:'' },
+  { title:'Звонок Wiriyakit — финальное предложение',       due:'Сегодня, 17:00', priority:'normal', done:true,  overdue:false, client:'S. Wiriyakit' },
+];
+
+const leads = [
+  { source:'avito',    name:'Андрей Козлов',    contact:'+7 916 555-12-34', msg:'Ищу виллу 2-3 спальни в Паттайе до $300k',   date:'02.05 09:14' },
+  { source:'facebook', name:'Emma Thompson',    contact:'FB Messenger',     msg:'Looking for 2br condo near beach, budget $150k', date:'02.05 08:30' },
+  { source:'telegram', name:'@user_pattaya',    contact:'Telegram',         msg:'Есть квартиры у моря в аренду?',              date:'01.05 22:45' },
+  { source:'line',     name:'Siriporn Kaew',    contact:'LINE: siriporn',   msg:'ต้องการคอนโดใกล้ทะเล งบประมาณ 3 ล้าน',      date:'01.05 18:20' },
+  { source:'avito',    name:'Дмитрий Орлов',   contact:'+7 999 888-77-66', msg:'Интересует коммерческая недвижимость',        date:'01.05 15:10' },
+];
+
+// ── RENDER CLIENTS ────────────────────────────────────────────────────────────
+const statusMap = { hot:'Горячий', warm:'Тёплый', new:'Новый', cold:'Холодный' };
+const srcIcon   = { Avito:'🅰️', Facebook:'📘', Telegram:'✈️', LINE:'💚', Сайт:'🌐', Реферал:'👤' };
+
+function renderClients() {
+  const q  = (document.getElementById('client-search')?.value || '').toLowerCase();
+  const st = document.getElementById('client-status')?.value || '';
+  const sr = document.getElementById('client-source')?.value || '';
+  const data = clients.filter(c =>
+    (!q  || c.name.toLowerCase().includes(q) || c.phone.includes(q) || c.request.toLowerCase().includes(q)) &&
+    (!st || c.status === st) &&
+    (!sr || c.source === sr)
+  );
+  document.getElementById('clients-body').innerHTML = data.map(c => `<tr onclick="showToast('👤 Открываем карточку: ${c.name}')">
+    <td><div class="flex-cell"><div class="avatar">${c.name.split(' ').map(w=>w[0]).slice(0,2).join('')}</div><div><div class="cell-name">${c.name}</div><div class="cell-sub">${c.email}</div></div></div></td>
+    <td style="color:var(--text2);font-family:var(--mono);font-size:12px">${c.phone}</td>
+    <td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text2)">${c.request}</td>
+    <td style="font-family:var(--mono);font-size:12px;font-weight:500">${c.budget}</td>
+    <td><span class="badge ${c.status}">${statusMap[c.status]}</span></td>
+    <td><span class="badge ${c.source.toLowerCase()}">${srcIcon[c.source]||''} ${c.source}</span></td>
+    <td><span style="font-size:12px;color:var(--text2);background:var(--bg3);padding:3px 8px;border-radius:20px">${c.manager}</span></td>
+    <td onclick="event.stopPropagation()">
+      <div style="display:flex;gap:4px">
+        <button class="btn sm ghost" title="WhatsApp" onclick="quickSend('whatsapp','${c.name}','${c.phone}')">📱</button>
+        <button class="btn sm ghost" title="Telegram" onclick="quickSend('telegram','${c.name}','${c.phone}')">✈️</button>
+        <button class="btn sm ghost" title="Email"    onclick="quickSend('email','${c.name}','${c.email}')">📧</button>
+        <button class="btn sm ghost" title="SMS"      onclick="quickSend('sms','${c.name}','${c.phone}')">💬</button>
+      </div>
+    </td>
+  </tr>`).join('');
+}
+
+// ── RENDER PROPERTIES ─────────────────────────────────────────────────────────
+function renderProperties() {
+  document.getElementById('prop-grid').innerHTML = properties.map(p => `
+    <div class="prop-card" onclick="showToast('🏠 Открываем: ${p.title_ru}')">
+      <div class="prop-thumb" style="background:${p.color}">
+        <span class="prop-thumb-badge badge ${p.deal}">${p.deal === 'sale' ? 'Продажа' : 'Аренда'}</span>
+        <span style="font-size:40px">${p.emoji}</span>
+        <span class="prop-thumb-price">${p.price}</span>
+      </div>
+      <div class="prop-body">
+        <div class="prop-title">${p.title_ru}</div>
+        <div class="prop-loc">📍 ${p.loc} · <span style="color:var(--text3)">${p.type}</span></div>
+        <div class="prop-specs">
+          ${p.beds > 0 ? `<span class="prop-spec">🛏 ${p.beds}</span>` : ''}
+          <span class="prop-spec">🚿 ${p.baths}</span>
+          <span class="prop-spec">📐 ${p.sqm} м²</span>
+        </div>
+        <div class="prop-integrations">
+          ${p.avito ? `<span class="badge avito" style="font-size:10px">🅰️ Авито</span>` : `<span style="font-size:10px;color:var(--text3);padding:3px 6px">Авито: нет</span>`}
+          ${p.fb    ? `<span class="badge fb"    style="font-size:10px">📘 Facebook</span>` : ''}
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+// ── RENDER KANBAN ─────────────────────────────────────────────────────────────
+function renderKanban() {
+  const cls = { closed_won:'won', closed_lost:'lost' };
+  document.getElementById('kanban-board').innerHTML = Object.entries(kanbanData).map(([key, col]) => `
+    <div class="kanban-col ${cls[key]||''}">
+      <div class="kanban-head">
+        <span class="kanban-stage">${col.label}</span>
+        <span class="kanban-cnt">${col.deals.length}</span>
+      </div>
+      <div class="kanban-cards">
+        ${col.deals.map(d => `
+          <div class="deal-card" onclick="showToast('💼 Открываем сделку: ${d.t}')">
+            <div class="deal-card-title">${d.t}</div>
+            <div class="deal-card-client">${d.c}</div>
+            <div class="deal-card-price">${d.p}</div>
+            <div class="deal-card-footer">
+              <span class="deal-card-date">${d.d}</span>
+              <span class="deal-card-avatar">${d.c[0]}</span>
+            </div>
+          </div>`).join('')}
+      </div>
+    </div>`).join('');
+}
+
+// ── RENDER TASKS ──────────────────────────────────────────────────────────────
+function renderTasks() {
+  document.getElementById('tasks-list').innerHTML = tasks.map((t, i) => `
+    <div class="task-item ${t.done ? 'done' : ''}">
+      <div class="task-check ${t.done ? 'checked' : ''}" onclick="toggleTask(${i})">${t.done ? '✓' : ''}</div>
+      <div class="task-body">
+        <div class="task-title">${t.title}</div>
+        <div class="task-meta">
+          <span class="${t.overdue ? 'overdue' : ''}">${t.overdue ? '⚠ Просрочено: ' : ''}${t.due}</span>
+          ${t.client ? `<span>· ${t.client}</span>` : ''}
+        </div>
+      </div>
+      <div class="task-priority"><span class="pri-${t.priority}">${{high:'Высокий',normal:'Обычный',low:'Низкий'}[t.priority]}</span></div>
+    </div>`).join('');
+}
+function toggleTask(i) { tasks[i].done = !tasks[i].done; renderTasks(); }
+
+// ── RENDER LEADS ──────────────────────────────────────────────────────────────
+function renderLeads() {
+  const srcBadge = { avito:'avito 🅰️ Авито', facebook:'fb 📘 Facebook', telegram:'tg ✈️ Telegram', line:'line 💚 LINE' };
+  document.getElementById('leads-body').innerHTML = leads.map(l => `<tr>
+    <td><span class="badge ${srcBadge[l.source].split(' ')[0]}">${srcBadge[l.source].split(' ').slice(1).join(' ')}</span></td>
+    <td style="font-weight:500">${l.name}</td>
+    <td style="font-size:12px;color:var(--text2);font-family:var(--mono)">${l.contact}</td>
+    <td style="max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text2);font-size:12px">${l.msg}</td>
+    <td style="color:var(--text3);font-size:11px;font-family:var(--mono)">${l.date}</td>
+    <td><button class="btn sm primary" onclick="showToast('✅ Лид конвертирован в клиента!')">→ Клиент</button></td>
+  </tr>`).join('');
+}
+
+// ── DASHBOARD WIDGETS ─────────────────────────────────────────────────────────
+function renderDashboard() {
+  document.getElementById('dash-leads').innerHTML = clients.filter(c => c.status === 'hot').map(c => `
+    <div class="dash-row" onclick="goPage('clients')">
+      <div class="avatar">${c.name.split(' ').map(w=>w[0]).slice(0,2).join('')}</div>
+      <div class="dash-row-info"><div class="dash-row-title">${c.name}</div><div class="dash-row-sub">${c.request}</div></div>
+      <div class="dash-row-right"><div class="dash-row-val">${c.budget}</div><div class="dash-row-date">${srcIcon[c.source]||''} ${c.source}</div></div>
+    </div>`).join('');
+  document.getElementById('dash-tasks').innerHTML = tasks.filter(t => !t.done).slice(0,4).map(t => `
+    <div class="dash-row">
+      <span style="font-size:16px">${t.overdue ? '⚠️' : t.priority==='high' ? '🔴' : '🟡'}</span>
+      <div class="dash-row-info"><div class="dash-row-title">${t.title}</div><div class="dash-row-sub ${t.overdue?'overdue':''}">${t.due}</div></div>
+    </div>`).join('');
+  const activeDeals = Object.values(kanbanData).flatMap(c => c.deals).slice(0,4);
+  document.getElementById('dash-deals').innerHTML = activeDeals.map(d => `
+    <div class="dash-row" onclick="goPage('deals')">
+      <div class="dash-row-info"><div class="dash-row-title">${d.t}</div><div class="dash-row-sub">${d.c}</div></div>
+      <div class="dash-row-right"><div class="dash-row-val">${d.p}</div><div class="dash-row-date">${d.d}</div></div>
+    </div>`).join('');
+  document.getElementById('dash-props').innerHTML = properties.slice(0,4).map(p => `
+    <div class="dash-row" onclick="goPage('properties')">
+      <span style="font-size:20px">${p.emoji}</span>
+      <div class="dash-row-info"><div class="dash-row-title">${p.title_ru}</div><div class="dash-row-sub">${p.loc}</div></div>
+      <div class="dash-row-right"><div class="dash-row-val">${p.price}</div><div class="dash-row-date">${p.type}</div></div>
+    </div>`).join('');
+}
+
+// ── NAV ───────────────────────────────────────────────────────────────────────
+function goPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-' + name)?.classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => {
+    if (n.getAttribute('onclick') === `goPage('${name}')`) n.classList.add('active');
+  });
+}
+
+// ── MODAL ─────────────────────────────────────────────────────────────────────
+function openModal(id)  { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+document.addEventListener('click', e => { if (e.target.classList.contains('modal-overlay')) e.target.classList.remove('open'); });
+
+function saveClient() {
+  closeModal('client-modal');
+  showToast('✅ Клиент успешно добавлен!');
+}
+
+// ── TOAST ─────────────────────────────────────────────────────────────────────
+let toastTimer;
+function showToast(msg) {
+  const t = document.querySelector('.toast');
+  if (t) t.remove();
+  clearTimeout(toastTimer);
+  const el = document.createElement('div');
+  el.className = 'toast';
+  el.textContent = msg;
+  document.body.appendChild(el);
+  toastTimer = setTimeout(() => el.remove(), 3000);
+}
+
+// ── DEAL TYPE / STATUS LOGIC ──────────────────────────────────────────────────
+const statusesByDeal = {
+  rent: [
+    { value: 'new',      label: '🆕 Новый' },
+    { value: 'booking',  label: '🔒 Бронь' },
+    { value: 'done',     label: '✅ Выполнено' },
+  ],
+  sale: [
+    { value: 'warm',     label: '🌡️ Тёплый' },
+    { value: 'advance',  label: '💵 Внесён аванс' },
+    { value: 'deposit',  label: '🏦 Депозит' },
+    { value: 'done',     label: '✅ Выполнено' },
+  ],
+};
+
+function onDealTypeChange() {
+  const type    = document.getElementById('f-c-deal-type').value;
+  const wrap    = document.getElementById('f-c-status-wrap');
+  const sel     = document.getElementById('f-c-status');
+  const booking = document.getElementById('f-c-booking-wrap');
+
+  if (!type) {
+    wrap.style.display    = 'none';
+    booking.style.display = 'none';
+    return;
+  }
+
+  // Заполняем статусы по типу
+  sel.innerHTML = statusesByDeal[type]
+    .map(s => `<option value="${s.value}">${s.label}</option>`)
+    .join('');
+
+  wrap.style.display    = 'block';
+  booking.style.display = 'none'; // сброс при смене типа
+}
+
+function onStatusChange() {
+  const status  = document.getElementById('f-c-status').value;
+  const type    = document.getElementById('f-c-deal-type').value;
+  const booking = document.getElementById('f-c-booking-wrap');
+  // Показываем поля брони только для аренды со статусом "Бронь"
+  booking.style.display = (type === 'rent' && status === 'booking') ? 'block' : 'none';
+}
+
+// ── BROADCAST ────────────────────────────────────────────────────────────────
+const channelNames = { whatsapp:'WhatsApp', telegram:'Telegram', email:'Email', sms:'SMS' };
+const channelColors = { whatsapp:'#25D366', telegram:'#29B6F6', email:'#4E8EF7', sms:'#A78BFA' };
+let selectedChannel = 'whatsapp';
+
+function selectChannel(el, ch) {
+  selectedChannel = ch;
+  document.querySelectorAll('.channel-btn').forEach(b => {
+    b.style.border = '1px solid var(--border)';
+    b.style.background = 'var(--bg3)';
+    b.querySelector('span:last-child').style.color = 'var(--text2)';
+  });
+  el.style.border = `2px solid ${channelColors[ch]}`;
+  el.style.background = `${channelColors[ch]}18`;
+  el.querySelector('span:last-child').style.color = channelColors[ch];
+}
+
+const templates = {
+  new_obj:    'Здравствуйте, {name}!\n\nСпешим сообщить о новом поступлении, которое соответствует вашим критериям поиска.\n\n🏠 Объект: [НАЗВАНИЕ]\n📍 Локация: [МЕСТО]\n💰 Цена: [ЦЕНА]\n\nГотовы организовать просмотр в удобное для вас время.\n\nС уважением, {manager}\nAzimut Realty',
+  price_drop: 'Добрый день, {name}!\n\nХотим сообщить о снижении цены на объект, который вас интересовал:\n\n📉 Новая цена: [ЦЕНА] (было [СТАРАЯ ЦЕНА])\n🏠 [НАЗВАНИЕ ОБЪЕКТА]\n\nСвяжитесь с нами — предложение ограничено!\n\n{manager} | Azimut Realty',
+  follow:     'Добрый день, {name}!\n\nКак продвигается поиск недвижимости? Мы подобрали несколько новых вариантов в рамках вашего бюджета {budget}.\n\nПишите — всегда рады помочь!\n\n{manager} | Azimut Realty',
+  promo:      'Здравствуйте, {name}!\n\nСпециально для вас — эксклюзивное предложение этого месяца:\n\n🎁 [ОПИСАНИЕ АКЦИИ]\n\nОбращайтесь — будем рады помочь с выбором!\n\n{manager} | Azimut Realty',
+};
+
+function applyTemplate() {
+  const key = document.getElementById('broadcast-template').value;
+  if (key && templates[key]) {
+    document.getElementById('broadcast-text').value = templates[key];
+  }
+}
+
+function previewBroadcast() {
+  const txt = document.getElementById('broadcast-text').value;
+  if (!txt.trim()) { showToast('⚠️ Введите текст сообщения'); return; }
+  const preview = txt
+    .replace('{name}', 'Александр Петров')
+    .replace('{budget}', '$250–400k')
+    .replace('{manager}', 'Михаил А.');
+  alert(`Предпросмотр для «Александр Петров»:\n\n${preview}`);
+}
+
+function sendBroadcast() {
+  const txt = document.getElementById('broadcast-text').value;
+  if (!txt.trim()) { showToast('⚠️ Введите текст сообщения'); return; }
+  closeModal('broadcast-modal');
+  const ch = channelNames[selectedChannel];
+  showToast(`📣 Рассылка через ${ch} запущена! Отправляем 247 сообщений...`);
+  setTimeout(() => showToast(`✅ Рассылка завершена: 247 сообщений через ${ch}`), 3000);
+}
+
+function quickSend(channel, name, contact) {
+  const ch = channelNames[channel];
+  const msg = `Отправляем сообщение клиенту ${name} (${contact}) через ${ch}`;
+  openModal('broadcast-modal');
+  selectChannel(document.querySelectorAll('.channel-btn')[['whatsapp','telegram','email','sms'].indexOf(channel)], channel);
+  document.getElementById('broadcast-text').value = `Здравствуйте, ${name}!\n\n`;
+  showToast(`📱 Быстрое сообщение → ${name} через ${ch}`);
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+renderClients();
+renderProperties();
+renderKanban();
+renderTasks();
+renderLeads();
+renderDashboard();
+</script>
+</body>
+</html>
