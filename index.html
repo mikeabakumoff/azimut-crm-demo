@@ -671,6 +671,10 @@ tbody tr:hover td { background: var(--bg3); }
       <div class="nav-item" onclick="goPage('agents')">
         <span class="nav-ico">🤝</span><span id="nav-agents">Агенты</span>
       </div>
+      <div class="nav-item" onclick="goPage('clients-all')">
+        <span class="nav-ico">👥</span><span id="nav-clients-all">Клиенты</span>
+        <span class="nav-badge">10</span>
+      </div>
     </div>
 
     <!-- Секция ПРОДАЖА -->
@@ -686,10 +690,6 @@ tbody tr:hover td { background: var(--bg3); }
         <div class="nav-item nav-sub" onclick="goPage('leads-sale')">
           <span class="nav-ico">📥</span><span id="nav-leads-sale">Заявки</span>
           <span class="nav-badge blue">2</span>
-        </div>
-        <div class="nav-item nav-sub" onclick="goPage('clients-sale')">
-          <span class="nav-ico">👥</span><span id="nav-clients-sale">Клиенты</span>
-          <span class="nav-badge">4</span>
         </div>
         <div class="nav-item nav-sub" onclick="goPage('properties-sale')">
           <span class="nav-ico">🏠</span><span id="nav-properties-sale">Объекты</span>
@@ -713,10 +713,6 @@ tbody tr:hover td { background: var(--bg3); }
         <div class="nav-item nav-sub" onclick="goPage('leads-rent')">
           <span class="nav-ico">📥</span><span id="nav-leads-rent">Заявки</span>
           <span class="nav-badge blue">3</span>
-        </div>
-        <div class="nav-item nav-sub" onclick="goPage('clients-rent')">
-          <span class="nav-ico">👥</span><span id="nav-clients-rent">Клиенты</span>
-          <span class="nav-badge">6</span>
         </div>
         <div class="nav-item nav-sub" onclick="goPage('properties-rent')">
           <span class="nav-ico">🏠</span><span id="nav-properties-rent">Объекты</span>
@@ -850,6 +846,55 @@ tbody tr:hover td { background: var(--bg3); }
             </div>
             <div class="dash-card-body" id="dash-sale-leads"></div>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── CLIENTS ALL (единая база) ─────────────────────────────────────── -->
+    <div id="page-clients-all" class="page">
+      <div class="page-head">
+        <div>
+          <div class="page-title">👥 Клиенты</div>
+          <div class="page-subtitle">Единая база — аренда и продажа</div>
+        </div>
+        <div class="head-actions">
+          <button class="btn" onclick="openModal('broadcast-modal')">📣 Рассылка</button>
+          <button class="btn" onclick="showToast('📤 Экспорт...')">Экспорт</button>
+          <button class="btn primary" onclick="openClientModal('rent')">+ Добавить клиента</button>
+        </div>
+      </div>
+      <div class="page-body" style="padding-top:16px">
+        <div class="table-card">
+          <div class="table-toolbar">
+            <input type="text" placeholder="🔍  Поиск..." id="all-clients-search" oninput="renderAllClients()">
+            <select id="all-clients-status" onchange="renderAllClients()">
+              <option value="">Все статусы</option>
+              <option value="new">🆕 Новый</option>
+              <option value="negotiation">🗣️ Переговоры</option>
+              <option value="booking">🔒 Бронь</option>
+              <option value="warm">🌡️ Тёплый</option>
+              <option value="advance">💵 Аванс</option>
+              <option value="deferred">⏸️ Отложен</option>
+            </select>
+            <select id="all-clients-type" onchange="renderAllClients()">
+              <option value="">Все типы</option>
+              <option value="rent">🔑 Аренда</option>
+              <option value="sale">💰 Продажа</option>
+            </select>
+            <select id="all-clients-source" onchange="renderAllClients()">
+              <option value="">Все источники</option>
+              <option value="Avito">Авито</option>
+              <option value="Facebook">Facebook</option>
+              <option value="Telegram">Telegram</option>
+              <option value="Сайт">Сайт</option>
+            </select>
+          </div>
+          <table>
+            <thead><tr>
+              <th>Клиент</th><th>Телефон</th><th>Тип</th><th>Запрос</th><th>Бюджет</th><th>Статус</th><th>Источник</th><th>Написать</th><th>Действия</th>
+            </tr></thead>
+            <tbody id="all-clients-body"></tbody>
+          </table>
         </div>
       </div>
     </div>
@@ -2871,6 +2916,62 @@ function clientRow(c,statusMap,statusBadge) {
   </tr>`;
 }
 
+// ── RENDER ALL CLIENTS (единая база) ─────────────────────────────────────────
+function renderAllClients() {
+  const q   = (document.getElementById('all-clients-search')?.value||'').toLowerCase();
+  const st  = document.getElementById('all-clients-status')?.value||'';
+  const tp  = document.getElementById('all-clients-type')?.value||'';
+  const src = document.getElementById('all-clients-source')?.value||'';
+
+  const allStatusMap = {
+    ...rentStatusMap, ...saleStatusMap
+  };
+  const allStatusBadge = {
+    ...rentStatusBadge, ...saleStatusBadge
+  };
+
+  const data = clientsDB.filter(c =>
+    (!q   || c.name.toLowerCase().includes(q) || (c.phone||'').includes(q) || (c.request||'').toLowerCase().includes(q)) &&
+    (!st  || c.status === st) &&
+    (!tp  || c.dealType === tp) &&
+    (!src || c.source === src)
+  );
+
+  const el = document.getElementById('all-clients-body');
+  if (!el) return;
+
+  el.innerHTML = data.length ? data.map(c => {
+    const st2  = allStatusMap[c.status]  || c.status  || '—';
+    const bd2  = allStatusBadge[c.status]|| 'new';
+    const typeLabel = c.dealType === 'rent'
+      ? `<span class="badge rent" style="font-size:10px">🔑 Аренда</span>`
+      : `<span class="badge sale" style="font-size:10px">💰 Продажа</span>`;
+    const deferredTag = c.status === 'deferred' && c.deferredUntil
+      ? `<div style="font-size:10px;color:var(--amber);margin-top:2px">до ${c.deferredUntil}</div>` : '';
+    return `<tr onclick="showToast('👤 ${c.name}')">
+      <td><div class="flex-cell"><div class="avatar">${c.name.split(' ').map(w=>w[0]).slice(0,2).join('')}</div>
+        <div><div class="cell-name">${c.name}</div><div class="cell-sub">${c.email||''}</div></div></div></td>
+      <td style="font-family:var(--mono);font-size:12px;color:var(--text2)">${c.phone||'—'}</td>
+      <td>${typeLabel}</td>
+      <td style="max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text2);font-size:12px">${c.request||'—'}</td>
+      <td style="font-family:var(--mono);font-size:12px;font-weight:500">${c.budget||'—'}</td>
+      <td><span class="badge ${bd2}">${st2}</span>${deferredTag}</td>
+      <td><span class="badge ${(c.source||'').toLowerCase()}">${srcIcon[c.source]||''} ${c.source||'—'}</span></td>
+      <td onclick="event.stopPropagation()"><div style="display:flex;gap:3px">
+        <button class="btn sm ghost" onclick="quickSend('whatsapp','${c.name}','${c.phone||''}')">📱</button>
+        <button class="btn sm ghost" onclick="quickSend('telegram','${c.name}','${c.phone||''}')">✈️</button>
+        <button class="btn sm ghost" onclick="quickSend('email','${c.name}','${c.email||''}')">📧</button>
+      </div></td>
+      <td onclick="event.stopPropagation()"><div style="display:flex;gap:3px">
+        <button class="btn sm ghost" onclick="openDeferred('${c.name}')">⏸️</button>
+        <button class="btn sm" style="background:var(--red-bg);color:var(--red);border-color:transparent;white-space:nowrap" onclick="confirmDeleteClient('${c.name}')">${t('btn_delete')}</button>
+      </div></td>
+    </tr>`;
+  }).join('') :
+    `<tr><td colspan="9"><div class="empty-state" style="padding:32px;text-align:center;color:var(--text3)">Клиентов не найдено</div></td></tr>`;
+}
+
+
 function renderRentClients() {
   const q=(document.getElementById('rent-search')?.value||'').toLowerCase();
   const st=document.getElementById('rent-status')?.value||'';
@@ -3197,6 +3298,7 @@ function renderSidebar() {
     'nav-tasks':       lang==='ru'?'Задачи':lang==='th'?'งาน':'Tasks',
     'nav-reminders':   lang==='ru'?'Напоминания':lang==='th'?'การแจ้งเตือน':'Reminders',
     'nav-agents':      lang==='ru'?'Агенты':lang==='th'?'ตัวแทน':'Agents',
+    'nav-clients-all': lang==='ru'?'Клиенты':lang==='th'?'ลูกค้า':'Clients',
     'nav-leads-sale':  lang==='ru'?'Заявки':lang==='th'?'ลีด':'Leads',
     'nav-clients-sale':lang==='ru'?'Клиенты':lang==='th'?'ลูกค้า':'Clients',
     'nav-properties-sale':lang==='ru'?'Объекты':lang==='th'?'อสังหาฯ':'Properties',
@@ -3260,6 +3362,7 @@ function goPage(name) {
   if(['leads-sale','clients-sale','properties-sale','deals-sale'].includes(name)){document.getElementById('body-sale')?.classList.remove('collapsed');document.getElementById('grp-sale')?.classList.remove('collapsed');}
   if(['leads-rent','clients-rent','properties-rent','deals-rent'].includes(name)){document.getElementById('body-rent')?.classList.remove('collapsed');document.getElementById('grp-rent')?.classList.remove('collapsed');}
   if(name==='dashboard')      renderDashboard();
+  if(name==='clients-all')    renderAllClients();
   if(name==='clients-rent')   renderRentClients();
   if(name==='clients-sale')   renderSaleClients();
   if(name==='reminders')      renderReminders();
@@ -3339,6 +3442,7 @@ function saveClient() { closeModal('client-modal'); showToast('✅ Клиент 
 // ── INIT ──────────────────────────────────────────────────────────────────────
 renderSidebar();
 setRole('admin');
+renderAllClients();
 renderRentClients();
 renderSaleClients();
 renderProperties();
