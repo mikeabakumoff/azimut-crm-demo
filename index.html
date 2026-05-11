@@ -603,59 +603,69 @@ tbody tr:hover td { background: var(--bg3); }
   <!-- SIDEBAR -->
   <div class="sidebar">
     <div class="nav-section">
-      <div class="nav-label" data-t="nav_main">Основное</div>
+      <div class="nav-label" id="lbl-main">Основное</div>
       <div class="nav-item active" onclick="goPage('dashboard')">
-        <span class="nav-ico">📊</span><span data-t="nav_dashboard">Дашборд</span>
+        <span class="nav-ico">📊</span><span id="nav-dashboard">Дашборд</span>
       </div>
       <div class="nav-item" onclick="goPage('clients-rent')">
-        <span class="nav-ico">🔑</span>Клиенты — Аренда
-        <span class="nav-badge">5</span>
+        <span class="nav-ico">🔑</span><span id="nav-clients-rent">Клиенты — Аренда</span>
+        <span class="nav-badge">6</span>
       </div>
       <div class="nav-item" onclick="goPage('clients-sale')">
-        <span class="nav-ico">💰</span>Клиенты — Продажа
-        <span class="nav-badge">3</span>
+        <span class="nav-ico">💰</span><span id="nav-clients-sale">Клиенты — Продажа</span>
+        <span class="nav-badge">4</span>
       </div>
-      <div class="nav-item" onclick="goPage('properties')">
-        <span class="nav-ico">🏠</span><span data-t="nav_properties">Объекты</span>
+      <div class="nav-item" onclick="goPage('properties-sale')">
+        <span class="nav-ico">🏠</span><span id="nav-properties-sale">Объекты — Продажа</span>
       </div>
-      <div class="nav-item" onclick="goPage('deals')">
-        <span class="nav-ico">💼</span><span data-t="nav_deals">Сделки</span>
+      <div class="nav-item" onclick="goPage('properties-rent')">
+        <span class="nav-ico">🔑</span><span id="nav-properties-rent">Объекты — Аренда</span>
+      </div>
+      <div class="nav-item" onclick="goPage('deals-sale')">
+        <span class="nav-ico">💼</span><span id="nav-deals-sale">Сделки — Продажа</span>
+      </div>
+      <div class="nav-item" onclick="goPage('deals-rent')">
+        <span class="nav-ico">🤝</span><span id="nav-deals-rent">Сделки — Аренда</span>
       </div>
       <div class="nav-item" onclick="goPage('tasks')">
-        <span class="nav-ico">✅</span><span data-t="nav_tasks">Задачи</span>
+        <span class="nav-ico">✅</span><span id="nav-tasks">Задачи</span>
         <span class="nav-badge">2</span>
       </div>
       <div class="nav-item" onclick="goPage('reminders')">
-        <span class="nav-ico">🔔</span>Напоминания
+        <span class="nav-ico">🔔</span><span id="nav-reminders">Напоминания</span>
         <span class="nav-badge red">4</span>
       </div>
-    </div>
-    <div class="nav-section">
-      <div class="nav-label" data-t="nav_sources">Площадки</div>
       <div class="nav-item" onclick="goPage('leads')">
-        <span class="nav-ico">📥</span><span data-t="nav_leads">Лиды</span>
+        <span class="nav-ico">📥</span><span id="nav-leads">Заявки</span>
         <span class="nav-badge blue">5</span>
       </div>
-      <div class="nav-item" onclick="showToast('✈️ Telegram интеграция активна')">
-        <span class="nav-ico">✈️</span>Telegram
-        <span class="nav-badge blue">OK</span>
-      </div>
-      <div class="nav-item" onclick="showToast('🅰️ Авито: 12 активных объявлений')">
-        <span class="nav-ico">🅰️</span>Авито
-      </div>
-      <div class="nav-item" onclick="showToast('📘 Facebook: авторизован')">
-        <span class="nav-ico">📘</span>Facebook
-      </div>
     </div>
     <div class="nav-section">
-      <div class="nav-label">Система</div>
-      <div class="nav-item" onclick="showToast('⚙️ Открываем настройки...')">
-        <span class="nav-ico">⚙️</span>Настройки
+      <div class="nav-item" onclick="showToast('⚙️ Настройки...')">
+        <span class="nav-ico">⚙️</span><span id="nav-settings">Настройки</span>
       </div>
     </div>
     <div class="sidebar-footer">
+      <!-- Статус подключений — значками -->
+      <div style="padding:8px 10px 6px;border-top:1px solid var(--border)">
+        <div style="font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px" id="lbl-conn">Подключения</div>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+          <div title="Авито: подключён" style="display:flex;align-items:center;gap:3px;font-size:18px;cursor:pointer" onclick="showToast('🅰️ Авито: 12 объявлений, подключён')">
+            🅰️<span style="width:7px;height:7px;border-radius:50%;background:var(--green);display:inline-block"></span>
+          </div>
+          <div title="Facebook: подключён" style="display:flex;align-items:center;gap:3px;font-size:18px;cursor:pointer" onclick="showToast('📘 Facebook: подключён')">
+            📘<span style="width:7px;height:7px;border-radius:50%;background:var(--green);display:inline-block"></span>
+          </div>
+          <div title="Telegram: подключён" style="display:flex;align-items:center;gap:3px;font-size:18px;cursor:pointer" onclick="showToast('✈️ Telegram бот: активен')">
+            ✈️<span style="width:7px;height:7px;border-radius:50%;background:var(--green);display:inline-block"></span>
+          </div>
+          <div title="Сайт: не подключён" style="display:flex;align-items:center;gap:3px;font-size:18px;cursor:pointer" onclick="showToast('🌐 Сайт: не настроен — перейдите в Настройки')">
+            🌐<span style="width:7px;height:7px;border-radius:50%;background:var(--red);display:inline-block"></span>
+          </div>
+        </div>
+      </div>
       <div class="nav-item" onclick="showToast('👋 До свидания!')">
-        <span class="nav-ico">🚪</span><span style="color:var(--text2)">Выйти</span>
+        <span class="nav-ico">🚪</span><span id="nav-logout" style="color:var(--text2)">Выйти</span>
       </div>
     </div>
   </div>
@@ -834,22 +844,49 @@ tbody tr:hover td { background: var(--bg3); }
       </div>
     </div>
 
-    <!-- ── PROPERTIES ─────────────────────────────────────────────────────── -->
-    <div id="page-properties" class="page">
+    <!-- ── PROPERTIES SALE ───────────────────────────────────────────────── -->
+    <div id="page-properties-sale" class="page">
       <div class="page-head">
         <div>
-          <div class="page-title" data-t="nav_properties">Объекты недвижимости</div>
-          <div class="page-subtitle">84 объекта · 52 на продажу · 32 в аренду</div>
+          <div class="page-title" id="pt-props-sale">Объекты — Продажа</div>
+          <div class="page-subtitle">52 объекта на продажу</div>
         </div>
         <div class="head-actions">
-          <button class="btn" onclick="showToast('🅰️ Публикация на Авито...')">🅰️ На Авито</button>
-          <button class="btn" onclick="showToast('📘 Публикация на Facebook...')">📘 На Facebook</button>
-          <button class="btn primary" onclick="openModal('prop-modal')">+ Добавить объект</button>
+          <button class="btn" onclick="showToast('🅰️ Публикация на Авито...')">🅰️ Авито</button>
+          <button class="btn" onclick="showToast('📘 Facebook...')">📘 FB</button>
+          <button class="btn primary" onclick="openModal('prop-modal')" id="btn-add-prop-s">+ Добавить объект</button>
         </div>
       </div>
       <div class="page-body" style="padding-top:16px">
         <div class="table-toolbar" style="background:transparent;padding:0 0 12px;border:none">
-          <input type="text" placeholder="🔍  Поиск объектов..." style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:7px 12px;font-size:13px;color:var(--text);font-family:var(--font);flex:none;width:280px">
+          <input type="text" placeholder="🔍" style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:7px 12px;font-size:13px;color:var(--text);font-family:var(--font);flex:none;width:260px">
+          <select style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:7px 10px;font-size:13px;color:var(--text);font-family:var(--font)">
+            <option id="sel-all-types-ps">Все типы</option><option>Villa</option><option>Condo</option><option>Apartment</option>
+          </select>
+          <select style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:7px 10px;font-size:13px;color:var(--text);font-family:var(--font)">
+            <option id="sel-all-regions-ps">Все регионы</option><option>Pattaya</option><option>Phuket</option><option>Bangkok</option><option>Samui</option>
+          </select>
+        </div>
+        <div class="prop-grid" id="prop-grid-sale"></div>
+      </div>
+    </div>
+
+    <!-- ── PROPERTIES RENT ───────────────────────────────────────────────── -->
+    <div id="page-properties-rent" class="page">
+      <div class="page-head">
+        <div>
+          <div class="page-title" id="pt-props-rent">Объекты — Аренда</div>
+          <div class="page-subtitle">32 объекта в аренду</div>
+        </div>
+        <div class="head-actions">
+          <button class="btn" onclick="showToast('🅰️ Авито...')">🅰️ Авито</button>
+          <button class="btn" onclick="showToast('📘 Facebook...')">📘 FB</button>
+          <button class="btn primary" onclick="openModal('prop-modal')" id="btn-add-prop-r">+ Добавить объект</button>
+        </div>
+      </div>
+      <div class="page-body" style="padding-top:16px">
+        <div class="table-toolbar" style="background:transparent;padding:0 0 12px;border:none">
+          <input type="text" placeholder="🔍" style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:7px 12px;font-size:13px;color:var(--text);font-family:var(--font);flex:none;width:260px">
           <select style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:7px 10px;font-size:13px;color:var(--text);font-family:var(--font)">
             <option>Все типы</option><option>Villa</option><option>Condo</option><option>Apartment</option>
           </select>
@@ -857,23 +894,39 @@ tbody tr:hover td { background: var(--bg3); }
             <option>Все регионы</option><option>Pattaya</option><option>Phuket</option><option>Bangkok</option><option>Samui</option>
           </select>
         </div>
-        <div class="prop-grid" id="prop-grid"></div>
+        <div class="prop-grid" id="prop-grid-rent"></div>
       </div>
     </div>
 
-    <!-- ── DEALS ──────────────────────────────────────────────────────────── -->
-    <div id="page-deals" class="page">
+    <!-- ── DEALS SALE ─────────────────────────────────────────────────────── -->
+    <div id="page-deals-sale" class="page">
       <div class="page-head">
         <div>
-          <div class="page-title" data-t="nav_deals">Воронка сделок</div>
-          <div class="page-subtitle">23 активных сделки · Pipeline $2.4M</div>
+          <div class="page-title" id="pt-deals-sale">Сделки — Продажа</div>
+          <div class="page-subtitle">Pipeline $2.4M</div>
         </div>
         <div class="head-actions">
-          <button class="btn primary" onclick="openModal('deal-modal')">+ Новая сделка</button>
+          <button class="btn primary" onclick="openModal('deal-modal')" id="btn-add-deal-s">+ Новая сделка</button>
         </div>
       </div>
       <div class="kanban-wrap">
-        <div class="kanban-board" id="kanban-board"></div>
+        <div class="kanban-board" id="kanban-board-sale"></div>
+      </div>
+    </div>
+
+    <!-- ── DEALS RENT ─────────────────────────────────────────────────────── -->
+    <div id="page-deals-rent" class="page">
+      <div class="page-head">
+        <div>
+          <div class="page-title" id="pt-deals-rent">Сделки — Аренда</div>
+          <div class="page-subtitle">14 активных сделок</div>
+        </div>
+        <div class="head-actions">
+          <button class="btn primary" onclick="openModal('deal-modal')" id="btn-add-deal-r">+ Новая сделка</button>
+        </div>
+      </div>
+      <div class="kanban-wrap">
+        <div class="kanban-board" id="kanban-board-rent"></div>
       </div>
     </div>
 
@@ -898,12 +951,11 @@ tbody tr:hover td { background: var(--bg3); }
     <div id="page-leads" class="page">
       <div class="page-head">
         <div>
-          <div class="page-title" data-t="nav_leads">Входящие лиды</div>
-          <div class="page-subtitle">5 новых лидов с площадок</div>
+          <div class="page-title" id="pt-leads">Входящие заявки</div>
+          <div class="page-subtitle" id="sub-leads">5 новых заявок с площадок</div>
         </div>
         <div class="head-actions">
-          <button class="btn" onclick="showToast('🅰️ Парсинг Авито...')">🅰️ Авито-парсер</button>
-          <button class="btn primary" onclick="showToast('➕ Добавить лид вручную')">+ Добавить</button>
+          <button class="btn primary" style="padding:9px 20px;font-size:14px" onclick="showToast('➕ Добавить заявку вручную')" id="btn-add-lead">+ Добавить заявку</button>
         </div>
       </div>
       <div class="page-body" style="padding-top:16px">
@@ -1206,15 +1258,110 @@ tbody tr:hover td { background: var(--bg3); }
 <script>
 // ── TRANSLATIONS ─────────────────────────────────────────────────────────────
 const T = {
-  ru: { nav_dashboard:'Дашборд', nav_clients:'Клиенты', nav_properties:'Объекты', nav_deals:'Сделки', nav_tasks:'Задачи', nav_leads:'Лиды', nav_main:'Основное', nav_sources:'Площадки', stat_clients:'Клиентов в базе', stat_hot:'Горячих лидов', stat_pipeline:'Pipeline', stat_tasks_today:'Задач сегодня' },
-  en: { nav_dashboard:'Dashboard', nav_clients:'Clients', nav_properties:'Properties', nav_deals:'Deals', nav_tasks:'Tasks', nav_leads:'Leads', nav_main:'Main', nav_sources:'Platforms', stat_clients:'Total clients', stat_hot:'Hot leads', stat_pipeline:'Pipeline', stat_tasks_today:'Tasks today' },
-  th: { nav_dashboard:'แดชบอร์ด', nav_clients:'ลูกค้า', nav_properties:'อสังหาฯ', nav_deals:'ดีล', nav_tasks:'งาน', nav_leads:'ลีด', nav_main:'หลัก', nav_sources:'แพลตฟอร์ม', stat_clients:'ลูกค้าทั้งหมด', stat_hot:'ลีดร้อน', stat_pipeline:'ไปป์ไลน์', stat_tasks_today:'งานวันนี้' },
+  ru: {
+    nav_dashboard:'Дашборд', nav_clients_rent:'Клиенты — Аренда', nav_clients_sale:'Клиенты — Продажа',
+    nav_properties_sale:'Объекты — Продажа', nav_properties_rent:'Объекты — Аренда',
+    nav_deals_sale:'Сделки — Продажа', nav_deals_rent:'Сделки — Аренда',
+    nav_tasks:'Задачи', nav_leads:'Заявки', nav_reminders:'Напоминания',
+    nav_main:'Основное', nav_settings:'Настройки', nav_logout:'Выйти',
+    stat_tasks:'Задач сегодня', stat_rent_leads:'Новые заявки аренда',
+    stat_sale_leads:'Новые заявки продажа', stat_reminders:'Напоминания',
+    btn_add_client:'+ Добавить клиента', btn_add_prop:'+ Добавить объект',
+    btn_add_deal:'+ Новая сделка', btn_add_task:'+ Новая задача', btn_add_lead:'+ Добавить заявку',
+    btn_broadcast:'📣 Рассылка', btn_export:'Экспорт',
+    btn_delete:'Удалить', btn_edit:'Редактировать', btn_defer:'⏸️ Отложить',
+    btn_convert:'→ Клиент', btn_cancel:'Отмена', btn_save:'Сохранить',
+    confirm_delete:'Вы уверены, что хотите удалить? Это действие нельзя отменить.',
+    th_client:'Клиент', th_phone:'Телефон', th_request:'Запрос', th_budget:'Бюджет',
+    th_status:'Статус', th_source:'Источник', th_write:'Написать', th_actions:'Действия',
+    th_type:'Тип', th_message:'Сообщение', th_date:'Дата',
+    page_leads_title:'Входящие заявки', page_leads_sub:'новых заявок с площадок',
+    all_statuses:'Все статусы', all_sources:'Все источники', all_types:'Все типы', all_regions:'Все регионы',
+    status_new:'🆕 Новый', status_negotiation:'🗣️ Переговоры', status_booking:'🔒 Бронь',
+    status_moved_in:'✅ Заехал', status_moved_out:'🚪 Выехал', status_deferred:'⏸️ Отложен',
+    status_warm:'🌡️ Тёплый', status_advance:'💵 Внесён аванс', status_deposit:'🏦 Депозит', status_done:'✅ Выполнено',
+    type_rent:'🔑 Аренда', type_sale:'💰 Продажа',
+    deals_today:'Задачи на сегодня', deals_reminder:'Напоминания по клиентам',
+    new_leads_rent:'Новые заявки — Аренда', new_leads_sale:'Новые заявки — Продажа',
+    see_all:'Все →', kanban_title_rent:'Сделки — Аренда', kanban_title_sale:'Сделки — Продажа',
+    props_title_sale:'Объекты — Продажа', props_title_rent:'Объекты — Аренда',
+    conn_status:'Статус подключений',
+  },
+  en: {
+    nav_dashboard:'Dashboard', nav_clients_rent:'Clients — Rent', nav_clients_sale:'Clients — Sale',
+    nav_properties_sale:'Properties — Sale', nav_properties_rent:'Properties — Rent',
+    nav_deals_sale:'Deals — Sale', nav_deals_rent:'Deals — Rent',
+    nav_tasks:'Tasks', nav_leads:'Leads', nav_reminders:'Reminders',
+    nav_main:'Main', nav_settings:'Settings', nav_logout:'Logout',
+    stat_tasks:'Tasks today', stat_rent_leads:'New rent leads',
+    stat_sale_leads:'New sale leads', stat_reminders:'Reminders',
+    btn_add_client:'+ Add client', btn_add_prop:'+ Add property',
+    btn_add_deal:'+ New deal', btn_add_task:'+ New task', btn_add_lead:'+ Add lead',
+    btn_broadcast:'📣 Broadcast', btn_export:'Export',
+    btn_delete:'Delete', btn_edit:'Edit', btn_defer:'⏸️ Defer',
+    btn_convert:'→ Client', btn_cancel:'Cancel', btn_save:'Save',
+    confirm_delete:'Are you sure you want to delete? This cannot be undone.',
+    th_client:'Client', th_phone:'Phone', th_request:'Request', th_budget:'Budget',
+    th_status:'Status', th_source:'Source', th_write:'Message', th_actions:'Actions',
+    th_type:'Type', th_message:'Message', th_date:'Date',
+    page_leads_title:'Incoming Leads', page_leads_sub:'new leads from platforms',
+    all_statuses:'All statuses', all_sources:'All sources', all_types:'All types', all_regions:'All regions',
+    status_new:'🆕 New', status_negotiation:'🗣️ Negotiating', status_booking:'🔒 Booked',
+    status_moved_in:'✅ Moved in', status_moved_out:'🚪 Moved out', status_deferred:'⏸️ Deferred',
+    status_warm:'🌡️ Warm', status_advance:'💵 Advance paid', status_deposit:'🏦 Deposit', status_done:'✅ Done',
+    type_rent:'🔑 Rent', type_sale:'💰 Sale',
+    deals_today:"Today's Tasks", deals_reminder:'Client Reminders',
+    new_leads_rent:'New Leads — Rent', new_leads_sale:'New Leads — Sale',
+    see_all:'All →', kanban_title_rent:'Deals — Rent', kanban_title_sale:'Deals — Sale',
+    props_title_sale:'Properties — Sale', props_title_rent:'Properties — Rent',
+    conn_status:'Connection status',
+  },
+  th: {
+    nav_dashboard:'แดชบอร์ด', nav_clients_rent:'ลูกค้า — เช่า', nav_clients_sale:'ลูกค้า — ขาย',
+    nav_properties_sale:'อสังหาฯ — ขาย', nav_properties_rent:'อสังหาฯ — เช่า',
+    nav_deals_sale:'ดีล — ขาย', nav_deals_rent:'ดีล — เช่า',
+    nav_tasks:'งาน', nav_leads:'ลีด', nav_reminders:'การแจ้งเตือน',
+    nav_main:'หลัก', nav_settings:'ตั้งค่า', nav_logout:'ออกจากระบบ',
+    stat_tasks:'งานวันนี้', stat_rent_leads:'ลีดเช่าใหม่',
+    stat_sale_leads:'ลีดขายใหม่', stat_reminders:'การแจ้งเตือน',
+    btn_add_client:'+ เพิ่มลูกค้า', btn_add_prop:'+ เพิ่มอสังหาฯ',
+    btn_add_deal:'+ ดีลใหม่', btn_add_task:'+ งานใหม่', btn_add_lead:'+ เพิ่มลีด',
+    btn_broadcast:'📣 ส่งข้อความ', btn_export:'ส่งออก',
+    btn_delete:'ลบ', btn_edit:'แก้ไข', btn_defer:'⏸️ เลื่อน',
+    btn_convert:'→ ลูกค้า', btn_cancel:'ยกเลิก', btn_save:'บันทึก',
+    confirm_delete:'คุณแน่ใจหรือไม่ว่าต้องการลบ? ไม่สามารถยกเลิกได้',
+    th_client:'ลูกค้า', th_phone:'โทรศัพท์', th_request:'ความต้องการ', th_budget:'งบประมาณ',
+    th_status:'สถานะ', th_source:'แหล่งที่มา', th_write:'ส่งข้อความ', th_actions:'การดำเนินการ',
+    th_type:'ประเภท', th_message:'ข้อความ', th_date:'วันที่',
+    page_leads_title:'ลีดที่เข้ามา', page_leads_sub:'ลีดใหม่จากแพลตฟอร์ม',
+    all_statuses:'ทุกสถานะ', all_sources:'ทุกแหล่ง', all_types:'ทุกประเภท', all_regions:'ทุกภูมิภาค',
+    status_new:'🆕 ใหม่', status_negotiation:'🗣️ เจรจา', status_booking:'🔒 จอง',
+    status_moved_in:'✅ เข้าอยู่', status_moved_out:'🚪 ออกแล้ว', status_deferred:'⏸️ เลื่อน',
+    status_warm:'🌡️ อุ่น', status_advance:'💵 จ่ายเงินล่วงหน้า', status_deposit:'🏦 มัดจำ', status_done:'✅ เสร็จสิ้น',
+    type_rent:'🔑 เช่า', type_sale:'💰 ขาย',
+    deals_today:'งานวันนี้', deals_reminder:'การแจ้งเตือนลูกค้า',
+    new_leads_rent:'ลีดใหม่ — เช่า', new_leads_sale:'ลีดใหม่ — ขาย',
+    see_all:'ทั้งหมด →', kanban_title_rent:'ดีล — เช่า', kanban_title_sale:'ดีล — ขาย',
+    props_title_sale:'อสังหาฯ — ขาย', props_title_rent:'อสังหาฯ — เช่า',
+    conn_status:'สถานะการเชื่อมต่อ',
+  }
 };
 let lang = 'ru';
+function t(key) { return (T[lang] && T[lang][key]) || T.ru[key] || key; }
 function setLang(l) {
   lang = l;
+  document.documentElement.lang = l;
   document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.textContent === l.toUpperCase()));
-  document.querySelectorAll('[data-t]').forEach(el => { const k = el.dataset.t; if (T[l][k]) el.textContent = T[l][k]; });
+  // Re-render all dynamic content
+  renderSidebar();
+  renderDashboard();
+  renderRentClients();
+  renderSaleClients();
+  renderLeads();
+  renderTasks();
+  renderReminders();
+  renderProperties();
+  renderKanban();
 }
 
 // ── DATA ──────────────────────────────────────────────────────────────────────
@@ -1304,7 +1451,7 @@ function clientRow(c, statusMap, statusBadge) {
   const deferredTag = c.status === 'deferred'
     ? `<div style="font-size:10px;color:var(--amber);margin-top:2px">до ${c.deferredUntil} · ${c.deferredReason}</div>` : '';
   const bookingTag = c.status === 'booking' && c.bookingAmount
-    ? `<div style="font-size:10px;color:var(--blue);margin-top:2px">Бронь: ${c.bookingAmount} ${c.bookingCurrency}</div>` : '';
+    ? `<div style="font-size:10px;color:var(--blue);margin-top:2px">${t('status_booking')}: ${c.bookingAmount} ${c.bookingCurrency}</div>` : '';
   return `<tr onclick="showToast('👤 ${c.name}')">
     <td><div class="flex-cell"><div class="avatar">${c.name.split(' ').map(w=>w[0]).slice(0,2).join('')}</div><div>
       <div class="cell-name">${c.name}</div><div class="cell-sub">${c.email}</div>
@@ -1319,11 +1466,18 @@ function clientRow(c, statusMap, statusBadge) {
       <button class="btn sm ghost" title="Telegram" onclick="quickSend('telegram','${c.name}','${c.phone}')">✈️</button>
       <button class="btn sm ghost" title="Email"    onclick="quickSend('email','${c.name}','${c.email}')">📧</button>
     </div></td>
-    <td onclick="event.stopPropagation()"><div style="display:flex;gap:3px">
-      <button class="btn sm ghost" title="Отложить" onclick="openDeferred('${c.name}')">⏸️</button>
-      <button class="btn sm ghost" title="Редактировать" onclick="showToast('✏️ Редактирование: ${c.name}')">✏️</button>
+    <td onclick="event.stopPropagation()"><div style="display:flex;gap:4px;align-items:center">
+      <button class="btn sm ghost" onclick="openDeferred('${c.name}')">⏸️</button>
+      <button class="btn sm ghost" onclick="showToast('✏️ ${c.name}')">✏️</button>
+      <button class="btn sm" style="background:var(--red-bg);color:var(--red);border-color:transparent;white-space:nowrap" onclick="confirmDeleteClient('${c.name}')">${t('btn_delete')}</button>
     </div></td>
   </tr>`;
+}
+
+function confirmDeleteClient(name) {
+  if (confirm(t('confirm_delete') + '\n\n' + name)) {
+    showToast('🗑 ' + name + ' — ' + (lang==='ru' ? 'удалён' : lang==='th' ? 'ลบแล้ว' : 'deleted'));
+  }
 }
 
 function renderRentClients() {
@@ -1348,15 +1502,31 @@ function renderSaleClients() {
   document.getElementById('sale-clients-body').innerHTML = data.map(c=>clientRow(c,saleStatusMap,saleStatusBadge)).join('');
 }
 
-// ── RENDER CLIENTS (legacy, keep for compatibility) ───────────────────────────
-function renderClients() { renderRentClients(); renderSaleClients(); }
+// ── RENDER SIDEBAR ────────────────────────────────────────────────────────────
+function renderSidebar() {
+  const map = {
+    'nav-dashboard':'nav_dashboard', 'nav-clients-rent':'nav_clients_rent',
+    'nav-clients-sale':'nav_clients_sale', 'nav-properties-sale':'nav_properties_sale',
+    'nav-properties-rent':'nav_properties_rent', 'nav-deals-sale':'nav_deals_sale',
+    'nav-deals-rent':'nav_deals_rent', 'nav-tasks':'nav_tasks',
+    'nav-reminders':'nav_reminders', 'nav-leads':'nav_leads',
+    'nav-settings':'nav_settings', 'nav-logout':'nav_logout',
+    'lbl-main':'nav_main', 'lbl-conn':'conn_status',
+  };
+  Object.entries(map).forEach(([id, key]) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = t(key);
+  });
+}
+
+
 
 // ── RENDER PROPERTIES ─────────────────────────────────────────────────────────
 function renderProperties() {
-  document.getElementById('prop-grid').innerHTML = properties.map(p => `
-    <div class="prop-card" onclick="showToast('🏠 Открываем: ${p.title_ru}')">
+  const propCard = (p) => `
+    <div class="prop-card" onclick="showToast('🏠 ${p.title_ru}')">
       <div class="prop-thumb" style="background:${p.color}">
-        <span class="prop-thumb-badge badge ${p.deal}">${p.deal === 'sale' ? 'Продажа' : 'Аренда'}</span>
+        <span class="prop-thumb-badge badge ${p.deal}">${t(p.deal==='sale'?'type_sale':'type_rent')}</span>
         <span style="font-size:40px">${p.emoji}</span>
         <span class="prop-thumb-price">${p.price}</span>
       </div>
@@ -1364,30 +1534,55 @@ function renderProperties() {
         <div class="prop-title">${p.title_ru}</div>
         <div class="prop-loc">📍 ${p.loc} · <span style="color:var(--text3)">${p.type}</span></div>
         <div class="prop-specs">
-          ${p.beds > 0 ? `<span class="prop-spec">🛏 ${p.beds}</span>` : ''}
+          ${p.beds>0?`<span class="prop-spec">🛏 ${p.beds}</span>`:''}
           <span class="prop-spec">🚿 ${p.baths}</span>
           <span class="prop-spec">📐 ${p.sqm} м²</span>
         </div>
         <div class="prop-integrations">
-          ${p.avito ? `<span class="badge avito" style="font-size:10px">🅰️ Авито</span>` : `<span style="font-size:10px;color:var(--text3);padding:3px 6px">Авито: нет</span>`}
-          ${p.fb    ? `<span class="badge fb"    style="font-size:10px">📘 Facebook</span>` : ''}
+          ${p.avito?`<span class="badge avito" style="font-size:10px">🅰️ Авито</span>`:''}
+          ${p.fb?`<span class="badge fb" style="font-size:10px">📘 Facebook</span>`:''}
         </div>
       </div>
-    </div>`).join('');
+    </div>`;
+  const saleEl = document.getElementById('prop-grid-sale');
+  const rentEl = document.getElementById('prop-grid-rent');
+  if (saleEl) saleEl.innerHTML = properties.filter(p=>p.deal==='sale').map(propCard).join('');
+  if (rentEl)  rentEl.innerHTML = properties.filter(p=>p.deal==='rent').map(propCard).join('');
 }
 
 // ── RENDER KANBAN ─────────────────────────────────────────────────────────────
-function renderKanban() {
+const kanbanDataSale = {
+  'new_lead':   {label:()=>t('status_new'),    deals:[{t:'Вилла → Chen Wei',  c:'Chen Wei',  p:'$850k',d:'01.05'},{t:'Кондо → Петров',c:'А. Петров',p:'$320k',d:'02.05'}]},
+  'negotiation':{label:()=>t('status_negotiation'), deals:[{t:'Вилла → Anderson', c:'J. Anderson',p:'$450k',d:'30.04'}]},
+  'viewing':    {label:()=>(lang==='ru'?'Просмотр':lang==='th'?'ดูสถานที่':'Viewing'), deals:[{t:'Таунхаус → Müller',c:'A. Müller',p:'$290k',d:'25.04'}]},
+  'offer':      {label:()=>(lang==='ru'?'Предложение':lang==='th'?'เสนอราคา':'Offer'), deals:[]},
+  'contract':   {label:()=>(lang==='ru'?'Договор':lang==='th'?'สัญญา':'Contract'), deals:[{t:'Кондо → Müller',c:'A. Müller',p:'$290k',d:'25.04'}]},
+  'closed_won': {label:()=>(lang==='ru'?'Закрыто ✓':lang==='th'?'ปิดได้ ✓':'Won ✓'), deals:[{t:'Бунгало → Wang',c:'Wang Lei',p:'$220k',d:'15.04'}]},
+  'closed_lost':{label:()=>(lang==='ru'?'Потеряно':lang==='th'?'สูญเสีย':'Lost'), deals:[{t:'Вилла → Ivanov',c:'P. Ivanov',p:'$400k',d:'10.04'}]},
+};
+const kanbanDataRent = {
+  'new_lead':   {label:()=>t('status_new'),    deals:[{t:'Студия → Козлов',c:'А. Козлов',p:'฿25k/м',d:'02.05'},{t:'Апарт. → Mitchell',c:'S. Mitchell',p:'$600/м',d:'01.05'}]},
+  'negotiation':{label:()=>t('status_negotiation'), deals:[{t:'Вилла → Смирнова',c:'Н. Смирнова',p:'฿80k/м',d:'28.04'}]},
+  'viewing':    {label:()=>(lang==='ru'?'Просмотр':lang==='th'?'ดูสถานที่':'Viewing'), deals:[{t:'Кондо → Kaew',c:'S. Kaew',p:'฿18k/м',d:'03.05'}]},
+  'booking':    {label:()=>t('status_booking'), deals:[{t:'Студия → Thompson',c:'E. Thompson',p:'$800/м',d:'30.04'}]},
+  'moved_in':   {label:()=>t('status_moved_in'), deals:[{t:'Апарт. → Орлов',c:'Д. Орлов',p:'฿15k/м',d:'20.04'}]},
+  'closed_won': {label:()=>(lang==='ru'?'Закрыто ✓':lang==='th'?'ปิดได้ ✓':'Done ✓'), deals:[{t:'Вилла → Wang',c:'Wang Lei',p:'฿85k/м',d:'15.04'}]},
+  'closed_lost':{label:()=>(lang==='ru'?'Потеряно':lang==='th'?'สูญเสีย':'Lost'), deals:[]},
+};
+
+function renderKanbanBoard(data, containerId) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
   const cls = { closed_won:'won', closed_lost:'lost' };
-  document.getElementById('kanban-board').innerHTML = Object.entries(kanbanData).map(([key, col]) => `
+  el.innerHTML = Object.entries(data).map(([key, col]) => `
     <div class="kanban-col ${cls[key]||''}">
       <div class="kanban-head">
-        <span class="kanban-stage">${col.label}</span>
+        <span class="kanban-stage">${col.label()}</span>
         <span class="kanban-cnt">${col.deals.length}</span>
       </div>
       <div class="kanban-cards">
-        ${col.deals.map(d => `
-          <div class="deal-card" onclick="showToast('💼 Открываем сделку: ${d.t}')">
+        ${col.deals.map(d=>`
+          <div class="deal-card" onclick="showToast('💼 ${d.t}')">
             <div class="deal-card-title">${d.t}</div>
             <div class="deal-card-client">${d.c}</div>
             <div class="deal-card-price">${d.p}</div>
@@ -1400,68 +1595,87 @@ function renderKanban() {
     </div>`).join('');
 }
 
+function renderKanban() {
+  renderKanbanBoard(kanbanDataSale, 'kanban-board-sale');
+  renderKanbanBoard(kanbanDataRent, 'kanban-board-rent');
+}
+
 // ── RENDER TASKS ──────────────────────────────────────────────────────────────
 function renderTasks() {
-  document.getElementById('tasks-list').innerHTML = tasks.map((t, i) => `
-    <div class="task-item ${t.done ? 'done' : ''}">
-      <div class="task-check ${t.done ? 'checked' : ''}" onclick="toggleTask(${i})">${t.done ? '✓' : ''}</div>
+  const priLabel = { high: lang==='ru'?'Высокий':lang==='th'?'สูง':'High', normal:lang==='ru'?'Обычный':lang==='th'?'ปกติ':'Normal', low:lang==='ru'?'Низкий':lang==='th'?'ต่ำ':'Low' };
+  const overdueLabel = lang==='ru'?'⚠ Просрочено: ':lang==='th'?'⚠ เกินกำหนด: ':'⚠ Overdue: ';
+  document.getElementById('tasks-list').innerHTML = tasks.map((tk, i) => `
+    <div class="task-item ${tk.done?'done':''}">
+      <div class="task-check ${tk.done?'checked':''}" onclick="toggleTask(${i})">${tk.done?'✓':''}</div>
       <div class="task-body">
-        <div class="task-title">${t.title}</div>
+        <div class="task-title">${tk.title}</div>
         <div class="task-meta">
-          <span class="${t.overdue ? 'overdue' : ''}">${t.overdue ? '⚠ Просрочено: ' : ''}${t.due}</span>
-          ${t.client ? `<span>· ${t.client}</span>` : ''}
+          <span class="${tk.overdue?'overdue':''}">${tk.overdue?overdueLabel:''}${tk.due}</span>
+          ${tk.client?`<span>· ${tk.client}</span>`:''}
         </div>
       </div>
-      <div class="task-priority"><span class="pri-${t.priority}">${{high:'Высокий',normal:'Обычный',low:'Низкий'}[t.priority]}</span></div>
+      <div class="task-priority"><span class="pri-${tk.priority}">${priLabel[tk.priority]||tk.priority}</span></div>
     </div>`).join('');
 }
 function toggleTask(i) { tasks[i].done = !tasks[i].done; renderTasks(); }
 
 // ── RENDER LEADS ──────────────────────────────────────────────────────────────
 function renderLeads() {
-  const srcBadge = { avito:'avito 🅰️ Авито', facebook:'fb 📘 Facebook', telegram:'tg ✈️ Telegram', line:'line 💚 LINE', site:'new 🌐 Сайт' };
-  document.getElementById('leads-body').innerHTML = leadsData.map(l => `<tr>
-    <td><span class="badge ${srcBadge[l.source]?.split(' ')[0]||'new'}">${srcBadge[l.source]?.split(' ').slice(1).join(' ')||l.source}</span></td>
-    <td><span class="badge ${l.type==='rent'?'rent':'sale'}">${l.type==='rent'?'🔑 Аренда':'💰 Продажа'}</span></td>
+  const srcLabel = { avito:'🅰️ Авито', facebook:'📘 Facebook', telegram:'✈️ Telegram', line:'💚 LINE', site:`🌐 ${lang==='ru'?'Сайт':lang==='th'?'เว็บไซต์':'Website'}` };
+  const convertLabel = t('btn_convert');
+  const deleteLabel  = t('btn_delete');
+  const typeRent = t('type_rent');
+  const typeSale = t('type_sale');
+  document.getElementById('leads-body').innerHTML = leadsData.map(l=>`<tr>
+    <td><span class="badge ${l.source==='facebook'?'fb':l.source==='telegram'?'tg':l.source}">${srcLabel[l.source]||l.source}</span></td>
+    <td><span class="badge ${l.type==='rent'?'rent':'sale'}">${l.type==='rent'?typeRent:typeSale}</span></td>
     <td style="font-weight:500">${l.name}</td>
     <td style="font-size:12px;color:var(--text2);font-family:var(--mono)">${l.contact}</td>
-    <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text2);font-size:12px">${l.msg}</td>
+    <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text2);font-size:12px">${l.msg}</td>
     <td style="color:var(--text3);font-size:11px;font-family:var(--mono)">${l.date}</td>
     <td><div style="display:flex;gap:4px">
-      <button class="btn sm primary" onclick="convertLead(${l.id})">→ Клиент</button>
-      <button class="btn sm" style="background:var(--red-bg);color:var(--red);border-color:var(--red-bg)" onclick="deleteLead(${l.id})">🗑</button>
+      <button class="btn sm primary" onclick="convertLead(${l.id})">${convertLabel}</button>
+      <button class="btn sm" style="background:var(--red-bg);color:var(--red);border-color:transparent" onclick="deleteLead(${l.id})">${deleteLabel}</button>
     </div></td>
   </tr>`).join('');
+  // Update page title/subtitle
+  const ptEl = document.getElementById('pt-leads');
+  const subEl = document.getElementById('sub-leads');
+  if (ptEl)  ptEl.textContent  = t('page_leads_title');
+  if (subEl) subEl.textContent = leadsData.length + ' ' + t('page_leads_sub');
 }
 
 function convertLead(id) {
   const l = leadsData.find(x=>x.id===id);
   if (!l) return;
-  showToast(`✅ Лид конвертирован: ${l.name} → добавлен как клиент (${l.type==='rent'?'Аренда':'Продажа'})`);
+  const typeLabel = l.type==='rent' ? t('type_rent') : t('type_sale');
+  showToast(`✅ ${l.name} → ${lang==='ru'?'добавлен как клиент':lang==='th'?'เพิ่มเป็นลูกค้า':'added as client'} (${typeLabel})`);
   leadsData = leadsData.filter(x=>x.id!==id);
   renderLeads();
 }
 
 function deleteLead(id) {
-  if (!confirm('Удалить лид?')) return;
+  if (!confirm(t('confirm_delete'))) return;
   leadsData = leadsData.filter(x=>x.id!==id);
   renderLeads();
-  showToast('🗑 Лид удалён');
+  showToast(lang==='ru'?'🗑 Заявка удалена':lang==='th'?'🗑 ลบแล้ว':'🗑 Lead deleted');
 }
 
 // ── RENDER REMINDERS ──────────────────────────────────────────────────────────
 function renderReminders() {
   const el = document.getElementById('reminders-list');
   if (!el) return;
-  el.innerHTML = reminders.map(r => `
+  const contactLabel = lang==='ru'?'Связаться с':lang==='th'?'ติดต่อ':'Contact';
+  const newDaysLabel = (d) => lang==='ru'?`В статусе «Новый» уже ${d} дн.`:lang==='th'?`สถานะ «ใหม่» ${d} วัน`:`In 'New' status ${d} days`;
+  el.innerHTML = reminders.map(r=>`
     <div class="task-item">
       <div style="width:36px;height:36px;border-radius:var(--radius);background:var(--red-bg);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">🔔</div>
       <div class="task-body">
-        <div class="task-title">Связаться с <b>${r.client}</b></div>
+        <div class="task-title">${contactLabel} <b>${r.client}</b></div>
         <div class="task-meta">
-          <span class="overdue">В статусе «Новый» уже ${r.days} дн.</span>
+          <span class="overdue">${newDaysLabel(r.days)}</span>
           <span>· ${srcIcon[r.source]||''} ${r.source}</span>
-          <span>· <span class="badge ${r.type==='rent'?'rent':'sale'}" style="font-size:10px;padding:1px 6px">${r.type==='rent'?'Аренда':'Продажа'}</span></span>
+          <span>· <span class="badge ${r.type==='rent'?'rent':'sale'}" style="font-size:10px;padding:1px 6px">${t(r.type==='rent'?'type_rent':'type_sale')}</span></span>
         </div>
         <div style="font-size:12px;color:var(--text2);margin-top:4px">📋 ${r.action}</div>
         <div style="font-size:12px;color:var(--text3);margin-top:2px">📞 ${r.phone}</div>
@@ -1475,31 +1689,32 @@ function renderReminders() {
 
 // ── DASHBOARD ─────────────────────────────────────────────────────────────────
 function renderDashboard() {
-  // Задачи
-  document.getElementById('dash-tasks').innerHTML = tasks.filter(t=>!t.done).slice(0,4).map(t=>`
+  const noNew = lang==='ru'?'Нет новых':lang==='th'?'ไม่มีใหม่':'No new';
+  const contactLabel = lang==='ru'?'Связаться:':lang==='th'?'ติดต่อ:':'Contact:';
+  const newDays = (d) => lang==='ru'?`Статус «Новый» ${d} дн.`:lang==='th'?`ใหม่ ${d} วัน`:`New ${d} days`;
+
+  document.getElementById('dash-tasks').innerHTML = tasks.filter(tk=>!tk.done).slice(0,4).map(tk=>`
     <div class="dash-row">
-      <span style="font-size:16px">${t.overdue?'⚠️':t.priority==='high'?'🔴':'🟡'}</span>
+      <span style="font-size:16px">${tk.overdue?'⚠️':tk.priority==='high'?'🔴':'🟡'}</span>
       <div class="dash-row-info">
-        <div class="dash-row-title">${t.title}</div>
-        <div class="dash-row-sub ${t.overdue?'overdue':''}">${t.due}${t.client?' · '+t.client:''}</div>
+        <div class="dash-row-title">${tk.title}</div>
+        <div class="dash-row-sub ${tk.overdue?'overdue':''}">${tk.due}${tk.client?' · '+tk.client:''}</div>
       </div>
     </div>`).join('');
 
-  // Напоминания
   document.getElementById('dash-reminders').innerHTML = reminders.slice(0,4).map(r=>`
     <div class="dash-row" onclick="goPage('reminders')">
       <span style="font-size:16px">🔔</span>
       <div class="dash-row-info">
-        <div class="dash-row-title">Связаться: ${r.client}</div>
-        <div class="dash-row-sub overdue">В статусе «Новый» ${r.days} дн. · ${r.source}</div>
+        <div class="dash-row-title">${contactLabel} ${r.client}</div>
+        <div class="dash-row-sub overdue">${newDays(r.days)} · ${r.source}</div>
       </div>
       <div class="dash-row-right">
-        <span class="badge ${r.type==='rent'?'rent':'sale'}" style="font-size:10px">${r.type==='rent'?'Аренда':'Продажа'}</span>
+        <span class="badge ${r.type==='rent'?'rent':'sale'}" style="font-size:10px">${t(r.type==='rent'?'type_rent':'type_sale')}</span>
       </div>
     </div>`).join('');
 
-  // Новые заявки аренда
-  document.getElementById('dash-rent-leads').innerHTML = leadsData.filter(l=>l.type==='rent').map(l=>`
+  const rentLeadsHtml = leadsData.filter(l=>l.type==='rent').map(l=>`
     <div class="dash-row" onclick="goPage('leads')">
       <span style="font-size:16px">${srcIcon[l.source]||'📥'}</span>
       <div class="dash-row-info">
@@ -1507,10 +1722,11 @@ function renderDashboard() {
         <div class="dash-row-sub">${l.msg.slice(0,45)}${l.msg.length>45?'...':''}</div>
       </div>
       <div class="dash-row-right"><div class="dash-row-date">${l.date}</div></div>
-    </div>`).join('') || '<div class="empty-state" style="padding:20px"><div class="empty-icon">📥</div>Нет новых</div>';
+    </div>`).join('');
+  document.getElementById('dash-rent-leads').innerHTML = rentLeadsHtml ||
+    `<div class="empty-state" style="padding:20px"><div class="empty-icon">📥</div>${noNew}</div>`;
 
-  // Новые заявки продажа
-  document.getElementById('dash-sale-leads').innerHTML = leadsData.filter(l=>l.type==='sale').map(l=>`
+  const saleLeadsHtml = leadsData.filter(l=>l.type==='sale').map(l=>`
     <div class="dash-row" onclick="goPage('leads')">
       <span style="font-size:16px">${srcIcon[l.source]||'📥'}</span>
       <div class="dash-row-info">
@@ -1518,7 +1734,21 @@ function renderDashboard() {
         <div class="dash-row-sub">${l.msg.slice(0,45)}${l.msg.length>45?'...':''}</div>
       </div>
       <div class="dash-row-right"><div class="dash-row-date">${l.date}</div></div>
-    </div>`).join('') || '<div class="empty-state" style="padding:20px"><div class="empty-icon">📥</div>Нет новых</div>';
+    </div>`).join('');
+  document.getElementById('dash-sale-leads').innerHTML = saleLeadsHtml ||
+    `<div class="empty-state" style="padding:20px"><div class="empty-icon">📥</div>${noNew}</div>`;
+
+  // Update dashboard card titles
+  const dashTitles = {
+    'dash-tasks':      ()=>t('deals_today'),
+    'dash-reminders':  ()=>t('deals_reminder'),
+    'dash-rent-leads': ()=>t('new_leads_rent'),
+    'dash-sale-leads': ()=>t('new_leads_sale'),
+  };
+  document.querySelectorAll('.dash-card-head span:first-child').forEach((el,i) => {
+    const keys = Object.values(dashTitles);
+    if (keys[i]) el.textContent = keys[i]();
+  });
 }
 
 // ── NAV ───────────────────────────────────────────────────────────────────────
@@ -1530,11 +1760,13 @@ function goPage(name) {
   document.querySelectorAll('.nav-item').forEach(n => {
     if (n.getAttribute('onclick') === `goPage('${name}')`) n.classList.add('active');
   });
-  if (name === 'dashboard')     renderDashboard();
-  if (name === 'clients-rent')  renderRentClients();
-  if (name === 'clients-sale')  renderSaleClients();
-  if (name === 'reminders')     renderReminders();
-  if (name === 'leads')         renderLeads();
+  if (name === 'dashboard')        renderDashboard();
+  if (name === 'clients-rent')     renderRentClients();
+  if (name === 'clients-sale')     renderSaleClients();
+  if (name === 'reminders')        renderReminders();
+  if (name === 'leads')            renderLeads();
+  if (name === 'properties-sale' || name === 'properties-rent') renderProperties();
+  if (name === 'deals-sale' || name === 'deals-rent')           renderKanban();
 }
 
 // ── MODAL ─────────────────────────────────────────────────────────────────────
@@ -1690,6 +1922,7 @@ function openClientModal(dealType) {
 }
 
 // ── INIT ──────────────────────────────────────────────────────────────────────
+renderSidebar();
 renderRentClients();
 renderSaleClients();
 renderProperties();
