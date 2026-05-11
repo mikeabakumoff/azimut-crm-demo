@@ -51,7 +51,29 @@ body {
   flex-direction: column;
 }
 
-/* ── SCROLLBAR ─────────────────────────────────────────────────────────────── */
+.nav-group-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 8px 10px; border-radius: var(--radius);
+  cursor: pointer; transition: background 0.15s;
+  border: 1px solid var(--border);
+  background: var(--bg3); margin-bottom: 2px;
+}
+.nav-group-header:hover { background: var(--bg4); }
+.nav-group-arrow { font-size: 12px; color: var(--text3); transition: transform 0.2s; }
+.nav-group-header.collapsed .nav-group-arrow { transform: rotate(-90deg); }
+.nav-group-body { overflow: hidden; transition: max-height 0.25s ease; max-height: 300px; }
+.nav-group-body.collapsed { max-height: 0; }
+.nav-sub { padding-left: 22px !important; }
+.nav-sub::before { display: none !important; }
+
+/* Sale group highlight */
+#grp-sale { border-color: rgba(78,142,247,0.3); background: rgba(78,142,247,0.06); }
+#grp-sale:hover { background: rgba(78,142,247,0.12); }
+/* Rent group highlight */
+#grp-rent { border-color: rgba(167,139,250,0.3); background: rgba(167,139,250,0.06); }
+#grp-rent:hover { background: rgba(167,139,250,0.12); }
+
+
 ::-webkit-scrollbar { width: 4px; height: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--bg4); border-radius: 4px; }
@@ -602,30 +624,11 @@ tbody tr:hover td { background: var(--bg3); }
 
   <!-- SIDEBAR -->
   <div class="sidebar">
+
+    <!-- Дашборд -->
     <div class="nav-section">
-      <div class="nav-label" id="lbl-main">Основное</div>
       <div class="nav-item active" onclick="goPage('dashboard')">
         <span class="nav-ico">📊</span><span id="nav-dashboard">Дашборд</span>
-      </div>
-      <div class="nav-item" onclick="goPage('clients-rent')">
-        <span class="nav-ico">🔑</span><span id="nav-clients-rent">Клиенты — Аренда</span>
-        <span class="nav-badge">6</span>
-      </div>
-      <div class="nav-item" onclick="goPage('clients-sale')">
-        <span class="nav-ico">💰</span><span id="nav-clients-sale">Клиенты — Продажа</span>
-        <span class="nav-badge">4</span>
-      </div>
-      <div class="nav-item" onclick="goPage('properties-sale')">
-        <span class="nav-ico">🏠</span><span id="nav-properties-sale">Объекты — Продажа</span>
-      </div>
-      <div class="nav-item" onclick="goPage('properties-rent')">
-        <span class="nav-ico">🔑</span><span id="nav-properties-rent">Объекты — Аренда</span>
-      </div>
-      <div class="nav-item" onclick="goPage('deals-sale')">
-        <span class="nav-ico">💼</span><span id="nav-deals-sale">Сделки — Продажа</span>
-      </div>
-      <div class="nav-item" onclick="goPage('deals-rent')">
-        <span class="nav-ico">🤝</span><span id="nav-deals-rent">Сделки — Аренда</span>
       </div>
       <div class="nav-item" onclick="goPage('tasks')">
         <span class="nav-ico">✅</span><span id="nav-tasks">Задачи</span>
@@ -635,31 +638,82 @@ tbody tr:hover td { background: var(--bg3); }
         <span class="nav-ico">🔔</span><span id="nav-reminders">Напоминания</span>
         <span class="nav-badge red">4</span>
       </div>
-      <div class="nav-item" onclick="goPage('leads')">
-        <span class="nav-ico">📥</span><span id="nav-leads">Заявки</span>
-        <span class="nav-badge blue">5</span>
+    </div>
+
+    <!-- Секция ПРОДАЖА -->
+    <div class="nav-section">
+      <div class="nav-group-header" onclick="toggleGroup('sale')" id="grp-sale">
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="font-size:15px">💰</span>
+          <span id="lbl-sale" style="font-size:12px;font-weight:600;color:var(--text)">Продажа</span>
+        </div>
+        <span class="nav-group-arrow" id="arr-sale">▾</span>
+      </div>
+      <div class="nav-group-body" id="body-sale">
+        <div class="nav-item nav-sub" onclick="goPage('leads-sale')">
+          <span class="nav-ico">📥</span><span id="nav-leads-sale">Заявки</span>
+          <span class="nav-badge blue">2</span>
+        </div>
+        <div class="nav-item nav-sub" onclick="goPage('clients-sale')">
+          <span class="nav-ico">👥</span><span id="nav-clients-sale">Клиенты</span>
+          <span class="nav-badge">4</span>
+        </div>
+        <div class="nav-item nav-sub" onclick="goPage('properties-sale')">
+          <span class="nav-ico">🏠</span><span id="nav-properties-sale">Объекты</span>
+        </div>
+        <div class="nav-item nav-sub" onclick="goPage('deals-sale')">
+          <span class="nav-ico">💼</span><span id="nav-deals-sale">Сделки</span>
+        </div>
       </div>
     </div>
+
+    <!-- Секция АРЕНДА -->
+    <div class="nav-section">
+      <div class="nav-group-header" onclick="toggleGroup('rent')" id="grp-rent">
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="font-size:15px">🔑</span>
+          <span id="lbl-rent" style="font-size:12px;font-weight:600;color:var(--text)">Аренда</span>
+        </div>
+        <span class="nav-group-arrow" id="arr-rent">▾</span>
+      </div>
+      <div class="nav-group-body" id="body-rent">
+        <div class="nav-item nav-sub" onclick="goPage('leads-rent')">
+          <span class="nav-ico">📥</span><span id="nav-leads-rent">Заявки</span>
+          <span class="nav-badge blue">3</span>
+        </div>
+        <div class="nav-item nav-sub" onclick="goPage('clients-rent')">
+          <span class="nav-ico">👥</span><span id="nav-clients-rent">Клиенты</span>
+          <span class="nav-badge">6</span>
+        </div>
+        <div class="nav-item nav-sub" onclick="goPage('properties-rent')">
+          <span class="nav-ico">🏠</span><span id="nav-properties-rent">Объекты</span>
+        </div>
+        <div class="nav-item nav-sub" onclick="goPage('deals-rent')">
+          <span class="nav-ico">🤝</span><span id="nav-deals-rent">Сделки</span>
+        </div>
+      </div>
+    </div>
+
     <div class="nav-section">
       <div class="nav-item" onclick="showToast('⚙️ Настройки...')">
         <span class="nav-ico">⚙️</span><span id="nav-settings">Настройки</span>
       </div>
     </div>
+
     <div class="sidebar-footer">
-      <!-- Статус подключений — значками -->
       <div style="padding:8px 10px 6px;border-top:1px solid var(--border)">
         <div style="font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px" id="lbl-conn">Подключения</div>
         <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-          <div title="Авито: подключён" style="display:flex;align-items:center;gap:3px;font-size:18px;cursor:pointer" onclick="showToast('🅰️ Авито: 12 объявлений, подключён')">
+          <div title="Авито" style="display:flex;align-items:center;gap:3px;font-size:18px;cursor:pointer" onclick="showToast('🅰️ Авито: 12 объявлений, подключён')">
             🅰️<span style="width:7px;height:7px;border-radius:50%;background:var(--green);display:inline-block"></span>
           </div>
-          <div title="Facebook: подключён" style="display:flex;align-items:center;gap:3px;font-size:18px;cursor:pointer" onclick="showToast('📘 Facebook: подключён')">
+          <div title="Facebook" style="display:flex;align-items:center;gap:3px;font-size:18px;cursor:pointer" onclick="showToast('📘 Facebook: подключён')">
             📘<span style="width:7px;height:7px;border-radius:50%;background:var(--green);display:inline-block"></span>
           </div>
-          <div title="Telegram: подключён" style="display:flex;align-items:center;gap:3px;font-size:18px;cursor:pointer" onclick="showToast('✈️ Telegram бот: активен')">
+          <div title="Telegram" style="display:flex;align-items:center;gap:3px;font-size:18px;cursor:pointer" onclick="showToast('✈️ Telegram: активен')">
             ✈️<span style="width:7px;height:7px;border-radius:50%;background:var(--green);display:inline-block"></span>
           </div>
-          <div title="Сайт: не подключён" style="display:flex;align-items:center;gap:3px;font-size:18px;cursor:pointer" onclick="showToast('🌐 Сайт: не настроен — перейдите в Настройки')">
+          <div title="Сайт: не подключён" style="display:flex;align-items:center;gap:3px;font-size:18px;cursor:pointer" onclick="showToast('🌐 Сайт: не настроен')">
             🌐<span style="width:7px;height:7px;border-radius:50%;background:var(--red);display:inline-block"></span>
           </div>
         </div>
@@ -947,7 +1001,53 @@ tbody tr:hover td { background: var(--bg3); }
       </div>
     </div>
 
-    <!-- ── LEADS ──────────────────────────────────────────────────────────── -->
+    <!-- ── LEADS SALE ─────────────────────────────────────────────────────── -->
+    <div id="page-leads-sale" class="page">
+      <div class="page-head">
+        <div>
+          <div class="page-title">💰 Заявки — Продажа</div>
+          <div class="page-subtitle" id="sub-leads-sale">2 новых заявки</div>
+        </div>
+        <div class="head-actions">
+          <button class="btn primary" style="padding:9px 20px;font-size:14px" onclick="showToast('➕ Добавить заявку на продажу')">+ Добавить заявку</button>
+        </div>
+      </div>
+      <div class="page-body" style="padding-top:16px">
+        <div class="table-card">
+          <div class="table-toolbar">
+            <select><option>Все источники</option><option>Авито</option><option>Facebook</option><option>Telegram</option><option>Сайт</option></select>
+          </div>
+          <table><thead><tr>
+            <th>Источник</th><th>Имя</th><th>Контакт</th><th>Сообщение</th><th>Дата</th><th></th>
+          </tr></thead><tbody id="leads-sale-body"></tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── LEADS RENT ─────────────────────────────────────────────────────── -->
+    <div id="page-leads-rent" class="page">
+      <div class="page-head">
+        <div>
+          <div class="page-title">🔑 Заявки — Аренда</div>
+          <div class="page-subtitle" id="sub-leads-rent">3 новых заявки</div>
+        </div>
+        <div class="head-actions">
+          <button class="btn primary" style="padding:9px 20px;font-size:14px" onclick="showToast('➕ Добавить заявку на аренду')">+ Добавить заявку</button>
+        </div>
+      </div>
+      <div class="page-body" style="padding-top:16px">
+        <div class="table-card">
+          <div class="table-toolbar">
+            <select><option>Все источники</option><option>Авито</option><option>Facebook</option><option>Telegram</option><option>Сайт</option></select>
+          </div>
+          <table><thead><tr>
+            <th>Источник</th><th>Имя</th><th>Контакт</th><th>Сообщение</th><th>Дата</th><th></th>
+          </tr></thead><tbody id="leads-rent-body"></tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── LEADS (old combined, keep hidden) ─────────────────────────────── -->
     <div id="page-leads" class="page">
       <div class="page-head">
         <div>
@@ -1480,6 +1580,29 @@ function confirmDeleteClient(name) {
   }
 }
 
+// ── RENDER LEADS BY TYPE ──────────────────────────────────────────────────────
+function renderLeadsByType(type, bodyId, subId) {
+  const el = document.getElementById(bodyId);
+  if (!el) return;
+  const srcLabel = { avito:'🅰️ Авито', facebook:'📘 Facebook', telegram:'✈️ Telegram', line:'💚 LINE', site:'🌐 Сайт' };
+  const data = leadsData.filter(l => l.type === type);
+  const convertLabel = t('btn_convert');
+  const deleteLabel  = t('btn_delete');
+  el.innerHTML = data.map(l=>`<tr>
+    <td><span class="badge ${l.source==='facebook'?'fb':l.source==='telegram'?'tg':l.source}">${srcLabel[l.source]||l.source}</span></td>
+    <td style="font-weight:500">${l.name}</td>
+    <td style="font-size:12px;color:var(--text2);font-family:var(--mono)">${l.contact}</td>
+    <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text2);font-size:12px">${l.msg}</td>
+    <td style="color:var(--text3);font-size:11px;font-family:var(--mono)">${l.date}</td>
+    <td><div style="display:flex;gap:4px">
+      <button class="btn sm primary" onclick="convertLead(${l.id})">${convertLabel}</button>
+      <button class="btn sm" style="background:var(--red-bg);color:var(--red);border-color:transparent" onclick="deleteLead(${l.id})">${deleteLabel}</button>
+    </div></td>
+  </tr>`).join('') || `<tr><td colspan="6" style="text-align:center;padding:24px;color:var(--text3)">${lang==='ru'?'Нет заявок':lang==='th'?'ไม่มีลีด':'No leads'}</td></tr>`;
+  const sub = document.getElementById(subId);
+  if (sub) sub.textContent = data.length + ' ' + (lang==='ru'?'заявок':lang==='th'?'ลีด':'leads');
+}
+
 function renderRentClients() {
   const q  = (document.getElementById('rent-search')?.value||'').toLowerCase();
   const st = document.getElementById('rent-status')?.value||'';
@@ -1502,20 +1625,56 @@ function renderSaleClients() {
   document.getElementById('sale-clients-body').innerHTML = data.map(c=>clientRow(c,saleStatusMap,saleStatusBadge)).join('');
 }
 
+// ── ACCORDION ─────────────────────────────────────────────────────────────────
+function toggleGroup(group) {
+  const body = document.getElementById('body-' + group);
+  const hdr  = document.getElementById('grp-' + group);
+  const isCollapsed = body.classList.contains('collapsed');
+  body.classList.toggle('collapsed', !isCollapsed);
+  hdr.classList.toggle('collapsed', !isCollapsed);
+}
+
 // ── RENDER SIDEBAR ────────────────────────────────────────────────────────────
 function renderSidebar() {
   const map = {
-    'nav-dashboard':'nav_dashboard', 'nav-clients-rent':'nav_clients_rent',
-    'nav-clients-sale':'nav_clients_sale', 'nav-properties-sale':'nav_properties_sale',
-    'nav-properties-rent':'nav_properties_rent', 'nav-deals-sale':'nav_deals_sale',
-    'nav-deals-rent':'nav_deals_rent', 'nav-tasks':'nav_tasks',
-    'nav-reminders':'nav_reminders', 'nav-leads':'nav_leads',
+    'nav-dashboard':'nav_dashboard',
+    'nav-tasks':'nav_tasks', 'nav-reminders':'nav_reminders',
+    'nav-leads-sale':'nav_leads', 'nav-clients-sale':'nav_clients_rent',
+    'nav-properties-sale':'nav_properties_sale', 'nav-deals-sale':'nav_deals_sale',
+    'nav-leads-rent':'nav_leads',  'nav-clients-rent':'nav_clients_rent',
+    'nav-properties-rent':'nav_properties_rent', 'nav-deals-rent':'nav_deals_rent',
     'nav-settings':'nav_settings', 'nav-logout':'nav_logout',
-    'lbl-main':'nav_main', 'lbl-conn':'conn_status',
+    'lbl-conn':'conn_status',
   };
   Object.entries(map).forEach(([id, key]) => {
     const el = document.getElementById(id);
     if (el) el.textContent = t(key);
+  });
+  // Section labels
+  const saleLbl = document.getElementById('lbl-sale');
+  const rentLbl = document.getElementById('lbl-rent');
+  if (saleLbl) saleLbl.textContent = lang==='ru'?'Продажа':lang==='th'?'ขาย':'Sale';
+  if (rentLbl) rentLbl.textContent = lang==='ru'?'Аренда':lang==='th'?'เช่า':'Rent';
+  // Nav sub-items labels
+  const subLabels = {
+    'nav-leads-sale':  lang==='ru'?'Заявки':lang==='th'?'ลีด':'Leads',
+    'nav-clients-sale':lang==='ru'?'Клиенты':lang==='th'?'ลูกค้า':'Clients',
+    'nav-properties-sale':lang==='ru'?'Объекты':lang==='th'?'อสังหาฯ':'Properties',
+    'nav-deals-sale':  lang==='ru'?'Сделки':lang==='th'?'ดีล':'Deals',
+    'nav-leads-rent':  lang==='ru'?'Заявки':lang==='th'?'ลีด':'Leads',
+    'nav-clients-rent':lang==='ru'?'Клиенты':lang==='th'?'ลูกค้า':'Clients',
+    'nav-properties-rent':lang==='ru'?'Объекты':lang==='th'?'อสังหาฯ':'Properties',
+    'nav-deals-rent':  lang==='ru'?'Сделки':lang==='th'?'ดีล':'Deals',
+    'nav-tasks':       lang==='ru'?'Задачи':lang==='th'?'งาน':'Tasks',
+    'nav-reminders':   lang==='ru'?'Напоминания':lang==='th'?'การแจ้งเตือน':'Reminders',
+    'nav-settings':    lang==='ru'?'Настройки':lang==='th'?'ตั้งค่า':'Settings',
+    'nav-logout':      lang==='ru'?'Выйти':lang==='th'?'ออกจากระบบ':'Logout',
+    'nav-dashboard':   lang==='ru'?'Дашборд':lang==='th'?'แดชบอร์ด':'Dashboard',
+    'lbl-conn':        lang==='ru'?'Подключения':lang==='th'?'การเชื่อมต่อ':'Connections',
+  };
+  Object.entries(subLabels).forEach(([id, txt]) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = txt;
   });
 }
 
@@ -1757,16 +1916,29 @@ function goPage(name) {
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   const page = document.getElementById('page-' + name);
   if (page) page.classList.add('active');
+  // Highlight matching nav item
   document.querySelectorAll('.nav-item').forEach(n => {
     if (n.getAttribute('onclick') === `goPage('${name}')`) n.classList.add('active');
   });
+  // Auto-expand accordion group
+  if (['leads-sale','clients-sale','properties-sale','deals-sale'].includes(name)) {
+    document.getElementById('body-sale')?.classList.remove('collapsed');
+    document.getElementById('grp-sale')?.classList.remove('collapsed');
+  }
+  if (['leads-rent','clients-rent','properties-rent','deals-rent'].includes(name)) {
+    document.getElementById('body-rent')?.classList.remove('collapsed');
+    document.getElementById('grp-rent')?.classList.remove('collapsed');
+  }
+  // Render page content
   if (name === 'dashboard')        renderDashboard();
   if (name === 'clients-rent')     renderRentClients();
   if (name === 'clients-sale')     renderSaleClients();
   if (name === 'reminders')        renderReminders();
+  if (name === 'leads' || name === 'leads-sale') renderLeadsByType('sale', 'leads-sale-body', 'sub-leads-sale');
+  if (name === 'leads' || name === 'leads-rent') renderLeadsByType('rent', 'leads-rent-body', 'sub-leads-rent');
   if (name === 'leads')            renderLeads();
   if (name === 'properties-sale' || name === 'properties-rent') renderProperties();
-  if (name === 'deals-sale' || name === 'deals-rent')           renderKanban();
+  if (name === 'deals-sale' || name === 'deals-rent') renderKanban();
 }
 
 // ── MODAL ─────────────────────────────────────────────────────────────────────
@@ -1929,6 +2101,8 @@ renderProperties();
 renderKanban();
 renderTasks();
 renderLeads();
+renderLeadsByType('sale', 'leads-sale-body', 'sub-leads-sale');
+renderLeadsByType('rent', 'leads-rent-body', 'sub-leads-rent');
 renderReminders();
 renderDashboard();
 </script>
