@@ -1030,14 +1030,14 @@ tbody tr:hover td { background: var(--bg3); }
       <div class="page-head">
         <div>
           <div class="page-title">🔑 Сделки — Аренда</div>
-          <div class="page-subtitle" id="sub-deals-rent">14 активных сделок</div>
+          <div class="page-subtitle" id="sub-deals-rent">Активных сделок: 4</div>
         </div>
         <div class="head-actions">
           <button class="btn primary" onclick="openNewDeal('rent')">+ Новая сделка</button>
         </div>
       </div>
       <div class="kanban-wrap">
-        <div class="kanban-board" id="kanban-board-rent" style="grid-template-columns:repeat(6,minmax(190px,1fr))"></div>
+        <div class="kanban-board" id="kanban-board-rent" style="grid-template-columns:repeat(7,minmax(190px,1fr))"></div>
       </div>
     </div>
 
@@ -1294,21 +1294,47 @@ tbody tr:hover td { background: var(--bg3); }
       </div>
       <div class="page-body" style="padding-top:16px">
         <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px">
-          ${['🅰️ Авито|avito|Активен|green|12 объявлений · 21 заявка этот месяц',
-             '📘 Facebook Marketplace|fb|Активен|green|8 объявлений · 14 заявок',
-             '✈️ Telegram Bot|tg|Активен|green|Бот @azimut_realty_bot · 12 подписчиков',
-             '🌐 Сайт azimut.asia|site|Не настроен|red|Webhook не настроен'].map(s => {
-               const [ico, cls, status, color, detail] = s.split('|');
-               return `<div class="dash-card"><div style="padding:14px">
-                 <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
-                   <span style="font-size:24px">${ico.split(' ')[0]}</span>
-                   <div><div style="font-weight:500;font-size:14px">${ico.split(' ').slice(1).join(' ')}</div>
-                   <div style="font-size:12px;color:var(--${color})">● ${status}</div></div>
-                   <button class="btn sm" style="margin-left:auto" onclick="showToast('⚙️ Настройки ${ico}')">${color==='green'?'Настроить':'Подключить'}</button>
-                 </div>
-                 <div style="font-size:12px;color:var(--text2)">${detail}</div>
-               </div></div>`;
-             }).join('')}
+
+          <div class="dash-card"><div style="padding:14px">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+              <span style="font-size:24px">🅰️</span>
+              <div><div style="font-weight:500;font-size:14px">Авито</div>
+              <div style="font-size:12px;color:var(--green)">● Активен</div></div>
+              <button class="btn sm" style="margin-left:auto" onclick="showToast('⚙️ Настройки Авито')">Настроить</button>
+            </div>
+            <div style="font-size:12px;color:var(--text2)">12 объявлений · 21 заявка этот месяц</div>
+          </div></div>
+
+          <div class="dash-card"><div style="padding:14px">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+              <span style="font-size:24px">📘</span>
+              <div><div style="font-weight:500;font-size:14px">Facebook Marketplace</div>
+              <div style="font-size:12px;color:var(--green)">● Активен</div></div>
+              <button class="btn sm" style="margin-left:auto" onclick="showToast('⚙️ Настройки Facebook')">Настроить</button>
+            </div>
+            <div style="font-size:12px;color:var(--text2)">8 объявлений · 14 заявок</div>
+          </div></div>
+
+          <div class="dash-card"><div style="padding:14px">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+              <span style="font-size:24px">✈️</span>
+              <div><div style="font-weight:500;font-size:14px">Telegram Bot</div>
+              <div style="font-size:12px;color:var(--green)">● Активен</div></div>
+              <button class="btn sm" style="margin-left:auto" onclick="showToast('⚙️ Настройки Telegram')">Настроить</button>
+            </div>
+            <div style="font-size:12px;color:var(--text2)">Бот @azimut_realty_bot · 12 подписчиков</div>
+          </div></div>
+
+          <div class="dash-card"><div style="padding:14px">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+              <span style="font-size:24px">🌐</span>
+              <div><div style="font-weight:500;font-size:14px">Сайт azimut.asia</div>
+              <div style="font-size:12px;color:var(--red)">● Не настроен</div></div>
+              <button class="btn sm" style="margin-left:auto" onclick="showToast('⚙️ Подключить сайт')">Подключить</button>
+            </div>
+            <div style="font-size:12px;color:var(--text2)">Webhook не настроен</div>
+          </div></div>
+
         </div>
       </div>
     </div>
@@ -1894,6 +1920,117 @@ tbody tr:hover td { background: var(--bg3); }
   </div>
 </div>
 
+      <button class="btn" onclick="closeModal('deal-card-modal')">Закрыть</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── RENT CONTRACT MODAL ───────────────────────────────────────────────── -->
+<div class="modal-overlay" id="rent-contract-modal">
+  <div class="modal" style="width:540px;max-height:90vh;overflow-y:auto">
+    <div class="modal-head">
+      <div class="modal-title">📄 Договор аренды</div>
+      <div class="modal-close" onclick="closeModal('rent-contract-modal')">✕</div>
+    </div>
+    <div id="rct-deal-info" style="background:var(--bg3);border-radius:var(--radius);padding:10px 12px;margin-bottom:14px;font-size:13px;font-weight:500"></div>
+    <div style="font-size:11px;font-weight:600;color:var(--blue);text-transform:uppercase;margin-bottom:8px">📅 Срок аренды</div>
+    <div class="form-row">
+      <div class="form-group"><label>Дата начала *</label><input id="rct-from" type="date"></div>
+      <div class="form-group"><label>Дата окончания *</label><input id="rct-to" type="date"></div>
+    </div>
+    <div class="form-group">
+      <label>⚡💧 Показания счётчиков при заезде</label>
+      <textarea id="rct-meters" rows="2" placeholder="Свет: 1234 кВт·ч, Вода: 456 м³, комментарий..."></textarea>
+    </div>
+    <div style="font-size:11px;font-weight:600;color:var(--green);text-transform:uppercase;margin-bottom:8px;margin-top:4px">💰 Финансовые условия</div>
+    <div class="form-row">
+      <div class="form-group"><label>Цена аренды / мес *</label><input id="rct-rent" placeholder="฿ 18,000" oninput="calcRentBalance()"></div>
+      <div class="form-group"><label>Депозит</label><input id="rct-deposit" placeholder="฿ 36,000" oninput="calcRentBalance()"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Бронирование</label><input id="rct-booking" placeholder="฿ 18,000" oninput="calcRentBalance()"></div>
+      <div class="form-group"><label>Оплата (уже получено)</label><input id="rct-paid" placeholder="฿ 54,000" oninput="calcRentBalance()"></div>
+    </div>
+    <!-- Итого дебет/кредит -->
+    <div id="rct-balance-block" style="background:var(--bg3);border-radius:var(--radius);padding:12px;margin-bottom:12px">
+      <div style="font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;margin-bottom:8px">📊 Итого (дебет / кредит)</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;text-align:center">
+        <div><div style="font-size:10px;color:var(--text3)">Всего к получению</div><div id="rct-total-due" style="font-size:14px;font-weight:600;color:var(--blue);margin-top:3px">—</div></div>
+        <div><div style="font-size:10px;color:var(--text3)">Получено</div><div id="rct-total-paid" style="font-size:14px;font-weight:600;color:var(--green);margin-top:3px">—</div></div>
+        <div><div style="font-size:10px;color:var(--text3)">Остаток</div><div id="rct-total-balance" style="font-size:14px;font-weight:600;margin-top:3px">—</div></div>
+      </div>
+    </div>
+    <!-- Комиссия — только директор/админ -->
+    <div id="rct-commission-block" style="display:none">
+      <div style="height:1px;background:var(--border);margin:4px 0 12px"></div>
+      <div style="font-size:11px;font-weight:600;color:var(--amber);text-transform:uppercase;margin-bottom:8px">💼 Комиссия (только для директора)</div>
+      <div class="form-row">
+        <div class="form-group"><label>Размер комиссии</label><input id="rct-commission" placeholder="฿ 8,000 или 1 мес"></div>
+        <div class="form-group"><label>Статус</label>
+          <select id="rct-comm-status" style="width:100%;padding:8px 11px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);font-size:13px;color:var(--text);font-family:var(--font)">
+            <option value="">— Не указано —</option>
+            <option value="received">✅ Получена</option>
+            <option value="pending">⏳ Ожидается</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div id="rct-manager-hint" style="display:none;padding:10px 12px;background:var(--blue-bg);border-radius:var(--radius);font-size:12px;color:var(--blue);margin-bottom:4px">
+      ℹ️ Поле «Комиссия» заполняет директор. После сохранения директор получит уведомление.
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('rent-contract-modal')">Отмена</button>
+      <button class="btn primary" onclick="saveRentContract()">💾 Сохранить договор</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── CHECKOUT MODAL ─────────────────────────────────────────────────────── -->
+<div class="modal-overlay" id="checkout-modal">
+  <div class="modal" style="width:460px">
+    <div class="modal-head">
+      <div class="modal-title">🚪 Оформить выезд</div>
+      <div class="modal-close" onclick="closeModal('checkout-modal')">✕</div>
+    </div>
+    <div id="co-deal-info" style="background:var(--bg3);border-radius:var(--radius);padding:10px 12px;margin-bottom:14px;font-size:13px;font-weight:500"></div>
+    <div class="form-group"><label>Дата выезда *</label><input id="co-date" type="date"></div>
+    <div class="form-group">
+      <label>Показания счётчиков при выезде</label>
+      <textarea id="co-meters" rows="2" placeholder="Свет: 1456 кВт·ч, Вода: 512 м³..."></textarea>
+    </div>
+    <div id="co-deposit-info" style="padding:10px 12px;background:var(--bg3);border-radius:var(--radius);font-size:13px;margin-bottom:12px">
+      Депозит: <span id="co-deposit-amount" style="font-weight:600;color:var(--blue)">—</span>
+    </div>
+    <div style="font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;margin-bottom:8px">Возврат депозита</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">
+      <button id="co-dep-yes" class="btn" style="padding:12px;font-size:13px" onclick="setDepositReturn(true)">✅ Да, возвращён</button>
+      <button id="co-dep-no"  class="btn" style="padding:12px;font-size:13px" onclick="setDepositReturn(false)">❌ Нет, не вернули</button>
+    </div>
+    <div id="co-dep-hint" style="display:none;padding:10px 12px;background:var(--bg3);border-radius:var(--radius);font-size:12px;line-height:1.6;color:var(--text2);margin-bottom:8px"></div>
+    <div class="form-group"><label>Состояние объекта / комментарий</label><textarea id="co-note" rows="2" placeholder="Замечания, повреждения..."></textarea></div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('checkout-modal')">Отмена</button>
+      <button class="btn primary" onclick="saveCheckout()">🚪 Оформить выезд</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── SALE AMOUNT EDIT MODAL ────────────────────────────────────────────── -->
+<div class="modal-overlay" id="sale-amount-modal">
+  <div class="modal" style="width:380px">
+    <div class="modal-head">
+      <div class="modal-title">✏️ Изменить сумму сделки</div>
+      <div class="modal-close" onclick="closeModal('sale-amount-modal')">✕</div>
+    </div>
+    <div id="sam-deal-info" style="background:var(--bg3);border-radius:var(--radius);padding:10px 12px;margin-bottom:14px;font-size:13px;font-weight:500"></div>
+    <div class="form-group"><label>Новая сумма сделки</label><input id="sam-amount" type="text" placeholder="฿ 0 или $ 0"></div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('sale-amount-modal')">Отмена</button>
+      <button class="btn primary" onclick="saveSaleAmount()">Сохранить</button>
+    </div>
+  </div>
+</div>
+
 <script>
 // ── TRANSLATIONS ─────────────────────────────────────────────────────────────
 const T = {
@@ -2004,747 +2141,46 @@ function setLang(l) {
 }
 
 // ── DATA ──────────────────────────────────────────────────────────────────────
-const rentClients = [
-  { name:'Андрей Козлов',    email:'kozlov@mail.ru',  phone:'+7 916 555-12-34', request:'Квартира у моря, Паттайя',   budget:'฿25k/мес', status:'new',         source:'Avito',    manager:'МА', dealType:'rent' },
-  { name:'Sarah Mitchell',   email:'sarah@gmail.com', phone:'+44 77 900 1234',  request:'Condo 1br, Jomtien',         budget:'$600/мес',  status:'negotiation', source:'Facebook', manager:'АК', dealType:'rent' },
-  { name:'Наталья Смирнова', email:'nat@inbox.ru',    phone:'+7 812 444-56-78', request:'Долгосрочная аренда, вилла', budget:'฿80k/мес', status:'booking',     source:'Avito',    manager:'НС', dealType:'rent', bookingAmount:'80000', bookingCurrency:'THB' },
-  { name:'Siriporn Kaew',    email:'siri@th.com',     phone:'+66 81 234 5678',  request:'คอนโดใกล้ทะเล',             budget:'฿18k/мес', status:'new',         source:'Сайт',     manager:'МА', dealType:'rent' },
-  { name:'Emma Thompson',    email:'emma@uk.com',     phone:'+44 79 111 2233',  request:'2br apartment, Bangkok',     budget:'$800/мес',  status:'moved_in',    source:'Facebook', manager:'АК', dealType:'rent' },
-  { name:'Дмитрий Орлов',   email:'orlov@ya.ru',     phone:'+7 999 888-77-66', request:'Студия краткосрочно',        budget:'฿15k/мес', status:'deferred',    source:'Telegram', manager:'НС', dealType:'rent', deferredUntil:'15.06.2025', deferredReason:'Уехал в отпуск' },
+// ── UNIFIED CLIENT BASE ───────────────────────────────────────────────────────
+let clientsDB = [
+  { id:1,  name:'Александр Петров', email:'petrov@mail.ru',  phone:'+7 999 123-45-67',  request:'Вилла 3 спальни, Паттайя',  budget:'$250–400k', status:'warm',        source:'Avito',    manager:'МА' },
+  { id:2,  name:'Sarah Mitchell',   email:'sarah@gmail.com', phone:'+44 77 900 1234',   request:'Condo 1br, Jomtien',        budget:'$600/мес',  status:'negotiation', source:'Facebook', manager:'АК' },
+  { id:3,  name:'Chen Wei',         email:'chen@qq.com',     phone:'+86 138 0013 8000', request:'Инвестиция 2+ объекта',     budget:'$1M+',      status:'advance',     source:'Telegram', manager:'МА' },
+  { id:4,  name:'Мария Иванова',    email:'ivanova@ya.ru',   phone:'+7 495 555-12-34',  request:'Апартаменты, Джомтьен',     budget:'$80–120k',  status:'new',         source:'Сайт',     manager:'НС' },
+  { id:5,  name:'James Anderson',   email:'james@hotm.com',  phone:'+1 212 555-0100',   request:'Villa with pool, Samui',    budget:'$400–700k', status:'deposit',     source:'Facebook', manager:'АК' },
+  { id:6,  name:'Наталья Смирнова', email:'nat@inbox.ru',    phone:'+7 812 444-56-78',  request:'Аренда виллы, Паттайя',     budget:'฿80k/мес', status:'booking',     source:'Avito',    manager:'НС' },
+  { id:7,  name:'Siriporn Kaew',    email:'siri@th.com',     phone:'+66 81 234 5678',   request:'คอนโดใกล้ทะเล',            budget:'฿18k/мес', status:'new',         source:'Сайт',     manager:'МА' },
+  { id:8,  name:'Anna Müller',      email:'anna@web.de',     phone:'+49 30 12345678',   request:'Villa Koh Samui',           budget:'$250–350k', status:'warm',        source:'Facebook', manager:'АК' },
+  { id:9,  name:'Андрей Козлов',    email:'kozlov@mail.ru',  phone:'+7 916 555-12-34',  request:'Квартира у моря, Паттайя', budget:'฿25k/мес', status:'new',         source:'Avito',    manager:'МА' },
+  { id:10, name:'Emma Thompson',    email:'emma@uk.com',     phone:'+44 79 111 2233',   request:'2br apartment, Bangkok',    budget:'$800/мес',  status:'moved_in',    source:'Facebook', manager:'АК' },
+  { id:11, name:'Дмитрий Орлов',   email:'orlov@ya.ru',     phone:'+7 999 888-77-66',  request:'Студия краткосрочно',       budget:'฿15k/мес', status:'new',         source:'Telegram', manager:'НС' },
 ];
-
-const saleClients = [
-  { name:'Александр Петров', email:'petrov@mail.ru',  phone:'+7 999 123-45-67', request:'Вилла 3 спальни, Паттайя',  budget:'$250–400k', status:'warm',    source:'Avito',    manager:'МА', dealType:'sale' },
-  { name:'Chen Wei',         email:'chen@qq.com',     phone:'+86 138 0013 8000',request:'Инвестиция 2+ объекта',     budget:'$1M+',      status:'advance', source:'Telegram', manager:'МА', dealType:'sale' },
-  { name:'James Anderson',   email:'james@hotm.com',  phone:'+1 212 555-0100',  request:'Villa with pool, Samui',    budget:'$400–700k', status:'deposit', source:'Facebook', manager:'АК', dealType:'sale' },
-  { name:'Anna Müller',      email:'anna@web.de',     phone:'+49 30 12345678',  request:'Villa Koh Samui',           budget:'$250–350k', status:'warm',    source:'Facebook', manager:'АК', dealType:'sale' },
-];
-
-const properties = [
-  { emoji:'🏖️', title_ru:'Вилла у моря, 3 спальни',   loc:'Паттайя, Джомтьен',  type:'Villa',    deal:'sale', price:'฿ 14,500,000', beds:3, baths:3, sqm:280, avito:true,  fb:true,  color:'linear-gradient(135deg,#1e3a5f,#2563eb)' },
-  { emoji:'🏙️', title_ru:'Кондо в центре',             loc:'Бангкок, Сукхумвит',  type:'Condo',    deal:'sale', price:'฿ 6,200,000',  beds:2, baths:2, sqm:65,  avito:false, fb:true,  color:'linear-gradient(135deg,#1a1a2e,#6366f1)' },
-  { emoji:'🌴', title_ru:'Студия Ocean View',           loc:'Паттайя, Пратамнак', type:'Apartment',deal:'rent', price:'฿ 22,000/мес', beds:0, baths:1, sqm:35,  avito:true,  fb:false, color:'linear-gradient(135deg,#0f4c75,#1b6ca8)' },
-  { emoji:'🌺', title_ru:'Вилла с бассейном, Пхукет',  loc:'Пхукет, Раваи',      type:'Villa',    deal:'sale', price:'฿ 18,900,000', beds:4, baths:4, sqm:350, avito:false, fb:true,  color:'linear-gradient(135deg,#1a3a2a,#2d6a4f)' },
-  { emoji:'🏝️', title_ru:'Бунгало на берегу, Самуи',   loc:'Самуи, Чавенг',      type:'Villa',    deal:'rent', price:'฿ 85,000/мес', beds:3, baths:2, sqm:180, avito:false, fb:true,  color:'linear-gradient(135deg,#3d1a00,#d97706)' },
-  { emoji:'🏗️', title_ru:'Таунхаус, Чиангмай',         loc:'Чиангмай, Нимман',   type:'Townhouse',deal:'sale', price:'฿ 5,800,000',  beds:3, baths:3, sqm:160, avito:true,  fb:false, color:'linear-gradient(135deg,#1a1a1a,#4a4a4a)' },
-];
-
-const kanbanData = {
-  'new_lead':    { label:'Новый лид',    deals:[{t:'Вилла → Chen Wei',   c:'Chen Wei',     p:'$850,000', d:'01.05'},{t:'Кондо → Petrov', c:'А. Петров',  p:'$320,000', d:'02.05'}] },
-  'negotiation': { label:'Переговоры',   deals:[{t:'Апарт. → Козлов',    c:'А. Козлов',    p:'$98,000',  d:'28.04'},{t:'Вилла → Anderson',c:'J. Anderson',p:'$450,000', d:'30.04'}] },
-  'viewing':     { label:'Просмотр',     deals:[{t:'Таунхаус → Wiriy.',  c:'S. Wiriyakit', p:'$162,000', d:'03.05'}] },
-  'offer':       { label:'Предложение',  deals:[{t:'Вилла → Mitchell',   c:'S. Mitchell',  p:'Аренда',   d:'29.04'}] },
-  'contract':    { label:'Договор',      deals:[{t:'Кондо → Müller',     c:'A. Müller',    p:'$290,000', d:'25.04'}] },
-  'closed_won':  { label:'Закрыто ✓',   deals:[{t:'Студия → Смирнова',  c:'Н. Смирнова',  p:'$95,000',  d:'20.04'},{t:'Бунгало → Wang', c:'Wang Lei',   p:'$220,000', d:'15.04'}] },
-  'closed_lost': { label:'Потеряно',     deals:[{t:'Вилла → Ivanov',     c:'P. Ivanov',    p:'$400,000', d:'10.04'}] },
-};
-
-const tasks = [
-  { title:'Позвонить Chen Wei — уточнить условия сделки', due:'Сегодня, 11:00', priority:'high',   done:false, overdue:false, client:'Chen Wei' },
-  { title:'Отправить договор Müller на подпись',          due:'Сегодня, 13:00', priority:'high',   done:false, overdue:false, client:'A. Müller' },
-  { title:'Показ виллы Anderson на Самуи',                due:'Вчера, 16:00',   priority:'high',   done:false, overdue:true,  client:'J. Anderson' },
-  { title:'Follow-up: Козлов — апарты Джомтьен',         due:'30 апр, 10:00',  priority:'normal', done:false, overdue:true,  client:'А. Козлов' },
-  { title:'Встреча с застройщиком Laguna Pattaya',        due:'Завтра, 15:00',  priority:'normal', done:false, overdue:false, client:'' },
-  { title:'Обновить листинг: Вилла Пхукет на Авито',     due:'4 мая',          priority:'low',    done:false, overdue:false, client:'' },
-  { title:'Звонок Wiriyakit — финальное предложение',    due:'Сегодня, 17:00', priority:'normal', done:true,  overdue:false, client:'S. Wiriyakit' },
-];
-
-let leadsData = [
-  { id:1, source:'avito',    type:'rent', name:'Андрей Козлов',  contact:'+7 916 555-12-34', msg:'Ищу квартиру у моря, аренда, Паттайя',         date:'02.05 09:14' },
-  { id:2, source:'facebook', type:'sale', name:'Emma Thompson',  contact:'FB Messenger',     msg:'Looking for villa to buy, budget $300k',        date:'02.05 08:30' },
-  { id:3, source:'telegram', type:'rent', name:'@user_pattaya',  contact:'Telegram',         msg:'Есть квартиры у моря в аренду?',                date:'01.05 22:45' },
-  { id:4, source:'site',     type:'sale', name:'Siriporn Kaew',  contact:'+66 81 234 5678',  msg:'ต้องการซื้อคอนโด งบประมาณ 5 ล้านบาท',        date:'01.05 18:20' },
-  { id:5, source:'avito',    type:'rent', name:'Дмитрий Орлов',  contact:'+7 999 888-77-66', msg:'Долгосрочная аренда виллы с бассейном',         date:'01.05 15:10' },
-];
-
-// Клиенты в статусе "Новый" дольше 2 дней — напоминания
-const reminders = [
-  { client:'Андрей Козлов',   phone:'+7 916 555-12-34', source:'Авито',    type:'rent', days:3, action:'Связаться в WhatsApp, уточнить параметры поиска' },
-  { client:'Siriporn Kaew',   phone:'+66 81 234 5678',  source:'Сайт',     type:'sale', days:5, action:'Позвонить, уточнить бюджет и предпочтения по локации' },
-  { client:'@user_pattaya',   phone:'Telegram',         source:'Telegram', type:'rent', days:2, action:'Написать в Telegram, предложить варианты аренды' },
-  { client:'Неизвестный клиент', phone:'+7 999 111-22-33', source:'Facebook', type:'rent', days:4, action:'Связаться в FB Messenger, уточнить условия' },
-];
-
-// ── HELPERS ───────────────────────────────────────────────────────────────────
-const srcIcon = { Avito:'🅰️', Facebook:'📘', Telegram:'✈️', LINE:'💚', Сайт:'🌐', site:'🌐', avito:'🅰️', facebook:'📘', telegram:'✈️', line:'💚', Реферал:'👤' };
-
-const rentStatusMap = {
-  new:'🆕 Новый', negotiation:'🗣️ Переговоры', booking:'🔒 Бронь',
-  moved_in:'✅ Заехал', moved_out:'🚪 Выехал', deferred:'⏸️ Отложен'
-};
-const rentStatusBadge = {
-  new:'new', negotiation:'warm', booking:'amber',
-  moved_in:'active', moved_out:'cold', deferred:'cold'
-};
-const saleStatusMap = {
-  warm:'🌡️ Тёплый', advance:'💵 Внесён аванс', deposit:'🏦 Депозит',
-  done:'✅ Выполнено', deferred:'⏸️ Отложен'
-};
-const saleStatusBadge = {
-  warm:'warm', advance:'hot', deposit:'blue', done:'active', deferred:'cold'
-};
-
-function clientRow(c, statusMap, statusBadge) {
-  const st = statusMap[c.status] || c.status;
-  const bd = statusBadge[c.status] || 'new';
-  const deferredTag = c.status === 'deferred'
-    ? `<div style="font-size:10px;color:var(--amber);margin-top:2px">до ${c.deferredUntil} · ${c.deferredReason}</div>` : '';
-  const bookingTag = c.status === 'booking' && c.bookingAmount
-    ? `<div style="font-size:10px;color:var(--blue);margin-top:2px">${t('status_booking')}: ${c.bookingAmount} ${c.bookingCurrency}</div>` : '';
-  return `<tr onclick="showToast('👤 ${c.name}')">
-    <td><div class="flex-cell"><div class="avatar">${c.name.split(' ').map(w=>w[0]).slice(0,2).join('')}</div><div>
-      <div class="cell-name">${c.name}</div><div class="cell-sub">${c.email}</div>
-    </div></div></td>
-    <td style="font-family:var(--mono);font-size:12px;color:var(--text2)">${c.phone}</td>
-    <td style="max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text2)">${c.request}</td>
-    <td style="font-family:var(--mono);font-size:12px;font-weight:500">${c.budget}</td>
-    <td><span class="badge ${bd}">${st}</span>${deferredTag}${bookingTag}</td>
-    <td><span class="badge ${(c.source||'').toLowerCase()}">${srcIcon[c.source]||''} ${c.source}</span></td>
-    <td onclick="event.stopPropagation()"><div style="display:flex;gap:3px">
-      <button class="btn sm ghost" title="WhatsApp" onclick="quickSend('whatsapp','${c.name}','${c.phone}')">📱</button>
-      <button class="btn sm ghost" title="Telegram" onclick="quickSend('telegram','${c.name}','${c.phone}')">✈️</button>
-      <button class="btn sm ghost" title="Email"    onclick="quickSend('email','${c.name}','${c.email}')">📧</button>
-    </div></td>
-    <td onclick="event.stopPropagation()"><div style="display:flex;gap:4px;align-items:center">
-      <button class="btn sm ghost" onclick="openDeferred('${c.name}')">⏸️</button>
-      <button class="btn sm ghost" onclick="showToast('✏️ ${c.name}')">✏️</button>
-      <button class="btn sm" style="background:var(--red-bg);color:var(--red);border-color:transparent;white-space:nowrap" onclick="confirmDeleteClient('${c.name}')">${t('btn_delete')}</button>
-    </div></td>
-  </tr>`;
-}
-
-function confirmDeleteClient(name) {
-  if (confirm(t('confirm_delete') + '\n\n' + name)) {
-    showToast('🗑 ' + name + ' — ' + (lang==='ru' ? 'удалён' : lang==='th' ? 'ลบแล้ว' : 'deleted'));
-  }
-}
-
-// ── RENDER LEADS BY TYPE ──────────────────────────────────────────────────────
-function renderLeadsByType(type, bodyId, subId) {
-  const el = document.getElementById(bodyId);
-  if (!el) return;
-  const srcLabel = { avito:'🅰️ Авито', facebook:'📘 Facebook', telegram:'✈️ Telegram', line:'💚 LINE', site:'🌐 Сайт' };
-  const data = leadsData.filter(l => l.type === type);
-  const convertLabel = t('btn_convert');
-  const deleteLabel  = t('btn_delete');
-  el.innerHTML = data.map(l=>`<tr>
-    <td><span class="badge ${l.source==='facebook'?'fb':l.source==='telegram'?'tg':l.source}">${srcLabel[l.source]||l.source}</span></td>
-    <td style="font-weight:500">${l.name}</td>
-    <td style="font-size:12px;color:var(--text2);font-family:var(--mono)">${l.contact}</td>
-    <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text2);font-size:12px">${l.msg}</td>
-    <td style="color:var(--text3);font-size:11px;font-family:var(--mono)">${l.date}</td>
-    <td><div style="display:flex;gap:4px">
-      <button class="btn sm primary" onclick="convertLead(${l.id})">${convertLabel}</button>
-      <button class="btn sm" style="background:var(--red-bg);color:var(--red);border-color:transparent" onclick="deleteLead(${l.id})">${deleteLabel}</button>
-    </div></td>
-  </tr>`).join('') || `<tr><td colspan="6" style="text-align:center;padding:24px;color:var(--text3)">${lang==='ru'?'Нет заявок':lang==='th'?'ไม่มีลีด':'No leads'}</td></tr>`;
-  const sub = document.getElementById(subId);
-  if (sub) sub.textContent = data.length + ' ' + (lang==='ru'?'заявок':lang==='th'?'ลีด':'leads');
-}
-
-function renderRentClients() {
-  const q  = (document.getElementById('rent-search')?.value||'').toLowerCase();
-  const st = document.getElementById('rent-status')?.value||'';
-  const sr = document.getElementById('rent-source')?.value||'';
-  const data = rentClients.filter(c =>
-    (!q  || c.name.toLowerCase().includes(q)||c.request.toLowerCase().includes(q)) &&
-    (!st || c.status===st) && (!sr || c.source===sr)
-  );
-  document.getElementById('rent-clients-body').innerHTML = data.map(c=>clientRow(c,rentStatusMap,rentStatusBadge)).join('');
-}
-
-function renderSaleClients() {
-  const q  = (document.getElementById('sale-search')?.value||'').toLowerCase();
-  const st = document.getElementById('sale-status')?.value||'';
-  const sr = document.getElementById('sale-source')?.value||'';
-  const data = saleClients.filter(c =>
-    (!q  || c.name.toLowerCase().includes(q)||c.request.toLowerCase().includes(q)) &&
-    (!st || c.status===st) && (!sr || c.source===sr)
-  );
-  document.getElementById('sale-clients-body').innerHTML = data.map(c=>clientRow(c,saleStatusMap,saleStatusBadge)).join('');
-}
-
-// ── ROLE SYSTEM ───────────────────────────────────────────────────────────────
-let currentRole = 'admin'; // Михаил — администратор
-
-function setRole(role) {
-  currentRole = role;
-  document.getElementById('role-menu').style.display = 'none';
-
-  const labels = { manager:'Менеджер', director:'Директор', admin:'Администратор' };
-  const labelsEn = { manager:'Manager', director:'Director', admin:'Admin' };
-  const labelsTh = { manager:'ผู้จัดการ', director:'ผู้อำนวยการ', admin:'แอดมิน' };
-  document.getElementById('user-role-label').textContent =
-    lang==='th' ? labelsTh[role] : lang==='en' ? labelsEn[role] : labels[role];
-
-  // Avatar color by role
-  const avatar = document.querySelector('.user-avatar');
-  if (avatar) {
-    avatar.style.background =
-      role === 'admin'    ? 'linear-gradient(135deg,#F59E0B,#EF4444)' :
-      role === 'director' ? 'linear-gradient(135deg,#10B981,#3B82F6)' :
-                            'linear-gradient(135deg,var(--blue),#6366F1)';
-  }
-
-  // Pipeline: visible for director + admin
-  const pipelineItem = document.getElementById('nav-pipeline-item');
-  const showPipeline = role === 'director' || role === 'admin';
-  pipelineItem.style.display = showPipeline ? 'flex' : 'none';
-  if (showPipeline) {
-    pipelineItem.style.background = 'rgba(52,211,153,0.08)';
-    pipelineItem.style.borderRadius = 'var(--radius)';
-    document.getElementById('nav-pipeline-lbl').style.color = 'var(--green)';
-  }
-
-  // Admin section: visible only for admin
-  const adminSection = document.getElementById('nav-admin-section');
-  adminSection.style.display = role === 'admin' ? 'block' : 'none';
-
-  const toasts = {
-    manager: '👤 Режим: Менеджер',
-    director: '👑 Режим: Директор — Pipeline доступен',
-    admin: '⚡ Режим: Администратор — полный доступ'
-  };
-  showToast(toasts[role]);
-}
-
-function toggleRoleMenu() {
-  const m = document.getElementById('role-menu');
-  m.style.display = m.style.display === 'none' ? 'block' : 'none';
-}
-
-// Close role menu on outside click
-document.addEventListener('click', e => {
-  const chip = e.target.closest('.user-chip');
-  if (!chip) document.getElementById('role-menu').style.display = 'none';
-});
-
-// ── RENDER ADMIN ──────────────────────────────────────────────────────────────
-const adminUsers = [
-  { name:'Абакумов Михаил', role:'admin',    deals:9,  clients:10, active:true  },
-  { name:'Алина Козлова',   role:'manager',  deals:5,  clients:6,  active:true  },
-  { name:'Наталья С.',      role:'manager',  deals:3,  clients:5,  active:true  },
-  { name:'Иван Петров',     role:'director', deals:0,  clients:0,  active:false },
-];
-
-const adminLogs = [
-  { time:'02.05 11:42', user:'Абакумов М.', action:'Создана сделка',          obj:'Вилла → Chen Wei' },
-  { time:'02.05 11:30', user:'Козлова А.',  action:'Добавлен клиент',         obj:'Андрей Козлов (Аренда)' },
-  { time:'02.05 10:55', user:'Абакумов М.', action:'Заявка конвертирована',   obj:'Emma Thompson → Клиент' },
-  { time:'02.05 10:20', user:'Наталья С.',  action:'Сделка перемещена',       obj:'Апарт. → Mitchell: Переговоры' },
-  { time:'01.05 18:34', user:'Козлова А.',  action:'Клиент отложен',          obj:'Дмитрий Орлов до 15.06' },
-  { time:'01.05 17:10', user:'Абакумов М.', action:'Договор сохранён',        obj:'Таунхаус → Müller' },
-  { time:'01.05 16:00', user:'Наталья С.',  action:'Задача выполнена',        obj:'Показ виллы Anderson' },
-  { time:'01.05 14:22', user:'Абакумов М.', action:'Удалена заявка',          obj:'[Авито] Неизвестный' },
-];
-
-function renderAdminDashboard() {
-  // Users preview
-  const up = document.getElementById('admin-users-preview');
-  if (up) up.innerHTML = adminUsers.map(u => `
-    <div class="dash-row">
-      <div class="avatar" style="width:24px;height:24px;font-size:10px">${u.name.split(' ').map(w=>w[0]).join('').slice(0,2)}</div>
-      <div class="dash-row-info"><div class="dash-row-title" style="font-size:12px">${u.name}</div></div>
-      <div><span class="badge ${u.role==='admin'?'hot':u.role==='director'?'active':'new'}" style="font-size:10px">${u.role==='admin'?'⚡ Админ':u.role==='director'?'👑 Директор':'👤 Менеджер'}</span></div>
-    </div>`).join('');
-
-  // Logs preview
-  const lp = document.getElementById('admin-logs-preview');
-  if (lp) lp.innerHTML = adminLogs.slice(0,4).map(l => `
-    <div class="dash-row">
-      <div style="font-size:11px;color:var(--text3);font-family:var(--mono);flex-shrink:0;width:80px">${l.time}</div>
-      <div class="dash-row-info"><div class="dash-row-title" style="font-size:12px">${l.action}</div><div class="dash-row-sub">${l.obj}</div></div>
-      <div style="font-size:11px;color:var(--text2)">${l.user}</div>
-    </div>`).join('');
-}
-
-function renderAdminReports() {
-  const sourceData = [
-    { src:'🅰️ Авито', cnt:21, pct:45 }, { src:'📘 Facebook', cnt:14, pct:30 },
-    { src:'✈️ Telegram', cnt:12, pct:25 }, { src:'🌐 Сайт', cnt:0, pct:0 },
-  ];
-  const managersData = [
-    { name:'Абакумов М.', deals:9, closed:2, conv:'22%' },
-    { name:'Козлова А.',  deals:5, closed:1, conv:'20%' },
-    { name:'Наталья С.',  deals:3, closed:0, conv:'0%'  },
-  ];
-  const stagesLabel = { new_lead:'Новая заявка', negotiation:'Переговоры', offer:'Предложение', viewing:'Просмотр', contract:'Договор', closed_won:'Закрыто' };
-
-  const el = (id) => document.getElementById(id);
-
-  if (el('rep-sources')) el('rep-sources').innerHTML = sourceData.map(s => `
-    <div class="dash-row">
-      <div class="dash-row-info"><div class="dash-row-title">${s.src}</div></div>
-      <div style="flex:1;margin:0 12px">
-        <div style="height:6px;background:var(--bg3);border-radius:4px;overflow:hidden">
-          <div style="height:100%;width:${s.pct}%;background:var(--blue);border-radius:4px;transition:width 0.4s"></div>
-        </div>
-      </div>
-      <div style="font-size:12px;font-weight:600;font-family:var(--mono);width:30px;text-align:right">${s.cnt}</div>
-    </div>`).join('');
-
-  if (el('rep-managers')) el('rep-managers').innerHTML = managersData.map(m => `
-    <div class="dash-row">
-      <div class="avatar" style="width:24px;height:24px;font-size:10px">${m.name.split(' ').map(w=>w[0]).join('').slice(0,2)}</div>
-      <div class="dash-row-info"><div class="dash-row-title">${m.name}</div><div class="dash-row-sub">${m.deals} сделок · закрыто ${m.closed}</div></div>
-      <div><span class="badge new" style="font-size:11px">${m.conv}</span></div>
-    </div>`).join('');
-
-  ['sale','rent'].forEach(type => {
-    const deals = dealsData[type];
-    const byStage = {};
-    deals.forEach(d => { if(d.stage!=='lost') byStage[d.stage] = (byStage[d.stage]||0)+1; });
-    const repEl = el(`rep-${type}-stages`);
-    if (repEl) repEl.innerHTML = Object.entries(byStage).map(([stage,cnt]) => `
-      <div class="dash-row">
-        <div class="dash-row-info"><div class="dash-row-title">${stagesLabel[stage]||stage}</div></div>
-        <span class="badge new" style="font-size:11px">${cnt}</span>
-      </div>`).join('') || '<div style="padding:16px;color:var(--text3);font-size:12px;text-align:center">Нет данных</div>';
-  });
-
-  if (el('rep-lost')) el('rep-lost').innerHTML =
-    '<div style="padding:16px;color:var(--text3);font-size:12px;text-align:center">Нет потерянных сделок</div>';
-
-  if (el('rep-commissions')) el('rep-commissions').innerHTML = [...dealsData.sale,...dealsData.rent]
-    .filter(d=>d.contract).map(d => `
-      <div class="dash-row">
-        <div class="dash-row-info"><div class="dash-row-title" style="font-size:12px">${d.t}</div><div class="dash-row-sub">${d.contract?.commission||'—'}</div></div>
-        <span class="badge ${d.contract?.commReceived===true?'active':d.contract?.commReceived===false?'warm':'new'}" style="font-size:10px">
-          ${d.contract?.commReceived===true?'✓ Получена':d.contract?.commReceived===false?'⏳ Ожидается':'📄 В работе'}
-        </span>
-      </div>`).join('') || '<div style="padding:16px;color:var(--text3);font-size:12px;text-align:center">Нет договоров</div>';
-}
-
-function renderAdminUsers() {
-  const roleLabel = { admin:'⚡ Администратор', director:'👑 Директор', manager:'👤 Менеджер' };
-  const el = document.getElementById('admin-users-table');
-  if (!el) return;
-  el.innerHTML = adminUsers.map(u => `<tr>
-    <td><div class="flex-cell"><div class="avatar">${u.name.split(' ').map(w=>w[0]).join('').slice(0,2)}</div><span style="font-weight:500">${u.name}</span></div></td>
-    <td><span class="badge ${u.role==='admin'?'hot':u.role==='director'?'active':'new'}">${roleLabel[u.role]}</span></td>
-    <td style="font-family:var(--mono)">${u.deals}</td>
-    <td style="font-family:var(--mono)">${u.clients}</td>
-    <td><span class="badge ${u.active?'active':'cold'}">${u.active?'● Активен':'○ Неактивен'}</span></td>
-    <td><button class="btn sm ghost" onclick="showToast('✏️ Редактировать: ${u.name}')">✏️</button></td>
-  </tr>`).join('');
-}
-
-function renderAdminLogs() {
-  const el = document.getElementById('admin-logs-table');
-  if (!el) return;
-  el.innerHTML = adminLogs.map(l => `<tr>
-    <td style="font-size:11px;font-family:var(--mono);color:var(--text3)">${l.time}</td>
-    <td style="font-size:12px;color:var(--text2)">${l.user}</td>
-    <td style="font-weight:500">${l.action}</td>
-    <td style="font-size:12px;color:var(--text2)">${l.obj}</td>
-  </tr>`).join('');
-}
-
-
-function renderPipeline() {
-  const stageLabels = {
-    new_lead:'Новая заявка', negotiation:'Переговоры', offer:'Предложение',
-    viewing:'Просмотр', contract:'Договор', closed_won:'Закрыто'
-  };
-
-  ['sale','rent'].forEach(type => {
-    const deals = dealsData[type].filter(d => d.stage !== 'lost');
-    const byStage = {};
-    deals.forEach(d => { byStage[d.stage] = (byStage[d.stage]||0) + 1; });
-    const el = document.getElementById(`pl-${type}-stages`);
-    if (!el) return;
-    el.innerHTML = Object.entries(byStage).map(([stage, cnt]) => `
-      <div class="dash-row">
-        <div class="dash-row-info">
-          <div class="dash-row-title">${stageLabels[stage]||stage}</div>
-        </div>
-        <div class="dash-row-right">
-          <div class="dash-row-val" style="font-size:13px">${cnt} сдел${cnt===1?'ка':cnt<5?'ки':'ок'}</div>
-        </div>
-      </div>`).join('') ||
-      '<div style="padding:16px;text-align:center;color:var(--text3);font-size:13px">Нет активных сделок</div>';
-  });
-
-  // Pending commissions
-  const pendingComm = [...dealsData.sale, ...dealsData.rent]
-    .filter(d => d.contract && d.contract.commReceived === false).length;
-  const elComm = document.getElementById('pl-comm-pend');
-  if (elComm) elComm.textContent = pendingComm;
-}
-
-
-function toggleGroup(group) {
-  const body = document.getElementById('body-' + group);
-  const hdr  = document.getElementById('grp-' + group);
-  const isCollapsed = body.classList.contains('collapsed');
-  body.classList.toggle('collapsed', !isCollapsed);
-  hdr.classList.toggle('collapsed', !isCollapsed);
-}
-
-// ── RENDER SIDEBAR ────────────────────────────────────────────────────────────
-function renderSidebar() {
-  const map = {
-    'nav-dashboard':'nav_dashboard',
-    'nav-tasks':'nav_tasks', 'nav-reminders':'nav_reminders',
-    'nav-leads-sale':'nav_leads', 'nav-clients-sale':'nav_clients_rent',
-    'nav-properties-sale':'nav_properties_sale', 'nav-deals-sale':'nav_deals_sale',
-    'nav-leads-rent':'nav_leads',  'nav-clients-rent':'nav_clients_rent',
-    'nav-properties-rent':'nav_properties_rent', 'nav-deals-rent':'nav_deals_rent',
-    'nav-settings':'nav_settings', 'nav-logout':'nav_logout',
-    'lbl-conn':'conn_status',
-  };
-  Object.entries(map).forEach(([id, key]) => {
-    const el = document.getElementById(id);
-    if (el) el.textContent = t(key);
-  });
-  // Section labels
-  const saleLbl = document.getElementById('lbl-sale');
-  const rentLbl = document.getElementById('lbl-rent');
-  if (saleLbl) saleLbl.textContent = lang==='ru'?'Продажа':lang==='th'?'ขาย':'Sale';
-  if (rentLbl) rentLbl.textContent = lang==='ru'?'Аренда':lang==='th'?'เช่า':'Rent';
-  // Nav sub-items labels
-  const subLabels = {
-    'nav-leads-sale':  lang==='ru'?'Заявки':lang==='th'?'ลีด':'Leads',
-    'nav-clients-sale':lang==='ru'?'Клиенты':lang==='th'?'ลูกค้า':'Clients',
-    'nav-properties-sale':lang==='ru'?'Объекты':lang==='th'?'อสังหาฯ':'Properties',
-    'nav-deals-sale':  lang==='ru'?'Сделки':lang==='th'?'ดีล':'Deals',
-    'nav-leads-rent':  lang==='ru'?'Заявки':lang==='th'?'ลีด':'Leads',
-    'nav-clients-rent':lang==='ru'?'Клиенты':lang==='th'?'ลูกค้า':'Clients',
-    'nav-properties-rent':lang==='ru'?'Объекты':lang==='th'?'อสังหาฯ':'Properties',
-    'nav-deals-rent':  lang==='ru'?'Сделки':lang==='th'?'ดีล':'Deals',
-    'nav-tasks':       lang==='ru'?'Задачи':lang==='th'?'งาน':'Tasks',
-    'nav-reminders':   lang==='ru'?'Напоминания':lang==='th'?'การแจ้งเตือน':'Reminders',
-    'nav-agents':      lang==='ru'?'Агенты':lang==='th'?'ตัวแทน':'Agents',
-    'nav-settings':    lang==='ru'?'Настройки':lang==='th'?'ตั้งค่า':'Settings',
-    'nav-logout':      lang==='ru'?'Выйти':lang==='th'?'ออกจากระบบ':'Logout',
-    'nav-dashboard':   lang==='ru'?'Дашборд':lang==='th'?'แดชบอร์ด':'Dashboard',
-    'lbl-conn':        lang==='ru'?'Подключения':lang==='th'?'การเชื่อมต่อ':'Connections',
-  };
-  Object.entries(subLabels).forEach(([id, txt]) => {
-    const el = document.getElementById(id);
-    if (el) el.textContent = txt;
-  });
-}
-
-
-
-// ── RENDER PROPERTIES ─────────────────────────────────────────────────────────
-function renderProperties() {
-  const propCard = (p) => `
-    <div class="prop-card" onclick="showToast('🏠 ${p.title_ru}')">
-      <div class="prop-thumb" style="background:${p.color}">
-        <span class="prop-thumb-badge badge ${p.deal}">${t(p.deal==='sale'?'type_sale':'type_rent')}</span>
-        <span style="font-size:40px">${p.emoji}</span>
-        <span class="prop-thumb-price">${p.price}</span>
-      </div>
-      <div class="prop-body">
-        <div class="prop-title">${p.title_ru}</div>
-        <div class="prop-loc">📍 ${p.loc} · <span style="color:var(--text3)">${p.type}</span></div>
-        <div class="prop-specs">
-          ${p.beds>0?`<span class="prop-spec">🛏 ${p.beds}</span>`:''}
-          <span class="prop-spec">🚿 ${p.baths}</span>
-          <span class="prop-spec">📐 ${p.sqm} м²</span>
-        </div>
-        <div class="prop-integrations">
-          ${p.avito?`<span class="badge avito" style="font-size:10px">🅰️ Авито</span>`:''}
-          ${p.fb?`<span class="badge fb" style="font-size:10px">📘 Facebook</span>`:''}
-        </div>
-      </div>
-    </div>`;
-  const saleEl = document.getElementById('prop-grid-sale');
-  const rentEl = document.getElementById('prop-grid-rent');
-  if (saleEl) saleEl.innerHTML = properties.filter(p=>p.deal==='sale').map(propCard).join('');
-  if (rentEl)  rentEl.innerHTML = properties.filter(p=>p.deal==='rent').map(propCard).join('');
-}
-
-// ── RENDER KANBAN ─────────────────────────────────────────────────────────────
-const kanbanDataSale = {
-  'new_lead':   {label:()=>t('status_new'),    deals:[{t:'Вилла → Chen Wei',  c:'Chen Wei',  p:'$850k',d:'01.05'},{t:'Кондо → Петров',c:'А. Петров',p:'$320k',d:'02.05'}]},
-  'negotiation':{label:()=>t('status_negotiation'), deals:[{t:'Вилла → Anderson', c:'J. Anderson',p:'$450k',d:'30.04'}]},
-  'viewing':    {label:()=>(lang==='ru'?'Просмотр':lang==='th'?'ดูสถานที่':'Viewing'), deals:[{t:'Таунхаус → Müller',c:'A. Müller',p:'$290k',d:'25.04'}]},
-  'offer':      {label:()=>(lang==='ru'?'Предложение':lang==='th'?'เสนอราคา':'Offer'), deals:[]},
-  'contract':   {label:()=>(lang==='ru'?'Договор':lang==='th'?'สัญญา':'Contract'), deals:[{t:'Кондо → Müller',c:'A. Müller',p:'$290k',d:'25.04'}]},
-  'closed_won': {label:()=>(lang==='ru'?'Закрыто ✓':lang==='th'?'ปิดได้ ✓':'Won ✓'), deals:[{t:'Бунгало → Wang',c:'Wang Lei',p:'$220k',d:'15.04'}]},
-  'closed_lost':{label:()=>(lang==='ru'?'Потеряно':lang==='th'?'สูญเสีย':'Lost'), deals:[{t:'Вилла → Ivanov',c:'P. Ivanov',p:'$400k',d:'10.04'}]},
-};
-const kanbanDataRent = {
-  'new_lead':   {label:()=>t('status_new'),    deals:[{t:'Студия → Козлов',c:'А. Козлов',p:'฿25k/м',d:'02.05'},{t:'Апарт. → Mitchell',c:'S. Mitchell',p:'$600/м',d:'01.05'}]},
-  'negotiation':{label:()=>t('status_negotiation'), deals:[{t:'Вилла → Смирнова',c:'Н. Смирнова',p:'฿80k/м',d:'28.04'}]},
-  'viewing':    {label:()=>(lang==='ru'?'Просмотр':lang==='th'?'ดูสถานที่':'Viewing'), deals:[{t:'Кондо → Kaew',c:'S. Kaew',p:'฿18k/м',d:'03.05'}]},
-  'booking':    {label:()=>t('status_booking'), deals:[{t:'Студия → Thompson',c:'E. Thompson',p:'$800/м',d:'30.04'}]},
-  'moved_in':   {label:()=>t('status_moved_in'), deals:[{t:'Апарт. → Орлов',c:'Д. Орлов',p:'฿15k/м',d:'20.04'}]},
-  'closed_won': {label:()=>(lang==='ru'?'Закрыто ✓':lang==='th'?'ปิดได้ ✓':'Done ✓'), deals:[{t:'Вилла → Wang',c:'Wang Lei',p:'฿85k/м',d:'15.04'}]},
-  'closed_lost':{label:()=>(lang==='ru'?'Потеряно':lang==='th'?'สูญเสีย':'Lost'), deals:[]},
-};
-
-// ── AGENTS DATA ───────────────────────────────────────────────────────────────
-let agentsData = [
-  { id:1, name:'Сомчай Виттая',    phone:'+66 81 111 2233', property:'Кондо «The Base», Паттайя Центр', commission:'3%',       deals:2 },
-  { id:2, name:'Анна Ли',          phone:'+66 82 333 4455', property:'Вилла Rawai, Пхукет',              commission:'฿80,000',  deals:1 },
-  { id:3, name:'Дмитрий Павлов',   phone:'+7 916 777 8899', property:'ЖК «Laguna», Паттайя',            commission:'2.5%',     deals:3 },
-];
-
-let agentDealContext = null; // 'rent' | 'sale' | 'standalone'
-let selectedAgentForDeal = null;
-
-// ── RENDER AGENTS ─────────────────────────────────────────────────────────────
-function renderAgents() {
-  const q = (document.getElementById('agents-search')?.value||'').toLowerCase();
-  const data = agentsData.filter(a =>
-    !q || a.name.toLowerCase().includes(q) || a.phone.includes(q) || a.property.toLowerCase().includes(q)
-  );
-  const el = document.getElementById('agents-table-body');
-  if (!el) return;
-  el.innerHTML = data.length ? data.map(a => `<tr>
-    <td><div class="flex-cell"><div class="avatar">${a.name.split(' ').map(w=>w[0]).slice(0,2).join('')}</div>
-      <div class="cell-name">${a.name}</div></div></td>
-    <td style="font-family:var(--mono);font-size:12px;color:var(--text2)">${a.phone}</td>
-    <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text2)">${a.property}</td>
-    <td style="font-weight:500;color:var(--amber)">${a.commission}</td>
-    <td style="font-family:var(--mono)">${a.deals}</td>
-    <td><div style="display:flex;gap:4px">
-      <button class="btn sm ghost" onclick="editAgent(${a.id})">✏️</button>
-      <button class="btn sm" style="background:var(--red-bg);color:var(--red);border-color:transparent" onclick="deleteAgent(${a.id})">Удалить</button>
-    </div></td>
-  </tr>`).join('') :
-    `<tr><td colspan="6" class="empty-state" style="padding:32px;text-align:center;color:var(--text3)">Агентов нет</td></tr>`;
-}
-
-function editAgent(id) {
-  const a = agentsData.find(x=>x.id===id);
-  if (!a) return;
-  document.getElementById('ag-name').value       = a.name;
-  document.getElementById('ag-phone').value      = a.phone;
-  document.getElementById('ag-property').value   = a.property;
-  document.getElementById('ag-commission').value = a.commission;
-  agentDealContext = 'standalone';
-  openModal('agent-modal');
-}
-
-function deleteAgent(id) {
-  if (!confirm(t('confirm_delete'))) return;
-  agentsData = agentsData.filter(a=>a.id!==id);
-  renderAgents();
-  showToast('🗑 Агент удалён');
-}
-
-// ── AGENT MODAL ───────────────────────────────────────────────────────────────
-function openAgentModal(context) {
-  agentDealContext = context;
-  document.getElementById('ag-name').value       = '';
-  document.getElementById('ag-phone').value      = '';
-  document.getElementById('ag-property').value   = '';
-  document.getElementById('ag-commission').value = '';
-  document.getElementById('agent-dup-warning').style.display = 'none';
-  openModal('agent-modal');
-}
-
-function checkAgentDuplicate() {
-  const phone = document.getElementById('ag-phone').value.replace(/\s/g,'');
-  if (phone.length < 7) { document.getElementById('agent-dup-warning').style.display = 'none'; return; }
-  const dup = agentsData.find(a => a.phone.replace(/\s/g,'') === phone);
-  const warn = document.getElementById('agent-dup-warning');
-  if (dup) {
-    warn.style.display = 'block';
-    warn.textContent = `⚠️ Агент с этим номером уже есть: ${dup.name} — ${dup.property}. При сохранении он будет добавлен к сделке.`;
-    // Pre-fill name and property
-    document.getElementById('ag-name').value     = dup.name;
-    document.getElementById('ag-property').value = dup.property;
-    document.getElementById('ag-commission').value = dup.commission;
-  } else {
-    warn.style.display = 'none';
-  }
-}
-
-function saveAgent() {
-  const name     = document.getElementById('ag-name').value.trim();
-  const phone    = document.getElementById('ag-phone').value.trim();
-  const property = document.getElementById('ag-property').value.trim();
-  const comm     = document.getElementById('ag-commission').value.trim();
-
-  if (!name)     { showToast('⚠️ Укажите ФИО агента'); return; }
-  if (!phone)    { showToast('⚠️ Укажите телефон'); return; }
-  if (!property) { showToast('⚠️ Укажите объект'); return; }
-
-  // Check duplicate
-  const dup = agentsData.find(a => a.phone.replace(/\s/g,'') === phone.replace(/\s/g,''));
-  let agent;
-  if (dup) {
-    agent = dup;
-  } else {
-    agent = { id: agentsData.length + 1, name, phone, property, commission: comm, deals: 0 };
-    agentsData.push(agent);
-  }
-
-  selectedAgentForDeal = agent;
-  closeModal('agent-modal');
-
-  // Apply agent to the deal form
-  if (agentDealContext === 'rent') {
-    const info = document.getElementById('rd-agent-info');
-    info.style.display = 'block';
-    info.innerHTML = `🤝 <b>${agent.name}</b> · ${agent.phone}<br>📍 ${agent.property}${agent.commission?' · '+agent.commission:''}`;
-    // Auto-set status to negotiation
-    document.getElementById('rd-status').value = 'negotiation';
-    onRentStatusChange();
-    showToast(`✅ Агент добавлен. Статус → Переговоры`);
-  } else if (agentDealContext === 'sale') {
-    const info = document.getElementById('sd-agent-info');
-    info.style.display = 'block';
-    info.innerHTML = `🤝 <b>${agent.name}</b> · ${agent.phone}<br>📍 ${agent.property}${agent.commission?' · '+agent.commission:''}`;
-    showToast(`✅ Агент добавлен. Статус → Переговоры`);
-  } else {
-    showToast(`✅ Агент «${agent.name}» сохранён`);
-    renderAgents();
-  }
-}
-
-// ── CLIENT SUGGEST ────────────────────────────────────────────────────────────
-const allClients = [
-  ...rentClients.map(c=>({...c})),
-  ...saleClients.map(c=>({...c})),
-];
-
-function searchClientSuggest(input, listId) {
-  const q = input.value.toLowerCase();
-  const list = document.getElementById(listId);
-  if (!list) return;
-  if (!q) { list.innerHTML = ''; return; }
-  const matches = allClients.filter(c =>
-    c.name.toLowerCase().includes(q) || c.phone.includes(q) || c.email.toLowerCase().includes(q)
-  ).slice(0, 6);
-  if (!matches.length) { list.innerHTML = ''; return; }
-  list.innerHTML = matches.map(c => `
-    <div class="suggest-item" onclick="selectClient('${input.id}','${listId}','${c.name}','${c.phone}')">
-      <div style="font-weight:500">${c.name}</div>
-      <div class="sub">${c.phone} · ${c.email}</div>
-    </div>`).join('');
-}
-
-function selectClient(inputId, listId, name, phone) {
-  document.getElementById(inputId).value = name;
-  document.getElementById(listId).innerHTML = '';
-  // Show selected badge for sale form
-  const sel = document.getElementById('sd-client-selected');
-  if (sel) { sel.style.display='block'; sel.textContent = `✓ Выбран: ${name} · ${phone}`; }
-}
-
-// ── RENT STATUS CHANGE ────────────────────────────────────────────────────────
-function onRentStatusChange() {
-  const status = document.getElementById('rd-status')?.value;
-  document.getElementById('rd-booking-block').style.display  = status === 'booking'  ? 'block' : 'none';
-  document.getElementById('rd-checkin-block').style.display  = status === 'checkin'  ? 'block' : 'none';
-  document.getElementById('rd-checkout-block').style.display = status === 'checkout' ? 'block' : 'none';
-}
-
-// ── SALE PROP TYPE CHANGE ─────────────────────────────────────────────────────
-const propLists = {
-  new:       ['ЖК Laguna Beach Resort, Паттайя', 'ЖК The Base, Паттайя Центр', 'ЖК Riviera Monaco, Паттайя', 'ЖК The Riviera Jomtien'],
-  secondary: ['Кондо 2BR, The Riviera, Паттайя', 'Апарт. 1BR, Джомтьен', 'Кондо Studio, Наклуа', 'Кондо 3BR, Пратамнак'],
-  house:     ['Дом 3BR+пул, Восток Паттайи', 'Вилла 4BR, Хуа Хин', 'Дом 2BR, Паньянг', 'Вилла 5BR, Банглaмунг'],
-  land:      ['Участок 400 м², Паттайя Восток', 'Земля 800 м², Хуа Хин', 'Участок 1 рай, Чонбури', 'Земля 2 рай, Банг Ламунг'],
-};
-
-function onSalePropTypeChange() {
-  const type = document.getElementById('sd-prop-type').value;
-  const selectWrap = document.getElementById('sd-prop-select-wrap');
-  const reassignWrap = document.getElementById('sd-reassign-wrap');
-  const sel = document.getElementById('sd-prop-select');
-  const lbl = document.getElementById('sd-prop-select-label');
-
-  if (type === 'reassign') {
-    selectWrap.style.display   = 'none';
-    reassignWrap.style.display = 'block';
-    return;
-  }
-  reassignWrap.style.display = 'none';
-
-  if (type && propLists[type]) {
-    selectWrap.style.display = 'block';
-    const typeName = { new:'Новостройка', secondary:'Вторичка', house:'Дом', land:'Земля' };
-    lbl.textContent = `Выбрать объект — ${typeName[type]}`;
-    sel.innerHTML = `<option value="">— Выбрать из базы —</option>` +
-      propLists[type].map(p => `<option>${p}</option>`).join('');
-  } else {
-    selectWrap.style.display = 'none';
-  }
-}
-
-// ── CREATE DEALS ──────────────────────────────────────────────────────────────
-function createDealRent() {
-  const client   = document.getElementById('rd-client').value.trim();
-  const property = document.getElementById('rd-property').value;
-  const status   = document.getElementById('rd-status').value;
-
-  if (!client)   { showToast('⚠️ Укажите клиента'); return; }
-  if (!property) { showToast('⚠️ Выберите объект'); return; }
-
-  const finalStatus = selectedAgentForDeal ? 'negotiation' : status;
-  const newDeal = {
-    id: Math.max(...dealsData.rent.map(d=>d.id), 20) + 1,
-    t: `${property.split(',')[0]} → ${client.split(' ')[0]}`,
-    c: client, p: '—', d: new Date().toLocaleDateString('ru').slice(0,5),
-    stage: finalStatus, dealType: 'rent',
-    agent: selectedAgentForDeal ? { ...selectedAgentForDeal } : null,
-  };
-  dealsData.rent.push(newDeal);
-  selectedAgentForDeal = null;
-  closeModal('deal-modal-rent');
-  renderKanban();
-  showToast(`✅ Сделка создана: ${newDeal.t}${finalStatus==='negotiation'?' → Переговоры':''}`);
-}
-
-function createDealSale() {
-  const client  = document.getElementById('sd-client').value.trim();
-  const propType = document.getElementById('sd-prop-type').value;
-
-  if (!client)   { showToast('⚠️ Укажите клиента из базы'); return; }
-  if (!propType) { showToast('⚠️ Выберите тип недвижимости'); return; }
-
-  let propName = '';
-  if (propType === 'reassign') {
-    propName = document.getElementById('sd-reassign-name').value || 'Переуступка';
-  } else {
-    propName = document.getElementById('sd-prop-select').value || propType;
-  }
-
-  const finalStatus = selectedAgentForDeal ? 'negotiation' : 'new_lead';
-  const newDeal = {
-    id: Math.max(...dealsData.sale.map(d=>d.id), 10) + 1,
-    t: `${propName.split(',')[0]} → ${client.split(' ')[0]}`,
-    c: client, p: document.getElementById('sd-amount').value || '—',
-    d: new Date().toLocaleDateString('ru').slice(0,5),
-    stage: finalStatus, dealType: 'sale',
-    agent: selectedAgentForDeal ? { ...selectedAgentForDeal } : null,
-  };
-  dealsData.sale.push(newDeal);
-  selectedAgentForDeal = null;
-  closeModal('deal-modal-sale');
-  renderKanban();
-  showToast(`✅ Сделка создана: ${newDeal.t}${finalStatus==='negotiation'?' → Переговоры':''}`);
-}
-
+// Единая база — аренда и продажа используют одну
+const rentClients = clientsDB;
+const saleClients = clientsDB;
+const allClients  = clientsDB;
 
 let dealsData = {
   sale: [
-    { id:1, t:'Вилла → Chen Wei',   c:'Chen Wei',     p:'$850,000', d:'01.05', stage:'new_lead',    dealType:'sale' },
-    { id:2, t:'Кондо → Петров',     c:'А. Петров',    p:'$320,000', d:'02.05', stage:'negotiation', dealType:'sale' },
-    { id:3, t:'Вилла → Anderson',   c:'J. Anderson',  p:'$450,000', d:'30.04', stage:'offer',       dealType:'sale' },
-    { id:4, t:'Таунхаус → Müller',  c:'A. Müller',    p:'$290,000', d:'25.04', stage:'contract',    dealType:'sale',
-      contract:{ commission:'3%', booking:'฿50,000', payment:'50% при подписании, 50% ключи', commReceived:null } },
-    { id:5, t:'Кондо → Wang',       c:'Wang Lei',     p:'$220,000', d:'15.04', stage:'closed_won',  dealType:'sale' },
+    { id:1, t:'Вилла → Chen Wei',   c:'Chen Wei',          p:'$850,000',    d:'01.05', stage:'new_lead',    dealType:'sale' },
+    { id:2, t:'Кондо → Петров',     c:'Александр Петров',  p:'$320,000',    d:'02.05', stage:'negotiation', dealType:'sale' },
+    { id:3, t:'Вилла → Anderson',   c:'James Anderson',    p:'$450,000',    d:'30.04', stage:'offer',       dealType:'sale' },
+    { id:4, t:'Таунхаус → Müller',  c:'Anna Müller',       p:'$290,000',    d:'25.04', stage:'contract',    dealType:'sale',
+      contract:{ commission:'3%', booking:'฿50,000', payment:'50% аванс, 50% ключи', commReceived:null } },
+    { id:5, t:'Кондо → Wang',       c:'Wang Lei',          p:'$220,000',    d:'15.04', stage:'closed_won',  dealType:'sale' },
   ],
   rent: [
-    { id:6,  t:'Студия → Козлов',   c:'А. Козлов',    p:'฿25k/мес', d:'02.05', stage:'new_lead',    dealType:'rent' },
-    { id:7,  t:'Апарт. → Mitchell', c:'S. Mitchell',  p:'$600/мес', d:'01.05', stage:'negotiation', dealType:'rent' },
-    { id:8,  t:'Вилла → Смирнова',  c:'Н. Смирнова',  p:'฿80k/мес', d:'28.04', stage:'viewing',     dealType:'rent' },
-    { id:9,  t:'Кондо → Kaew',      c:'S. Kaew',      p:'฿18k/мес', d:'03.05', stage:'contract',    dealType:'rent',
-      contract:{ commission:'฿8,000', booking:'฿36,000', payment:'Депозит 2 мес + 1 мес вперёд', commReceived:null } },
-    { id:10, t:'Студия → Орлов',    c:'Д. Орлов',     p:'฿15k/мес', d:'20.04', stage:'closed_won',  dealType:'rent' },
+    { id:6,  t:'Студия → Козлов',   c:'Андрей Козлов',     p:'฿25,000/мес', d:'02.05', stage:'new_lead',    dealType:'rent' },
+    { id:7,  t:'Апарт. → Mitchell', c:'Sarah Mitchell',    p:'$600/мес',    d:'01.05', stage:'negotiation', dealType:'rent' },
+    { id:8,  t:'Вилла → Смирнова',  c:'Наталья Смирнова',  p:'฿80,000/мес', d:'28.04', stage:'booking',     dealType:'rent',
+      booking:{ amount:'฿80,000' } },
+    { id:9,  t:'Кондо → Kaew',      c:'Siriporn Kaew',     p:'฿18,000/мес', d:'03.05', stage:'contract',    dealType:'rent',
+      rentContract:{ dateFrom:'2025-05-01', dateTo:'2025-11-01', rentAmount:'฿18,000', deposit:'฿36,000',
+        booking:'฿18,000', commission:'฿8,000', paid:'฿54,000', meters:'Свет: 1240 кВт·ч', commReceived:null } },
+    { id:10, t:'Студия → Орлов',    c:'Дмитрий Орлов',     p:'฿15,000/мес', d:'20.04', stage:'closed_won',  dealType:'rent' },
   ]
 };
 
-// Stages config: id, label fn, color, icon
 const STAGES_SALE = [
   { id:'new_lead',    label:()=>lang==='ru'?'Новая заявка':lang==='th'?'ลีดใหม่':'New Lead',       icon:'📥', color:'var(--blue)' },
   { id:'negotiation', label:()=>lang==='ru'?'Переговоры':lang==='th'?'เจรจา':'Negotiation',         icon:'🗣️', color:'var(--amber)' },
@@ -2754,84 +2190,114 @@ const STAGES_SALE = [
   { id:'closed_won',  label:()=>lang==='ru'?'Закрыто ✓':lang==='th'?'ปิดได้':'Closed Won',           icon:'🏆', color:'var(--green)' },
 ];
 const STAGES_RENT = [
-  { id:'new_lead',    label:()=>lang==='ru'?'Новая заявка':lang==='th'?'ลีดใหม่':'New Lead',         icon:'📥', color:'var(--blue)' },
-  { id:'negotiation', label:()=>lang==='ru'?'Переговоры':lang==='th'?'เจรจา':'Negotiation',           icon:'🗣️', color:'var(--amber)' },
-  { id:'offer',       label:()=>lang==='ru'?'Предложение':lang==='th'?'เสนอราคา':'Offer',              icon:'📋', color:'var(--purple)' },
-  { id:'viewing',     label:()=>lang==='ru'?'Просмотр':lang==='th'?'ดูสถานที่':'Viewing',              icon:'👁️', color:'#F472B6' },
-  { id:'contract',    label:()=>lang==='ru'?'Договор':lang==='th'?'สัญญา':'Contract',                  icon:'📄', color:'var(--green)' },
-  { id:'closed_won',  label:()=>lang==='ru'?'Закрыто ✓':lang==='th'?'ปิดได้':'Closed Won',             icon:'🏆', color:'var(--green)' },
+  { id:'new_lead',    label:()=>lang==='ru'?'Новая заявка':lang==='th'?'ลีดใหม่':'New Lead',           icon:'📥', color:'var(--blue)' },
+  { id:'negotiation', label:()=>lang==='ru'?'Переговоры':lang==='th'?'เจรจา':'Negotiation',             icon:'🗣️', color:'var(--amber)' },
+  { id:'booking',     label:()=>lang==='ru'?'Бронирование':lang==='th'?'จอง':'Booking',                 icon:'🔒', color:'#F472B6' },
+  { id:'checkin',     label:()=>lang==='ru'?'Заезд':lang==='th'?'เช็คอิน':'Check-in',                   icon:'🏠', color:'var(--purple)' },
+  { id:'contract',    label:()=>lang==='ru'?'Договор':lang==='th'?'สัญญา':'Contract',                    icon:'📄', color:'var(--green)' },
+  { id:'checkout',    label:()=>lang==='ru'?'Выезд':lang==='th'?'เช็คเอาท์':'Check-out',                icon:'🚪', color:'var(--red)' },
 ];
 
-let activeDeal = null; // currently open deal for modals
-let commissionStatus = null;
+let activeDeal = null;let commissionStatus = null;
+let depositReturn = null;
+
+// ── KANBAN RENDER ─────────────────────────────────────────────────────────────
+// ── CHECKIN (dates required) ──────────────────────────────────────────────────
+function openCheckinModal(dealId) {
+  const deal = dealsData.rent.find(d=>d.id===dealId);
+  if (!deal) return;
+  activeDeal = deal;
+  const dateFrom = prompt(`📅 Дата заезда для "${deal.c}"\nФормат: ГГГГ-ММ-ДД (например 2025-06-01):`);
+  if (!dateFrom) { showToast('⚠️ Дата заезда обязательна'); return; }
+  deal.stage = 'checkin';
+  deal.checkinDate = dateFrom;
+  renderKanban();
+  showToast(`✅ Заезд: ${deal.c} с ${dateFrom}`);
+}
 
 function renderKanbanBoard(deals, stages, containerId) {
   const el = document.getElementById(containerId);
   if (!el) return;
-
-  // Count lost deals
-  const lostDeals = deals.filter(d => d.stage === 'lost');
+  const isRent = containerId === 'kanban-board-rent';
+  const lostDeals   = deals.filter(d => d.stage === 'lost');
+  const closedDeals = deals.filter(d => d.stage === 'closed_won');
 
   const stageHtml = stages.map(stage => {
     const stageDeals = deals.filter(d => d.stage === stage.id);
-    return `
-      <div class="kanban-col">
-        <div class="kanban-head" style="border-top:2px solid ${stage.color}">
-          <span class="kanban-stage">${stage.icon} ${stage.label()}</span>
-          <span class="kanban-cnt">${stageDeals.length}</span>
-        </div>
-        <div class="kanban-cards">
-          ${stageDeals.map(d => dealCardHtml(d, stage)).join('')}
-        </div>
-      </div>`;
+    return `<div class="kanban-col">
+      <div class="kanban-head" style="border-top:2px solid ${stage.color}">
+        <span class="kanban-stage">${stage.icon} ${stage.label()}</span>
+        <span class="kanban-cnt">${stageDeals.length}</span>
+      </div>
+      <div class="kanban-cards">${stageDeals.map(d => dealCardHtml(d, stage)).join('')}</div>
+    </div>`;
   }).join('');
 
-  // Lost column — only if has deals
-  const lostHtml = lostDeals.length > 0 ? `
-    <div class="kanban-col lost">
-      <div class="kanban-head" style="border-top:2px solid var(--red)">
-        <span class="kanban-stage">❌ ${lang==='ru'?'Потеряно':lang==='th'?'สูญเสีย':'Lost'}</span>
-        <span class="kanban-cnt" style="background:var(--red-bg);color:var(--red)">${lostDeals.length}</span>
-      </div>
-      <div class="kanban-cards">
-        ${lostDeals.map(d => `
-          <div class="deal-card" style="border-color:rgba(248,113,113,0.3);opacity:0.75" onclick="openDealCard(${d.id})">
-            <div class="deal-card-title">${d.t}</div>
-            <div class="deal-card-client">${d.c}</div>
-            <div style="font-size:11px;color:var(--red);margin-top:4px">
-              ${d.lostStage ? '⚠ '+stageLabel(d.lostStage) : ''}<br>
-              ${d.lostReason ? '📝 '+d.lostReason : ''}
-            </div>
-          </div>`).join('')}
-      </div>
-    </div>` : '';
+  // Closed column: always visible for rent, only if deals for sale
+  const showClosed = isRent || closedDeals.length > 0;
+  const closedHtml = showClosed ? `<div class="kanban-col won">
+    <div class="kanban-head" style="border-top:2px solid var(--green)">
+      <span class="kanban-stage">🏆 ${lang==='ru'?'Закрыто ✓':'Closed ✓'}</span>
+      <span class="kanban-cnt" style="background:var(--green-bg);color:var(--green)">${closedDeals.length}</span>
+    </div>
+    <div class="kanban-cards">
+      ${closedDeals.map(d=>`
+        <div class="deal-card" style="opacity:0.7" onclick="openDealCard(${d.id})">
+          <div class="deal-card-title">${d.t}</div>
+          <div class="deal-card-client">${d.c}</div>
+          <div class="deal-card-price">${d.p}</div>
+        </div>`).join('')}
+      ${closedDeals.length===0?`<div style="padding:14px;text-align:center;color:var(--text3);font-size:12px">Нет закрытых</div>`:''}
+    </div>
+  </div>` : '';
 
-  el.innerHTML = stageHtml + lostHtml;
+  // Lost column — only if has deals
+  const lostHtml = lostDeals.length > 0 ? `<div class="kanban-col lost">
+    <div class="kanban-head" style="border-top:2px solid var(--red)">
+      <span class="kanban-stage">❌ ${lang==='ru'?'Потеряно':'Lost'}</span>
+      <span class="kanban-cnt" style="background:var(--red-bg);color:var(--red)">${lostDeals.length}</span>
+    </div>
+    <div class="kanban-cards">${lostDeals.map(d=>`
+      <div class="deal-card" style="border-color:rgba(248,113,113,0.3);opacity:0.75" onclick="openDealCard(${d.id})">
+        <div class="deal-card-title">${d.t}</div>
+        <div class="deal-card-client">${d.c}</div>
+        <div style="font-size:11px;color:var(--red);margin-top:4px">${d.lostStage?'⚠ '+stageLabel(d.lostStage)+' · ':''} ${d.lostReason||''}</div>
+      </div>`).join('')}
+    </div>
+  </div>` : '';
+
+  el.innerHTML = stageHtml + closedHtml + lostHtml;
 }
 
 function dealCardHtml(d, stage) {
-  const contractBadge = d.contract ? (d.contract.commReceived === true
-    ? `<span style="font-size:10px;background:var(--green-bg);color:var(--green);padding:2px 6px;border-radius:20px">✓ Комиссия получена</span>`
-    : d.contract.commReceived === false
-    ? `<span style="font-size:10px;background:var(--amber-bg);color:var(--amber);padding:2px 6px;border-radius:20px">⏳ Комиссия ожидается</span>`
-    : `<span style="font-size:10px;background:var(--blue-bg);color:var(--blue);padding:2px 6px;border-radius:20px">📄 Договор</span>`) : '';
-  return `
-    <div class="deal-card" onclick="openDealCard(${d.id})">
-      <div class="deal-card-title">${d.t}</div>
-      <div class="deal-card-client">${d.c}</div>
-      <div class="deal-card-price">${d.p}</div>
-      ${contractBadge ? `<div style="margin-top:5px">${contractBadge}</div>` : ''}
-      <div class="deal-card-footer">
-        <span class="deal-card-date">${d.d}</span>
-        <span class="deal-card-avatar">${d.c[0]}</span>
-      </div>
-    </div>`;
+  const isSale = d.dealType === 'sale';
+  const amountHtml = isSale
+    ? `<div style="display:flex;align-items:center;gap:6px;margin-top:4px">
+        <div class="deal-card-price">${d.p}</div>
+        <button class="btn sm ghost" style="font-size:10px;padding:2px 6px" onclick="event.stopPropagation();openSaleAmountEdit(${d.id})">✏️</button>
+       </div>`
+    : `<div class="deal-card-price">${d.p}</div>`;
+  const contractBadge = d.contract ? (d.contract.commReceived===true
+    ? `<span style="font-size:10px;background:var(--green-bg);color:var(--green);padding:2px 6px;border-radius:20px">✓ Комиссия</span>`
+    : `<span style="font-size:10px;background:var(--blue-bg);color:var(--blue);padding:2px 6px;border-radius:20px">📄 Договор</span>`)
+    : d.rentContract ? `<span style="font-size:10px;background:var(--green-bg);color:var(--green);padding:2px 6px;border-radius:20px">📄 Договор</span>` : '';
+  const agentBadge = d.agent ? `<span style="font-size:10px;background:var(--amber-bg);color:var(--amber);padding:2px 6px;border-radius:20px">🤝 Агент</span>` : '';
+  const checkinBadge = d.checkinDate ? `<span style="font-size:10px;background:var(--purple-bg);color:var(--purple);padding:2px 6px;border-radius:20px">🏠 ${d.checkinDate}</span>` : '';
+  const badges = [contractBadge, agentBadge, checkinBadge].filter(Boolean).join('');
+  return `<div class="deal-card" onclick="openDealCard(${d.id})">
+    <div class="deal-card-title">${d.t}</div>
+    <div class="deal-card-client">${d.c}</div>
+    ${amountHtml}
+    ${badges ? `<div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:5px">${badges}</div>` : ''}
+    <div class="deal-card-footer">
+      <span class="deal-card-date">${d.d}</span>
+      <span class="deal-card-avatar">${d.c[0]}</span>
+    </div>
+  </div>`;
 }
 
 function stageLabel(id) {
-  const all = [...STAGES_SALE];
-  const s = all.find(x=>x.id===id);
-  return s ? s.label() : id;
+  return [...STAGES_SALE,...STAGES_RENT].find(s=>s.id===id)?.label() || id;
 }
 
 function renderKanban() {
@@ -2839,44 +2305,84 @@ function renderKanban() {
   renderKanbanBoard(dealsData.rent, STAGES_RENT, 'kanban-board-rent');
 }
 
-// ── OPEN DEAL CARD ────────────────────────────────────────────────────────────
+// ── DEAL CARD MODAL ───────────────────────────────────────────────────────────
 function openDealCard(dealId) {
-  const deal = [...dealsData.sale, ...dealsData.rent].find(d=>d.id===dealId);
+  const deal = [...dealsData.sale,...dealsData.rent].find(d=>d.id===dealId);
   if (!deal) return;
   activeDeal = deal;
-
   document.getElementById('dcm-title').textContent = deal.t;
-  document.getElementById('dcm-client').textContent = '👤 ' + deal.c + '  ·  ' + (deal.dealType==='sale'?'💰 Продажа':'🔑 Аренда');
+  document.getElementById('dcm-client').textContent = '👤 '+deal.c+' · '+(deal.dealType==='sale'?'💰 Продажа':'🔑 Аренда');
   document.getElementById('dcm-price').textContent = deal.p;
 
-  const stages = deal.dealType === 'sale' ? STAGES_SALE : STAGES_RENT;
+  const stages = deal.dealType==='sale' ? STAGES_SALE : STAGES_RENT;
   const stagesEl = document.getElementById('dcm-stages');
   stagesEl.innerHTML = stages.map(s => {
     const isCurrent = s.id === deal.stage;
-    const isContract = s.id === 'contract';
+    // Determine action for each stage
+    let onclick;
+    if (deal.dealType === 'rent') {
+      if (s.id === 'checkin')     onclick = `moveDeal(${deal.id},'checkin')`;
+      else if (s.id === 'contract') onclick = `openRentContract(${deal.id})`;
+      else if (s.id === 'checkout') onclick = `openCheckout(${deal.id})`;
+      else                          onclick = `moveDeal(${deal.id},'${s.id}')`;
+    } else {
+      if (s.id === 'contract') onclick = `openContract(${deal.id})`;
+      else                     onclick = `moveDeal(${deal.id},'${s.id}')`;
+    }
+    const needsFill = (s.id==='contract'||s.id==='checkout'||s.id==='checkin');
     return `<button class="btn" style="text-align:left;justify-content:flex-start;gap:10px;${isCurrent?'background:var(--blue-bg);color:var(--blue);border-color:rgba(78,142,247,0.3);font-weight:500':''}"
-      onclick="${isContract ? `openContract(${deal.id})` : `moveDeal(${deal.id},'${s.id}')`}">
-      ${s.icon} ${s.label()} ${isCurrent?'<span style="font-size:10px;opacity:0.6;margin-left:auto">← текущая</span>':''}
-      ${isContract?'<span style="font-size:10px;color:var(--text3);margin-left:auto">заполнить →</span>':''}
+      onclick="${onclick};closeModal('deal-card-modal');">
+      ${s.icon} ${s.label()}
+      ${isCurrent?'<span style="font-size:10px;opacity:0.6;margin-left:auto">← текущая</span>':''}
+      ${needsFill && !isCurrent?'<span style="font-size:10px;color:var(--text3);margin-left:auto">заполнить →</span>':''}
     </button>`;
   }).join('');
+
+  // Sale amount edit
+  const samBtn = document.getElementById('dcm-lost-btn-wrap');
+  if (samBtn && deal.dealType === 'sale') {
+    samBtn.innerHTML = `
+      <button class="btn" style="width:100%;margin-bottom:6px;justify-content:center" onclick="closeModal('deal-card-modal');openSaleAmountEdit(${deal.id})">
+        ✏️ Изменить сумму сделки
+      </button>
+      <button class="btn" style="width:100%;background:var(--red-bg);color:var(--red);border-color:transparent" onclick="openLostFromCard()">
+        ❌ Отметить как потерянную
+      </button>`;
+  } else if (samBtn) {
+    samBtn.innerHTML = `<button class="btn" style="width:100%;background:var(--red-bg);color:var(--red);border-color:transparent" onclick="openLostFromCard()">❌ Отметить как потерянную</button>`;
+  }
 
   openModal('deal-card-modal');
 }
 
 function moveDeal(dealId, newStage) {
-  const deal = [...dealsData.sale, ...dealsData.rent].find(d=>d.id===dealId);
+  const deal = [...dealsData.sale,...dealsData.rent].find(d=>d.id===dealId);
   if (!deal) return;
 
-  // Auto-create viewing task when moved to "offer"
-  if (newStage === 'offer' && deal.stage !== 'offer') {
-    const newTask = {
-      title: `📋 Просмотр объекта — ${deal.c}`,
-      due: 'Завтра', priority: 'high', done: false, overdue: false,
-      client: deal.c, autoCreated: true
-    };
-    tasks.unshift(newTask);
+  // SALE: offer → auto-create viewing task
+  if (newStage==='offer' && deal.stage!=='offer' && deal.dealType==='sale') {
+    tasks.unshift({ title:`📋 Просмотр объекта — ${deal.c}`, due:'Завтра', priority:'high', done:false, overdue:false, client:deal.c, autoCreated:true });
     showToast(`✅ Задание на просмотр создано для ${deal.c}`);
+  }
+
+  // RENT: checkin → требует обязательных дат → открываем contract-modal вместо
+  if (newStage==='checkin' && deal.dealType==='rent') {
+    closeModal('deal-card-modal');
+    // Open checkin date dialog
+    openCheckinModal(dealId);
+    return;
+  }
+
+  // RENT: contract → открываем полную форму договора
+  if (newStage==='contract' && deal.dealType==='rent') {
+    openRentContract(dealId);
+    return;
+  }
+
+  // RENT: checkout → открываем форму выезда
+  if (newStage==='checkout' && deal.dealType==='rent') {
+    openCheckout(dealId);
+    return;
   }
 
   deal.stage = newStage;
@@ -2885,50 +2391,20 @@ function moveDeal(dealId, newStage) {
   renderTasks();
 }
 
-// ── CONTRACT ──────────────────────────────────────────────────────────────────
+// ── SALE CONTRACT ─────────────────────────────────────────────────────────────
 function openContract(dealId) {
-  const deal = [...dealsData.sale, ...dealsData.rent].find(d=>d.id===dealId);
+  const deal = [...dealsData.sale].find(d=>d.id===dealId);
   if (!deal) return;
   activeDeal = deal;
   closeModal('deal-card-modal');
-
-  document.getElementById('contract-deal-info').textContent = `💼 ${deal.t}  ·  ${deal.c}  ·  ${deal.p}`;
-  const c = deal.contract || {};
-  document.getElementById('contract-commission').value = c.commission || '';
-  document.getElementById('contract-booking').value    = c.booking || '';
-  document.getElementById('contract-payment').value    = c.payment || '';
-  commissionStatus = c.commReceived !== undefined ? c.commReceived : null;
+  document.getElementById('contract-deal-info').textContent = `💼 ${deal.t} · ${deal.c} · ${deal.p}`;
+  const c = deal.contract||{};
+  document.getElementById('contract-commission').value = c.commission||'';
+  document.getElementById('contract-booking').value    = c.booking||'';
+  document.getElementById('contract-payment').value    = c.payment||'';
+  commissionStatus = c.commReceived!==undefined ? c.commReceived : null;
   updateCommBtns();
   openModal('contract-modal');
-}
-
-function openNewDeal(type) {
-  selectedAgentForDeal = null;
-  if (type === 'rent') {
-    // Reset form
-    document.getElementById('rd-client').value = '';
-    document.getElementById('rd-client-list').innerHTML = '';
-    document.getElementById('rd-property').value = '';
-    document.getElementById('rd-status').value = 'new_lead';
-    document.getElementById('rd-agent-info').style.display = 'none';
-    document.getElementById('rd-booking-block').style.display  = 'none';
-    document.getElementById('rd-checkin-block').style.display  = 'none';
-    document.getElementById('rd-checkout-block').style.display = 'none';
-    document.getElementById('rd-note').value = '';
-    openModal('deal-modal-rent');
-  } else {
-    // Reset form
-    document.getElementById('sd-client').value = '';
-    document.getElementById('sd-client-list').innerHTML = '';
-    document.getElementById('sd-client-selected').style.display = 'none';
-    document.getElementById('sd-prop-type').value = '';
-    document.getElementById('sd-prop-select-wrap').style.display   = 'none';
-    document.getElementById('sd-reassign-wrap').style.display      = 'none';
-    document.getElementById('sd-agent-info').style.display = 'none';
-    document.getElementById('sd-amount').value = '';
-    document.getElementById('sd-note').value = '';
-    openModal('deal-modal-sale');
-  }
 }
 
 function setCommissionStatus(received) {
@@ -2937,73 +2413,206 @@ function setCommissionStatus(received) {
   const hint = document.getElementById('contract-comm-hint');
   hint.style.display = 'block';
   if (received) {
-    hint.style.background = 'var(--green-bg)';
-    hint.style.color = 'var(--green)';
-    hint.textContent = '✅ После сохранения сделка будет перенесена в «Закрыто»';
+    hint.style.background='var(--green-bg)'; hint.style.color='var(--green)';
+    hint.textContent='✅ Сделка будет перенесена в «Закрыто»';
   } else {
-    hint.style.background = 'var(--amber-bg)';
-    hint.style.color = 'var(--amber)';
-    const tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate()+1);
-    const timeStr = `${tomorrow.getDate().toString().padStart(2,'0')}.${(tomorrow.getMonth()+1).toString().padStart(2,'0')} в 10:00`;
-    hint.textContent = `⏰ Будет создано напоминание на ${timeStr} — получить комиссию`;
+    hint.style.background='var(--amber-bg)'; hint.style.color='var(--amber)';
+    const d=new Date(); d.setDate(d.getDate()+1);
+    hint.textContent=`⏰ Напоминание на ${d.getDate().toString().padStart(2,'0')}.${(d.getMonth()+1).toString().padStart(2,'0')} в 10:00`;
   }
 }
 
 function updateCommBtns() {
-  const yBtn = document.getElementById('comm-yes-btn');
-  const nBtn = document.getElementById('comm-no-btn');
-  yBtn.style.background = commissionStatus === true  ? 'var(--green-bg)' : 'var(--bg3)';
-  yBtn.style.color      = commissionStatus === true  ? 'var(--green)'    : 'var(--text)';
-  yBtn.style.borderColor= commissionStatus === true  ? 'rgba(52,211,153,0.4)' : 'var(--border2)';
-  nBtn.style.background = commissionStatus === false ? 'var(--amber-bg)' : 'var(--bg3)';
-  nBtn.style.color      = commissionStatus === false ? 'var(--amber)'    : 'var(--text)';
-  nBtn.style.borderColor= commissionStatus === false ? 'rgba(251,191,36,0.4)' : 'var(--border2)';
+  const y=document.getElementById('comm-yes-btn'), n=document.getElementById('comm-no-btn');
+  if (!y||!n) return;
+  y.style.background=commissionStatus===true?'var(--green-bg)':'var(--bg3)';
+  y.style.color=commissionStatus===true?'var(--green)':'var(--text)';
+  y.style.borderColor=commissionStatus===true?'rgba(52,211,153,0.4)':'var(--border2)';
+  n.style.background=commissionStatus===false?'var(--amber-bg)':'var(--bg3)';
+  n.style.color=commissionStatus===false?'var(--amber)':'var(--text)';
+  n.style.borderColor=commissionStatus===false?'rgba(251,191,36,0.4)':'var(--border2)';
 }
 
 function saveContract() {
   if (!activeDeal) return;
-  const commission = document.getElementById('contract-commission').value;
-  const booking    = document.getElementById('contract-booking').value;
-  const payment    = document.getElementById('contract-payment').value;
-
-  if (!commission || !booking || !payment) {
-    showToast('⚠️ Заполните все поля договора');
-    return;
-  }
-
-  activeDeal.contract = { commission, booking, payment, commReceived: commissionStatus };
+  const comm=document.getElementById('contract-commission').value;
+  const book=document.getElementById('contract-booking').value;
+  const pay=document.getElementById('contract-payment').value;
+  if (!comm||!book||!pay) { showToast('⚠️ Заполните все поля'); return; }
+  activeDeal.contract = { commission:comm, booking:book, payment:pay, commReceived:commissionStatus };
   activeDeal.stage = 'contract';
-
-  if (commissionStatus === true) {
-    // Move to closed_won
-    activeDeal.stage = 'closed_won';
+  if (commissionStatus===true) {
+    activeDeal.stage='closed_won';
     closeModal('contract-modal');
     showToast('🏆 Комиссия получена! Сделка закрыта.');
-  } else if (commissionStatus === false) {
-    // Create reminder for tomorrow 10:00
-    const tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate()+1);
-    const dateStr = `${tomorrow.getDate().toString().padStart(2,'0')}.${(tomorrow.getMonth()+1).toString().padStart(2,'0')} в 10:00`;
-    tasks.unshift({
-      title: `💰 Получить комиссию — ${activeDeal.c} (${activeDeal.t})`,
-      due: dateStr, priority: 'high', done: false, overdue: false,
-      client: activeDeal.c, autoCreated: true
-    });
+  } else if (commissionStatus===false) {
+    const d=new Date(); d.setDate(d.getDate()+1);
+    const ds=`${d.getDate().toString().padStart(2,'0')}.${(d.getMonth()+1).toString().padStart(2,'0')} в 10:00`;
+    tasks.unshift({ title:`💰 Получить комиссию — ${activeDeal.c}`, due:ds, priority:'high', done:false, overdue:false, client:activeDeal.c });
     closeModal('contract-modal');
-    showToast(`⏰ Напоминание создано на ${dateStr}`);
+    showToast(`⏰ Напоминание на ${ds}`);
     renderTasks();
-  } else {
-    closeModal('contract-modal');
-    showToast('📄 Договор сохранён');
-  }
-
+  } else { closeModal('contract-modal'); showToast('📄 Договор сохранён'); }
   renderKanban();
+}
+
+// ── RENT CONTRACT ─────────────────────────────────────────────────────────────
+function openRentContract(dealId, forceStage) {
+  const deal = dealsData.rent.find(d=>d.id===dealId);
+  if (!deal) return;
+  activeDeal = deal;
+  closeModal('deal-card-modal');
+  document.getElementById('rct-deal-info').textContent = `🔑 ${deal.t} · ${deal.c} · ${deal.p}`;
+  const rc = deal.rentContract||{};
+  document.getElementById('rct-from').value        = rc.dateFrom||'';
+  document.getElementById('rct-to').value          = rc.dateTo||'';
+  document.getElementById('rct-meters').value      = rc.meters||'';
+  document.getElementById('rct-rent').value        = rc.rentAmount||'';
+  document.getElementById('rct-deposit').value     = rc.deposit||'';
+  document.getElementById('rct-booking').value     = rc.booking||'';
+  document.getElementById('rct-paid').value        = rc.paid||'';
+  document.getElementById('rct-commission').value  = rc.commission||'';
+  // Commission visibility by role
+  const canSeeComm = currentRole==='admin'||currentRole==='director';
+  document.getElementById('rct-commission-block').style.display = canSeeComm ? 'block':'none';
+  document.getElementById('rct-manager-hint').style.display     = canSeeComm ? 'none':'block';
+  calcRentBalance();
+  openModal('rent-contract-modal');
+}
+
+function calcRentBalance() {
+  const rent    = parseFloat((document.getElementById('rct-rent')?.value||'0').replace(/[^\d.]/g,''))||0;
+  const deposit = parseFloat((document.getElementById('rct-deposit')?.value||'0').replace(/[^\d.]/g,''))||0;
+  const booking = parseFloat((document.getElementById('rct-booking')?.value||'0').replace(/[^\d.]/g,''))||0;
+  const paid    = parseFloat((document.getElementById('rct-paid')?.value||'0').replace(/[^\d.]/g,''))||0;
+  const due = deposit + booking + rent;
+  const balance = paid - due;
+  const fmt = n => `฿ ${Math.abs(n).toLocaleString()}`;
+  document.getElementById('rct-total-due').textContent    = fmt(due)||'—';
+  document.getElementById('rct-total-paid').textContent   = fmt(paid)||'—';
+  const balEl = document.getElementById('rct-total-balance');
+  if (due>0||paid>0) {
+    balEl.textContent = (balance>=0?'+ ':'- ') + fmt(balance);
+    balEl.style.color = balance>=0 ? 'var(--green)':'var(--red)';
+  } else { balEl.textContent='—'; }
+}
+
+function saveRentContract() {
+  const from = document.getElementById('rct-from').value;
+  const rent = document.getElementById('rct-rent').value;
+  if (!from||!rent) { showToast('⚠️ Укажите срок и цену аренды'); return; }
+  if (!activeDeal) return;
+  activeDeal.rentContract = {
+    dateFrom: from,
+    dateTo:   document.getElementById('rct-to').value,
+    meters:   document.getElementById('rct-meters').value,
+    rentAmount:document.getElementById('rct-rent').value,
+    deposit:  document.getElementById('rct-deposit').value,
+    booking:  document.getElementById('rct-booking').value,
+    paid:     document.getElementById('rct-paid').value,
+    commission:document.getElementById('rct-commission').value,
+  };
+  activeDeal.stage = 'contract';
+  // Notify director if manager saved without filling commission
+  if (currentRole==='manager' && !activeDeal.rentContract.commission) {
+    showToast('📬 Директор получил уведомление о необходимости заполнить комиссию');
+    tasks.unshift({ title:`💼 Заполнить комиссию по сделке: ${activeDeal.t}`, due:'Сегодня', priority:'high', done:false, overdue:false, client:activeDeal.c });
+    renderTasks();
+  }
+  closeModal('rent-contract-modal');
+  renderKanban();
+  showToast('📄 Договор аренды сохранён');
+}
+
+// ── CHECKOUT ──────────────────────────────────────────────────────────────────
+function openCheckout(dealId) {
+  const deal = dealsData.rent.find(d=>d.id===dealId);
+  if (!deal) return;
+  activeDeal = deal;
+  closeModal('deal-card-modal');
+  depositReturn = null;
+  document.getElementById('co-deal-info').textContent = `🔑 ${deal.t} · ${deal.c}`;
+  document.getElementById('co-date').value = '';
+  document.getElementById('co-meters').value = '';
+  document.getElementById('co-note').value = '';
+  document.getElementById('co-dep-hint').style.display = 'none';
+  document.getElementById('co-deposit-amount').textContent = deal.rentContract?.deposit || '—';
+  const yBtn=document.getElementById('co-dep-yes');
+  const nBtn=document.getElementById('co-dep-no');
+  yBtn.style.background='var(--bg3)'; yBtn.style.color='var(--text)'; yBtn.style.borderColor='var(--border2)';
+  nBtn.style.background='var(--bg3)'; nBtn.style.color='var(--text)'; nBtn.style.borderColor='var(--border2)';
+  openModal('checkout-modal');
+}
+
+function setDepositReturn(returned) {
+  depositReturn = returned;
+  const yBtn=document.getElementById('co-dep-yes'), nBtn=document.getElementById('co-dep-no');
+  yBtn.style.background=returned?'var(--green-bg)':'var(--bg3)';
+  yBtn.style.color=returned?'var(--green)':'var(--text)';
+  yBtn.style.borderColor=returned?'rgba(52,211,153,0.4)':'var(--border2)';
+  nBtn.style.background=!returned?'var(--red-bg)':'var(--bg3)';
+  nBtn.style.color=!returned?'var(--red)':'var(--text)';
+  nBtn.style.borderColor=!returned?'rgba(248,113,113,0.4)':'var(--border2)';
+  const hint = document.getElementById('co-dep-hint');
+  hint.style.display = 'block';
+  if (returned) {
+    hint.style.background='var(--green-bg)'; hint.style.color='var(--green)';
+    hint.textContent='✅ Сделка закроется. Будет создано задание на клининг на завтра.';
+  } else {
+    hint.style.background='var(--red-bg)'; hint.style.color='var(--red)';
+    hint.textContent='❌ Сделка останется в «Выезд». Будет создано задание на клининг и напоминание о возврате депозита на завтра в 10:00.';
+  }
+}
+
+function saveCheckout() {
+  const date = document.getElementById('co-date').value;
+  if (!date) { showToast('⚠️ Укажите дату выезда'); return; }
+  if (depositReturn===null) { showToast('⚠️ Укажите статус возврата депозита'); return; }
+  if (!activeDeal) return;
+  const tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate()+1);
+  const tds = `${tomorrow.getDate().toString().padStart(2,'0')}.${(tomorrow.getMonth()+1).toString().padStart(2,'0')} в 10:00`;
+  // Cleaning task — always
+  tasks.unshift({ title:`🧹 Клининг после выезда — ${activeDeal.t.split('→')[0].trim()}`, due:tds, priority:'high', done:false, overdue:false, client:activeDeal.c });
+  if (depositReturn) {
+    activeDeal.stage = 'closed_won';
+    closeModal('checkout-modal');
+    renderKanban(); renderTasks();
+    showToast(`✅ Выезд оформлен, сделка закрыта. Задание на клининг создано на ${tds}`);
+  } else {
+    activeDeal.stage = 'checkout';
+    // Deposit reminder
+    tasks.unshift({ title:`💰 Вернуть депозит — ${activeDeal.c} (${activeDeal.rentContract?.deposit||'—'})`, due:tds, priority:'high', done:false, overdue:false, client:activeDeal.c });
+    closeModal('checkout-modal');
+    renderKanban(); renderTasks();
+    showToast(`⏰ Клининг и напоминание о депозите созданы на ${tds}`);
+  }
+}
+
+// ── SALE AMOUNT EDIT ──────────────────────────────────────────────────────────
+function openSaleAmountEdit(dealId) {
+  const deal = dealsData.sale.find(d=>d.id===dealId);
+  if (!deal) return;
+  activeDeal = deal;
+  document.getElementById('sam-deal-info').textContent = `💼 ${deal.t} · ${deal.c}`;
+  document.getElementById('sam-amount').value = deal.p;
+  openModal('sale-amount-modal');
+}
+
+function saveSaleAmount() {
+  if (!activeDeal) return;
+  const val = document.getElementById('sam-amount').value.trim();
+  if (!val) { showToast('⚠️ Введите сумму'); return; }
+  activeDeal.p = val;
+  closeModal('sale-amount-modal');
+  renderKanban();
+  showToast(`✅ Сумма сделки обновлена: ${val}`);
 }
 
 // ── LOST DEAL ─────────────────────────────────────────────────────────────────
 function openLostFromCard() {
   if (!activeDeal) return;
   closeModal('deal-card-modal');
-  document.getElementById('lost-deal-info').textContent = `💼 ${activeDeal.t}  ·  ${activeDeal.c}`;
+  document.getElementById('lost-deal-info').textContent = `💼 ${activeDeal.t} · ${activeDeal.c}`;
   document.getElementById('lost-stage').value = activeDeal.stage;
   document.getElementById('lost-reason-sel').value = '';
   document.getElementById('lost-reason-text').value = '';
@@ -3011,10 +2620,7 @@ function openLostFromCard() {
 }
 
 function onLostReasonChange() {
-  const sel = document.getElementById('lost-reason-sel').value;
-  if (sel === 'Другое') {
-    document.getElementById('lost-reason-text').focus();
-  }
+  if (document.getElementById('lost-reason-sel').value==='Другое') document.getElementById('lost-reason-text').focus();
 }
 
 function saveLostDeal() {
@@ -3022,46 +2628,379 @@ function saveLostDeal() {
   const stage  = document.getElementById('lost-stage').value;
   const reason = document.getElementById('lost-reason-sel').value || document.getElementById('lost-reason-text').value;
   const detail = document.getElementById('lost-reason-text').value;
-
-  if (!stage)  { showToast('⚠️ Укажите этап потери'); return; }
-  if (!reason) { showToast('⚠️ Укажите причину потери'); return; }
-
+  if (!stage)  { showToast('⚠️ Укажите этап'); return; }
+  if (!reason) { showToast('⚠️ Укажите причину'); return; }
   activeDeal.stage      = 'lost';
   activeDeal.lostStage  = stage;
-  activeDeal.lostReason = reason + (detail && detail !== reason ? ': ' + detail : '');
-
+  activeDeal.lostReason = reason + (detail&&detail!==reason?': '+detail:'');
   closeModal('lost-modal');
-  showToast(`❌ Сделка «${activeDeal.t}» перенесена в Потеряно`);
+  showToast(`❌ Сделка «${activeDeal.t}» — потеряна`);
   renderKanban();
 }
 
-// ── RENDER TASKS ──────────────────────────────────────────────────────────────
-function renderTasks() {
-  const priLabel = { high: lang==='ru'?'Высокий':lang==='th'?'สูง':'High', normal:lang==='ru'?'Обычный':lang==='th'?'ปกติ':'Normal', low:lang==='ru'?'Низкий':lang==='th'?'ต่ำ':'Low' };
-  const overdueLabel = lang==='ru'?'⚠ Просрочено: ':lang==='th'?'⚠ เกินกำหนด: ':'⚠ Overdue: ';
-  document.getElementById('tasks-list').innerHTML = tasks.map((tk, i) => `
-    <div class="task-item ${tk.done?'done':''}">
-      <div class="task-check ${tk.done?'checked':''}" onclick="toggleTask(${i})">${tk.done?'✓':''}</div>
-      <div class="task-body">
-        <div class="task-title">${tk.title}</div>
-        <div class="task-meta">
-          <span class="${tk.overdue?'overdue':''}">${tk.overdue?overdueLabel:''}${tk.due}</span>
-          ${tk.client?`<span>· ${tk.client}</span>`:''}
-        </div>
-      </div>
-      <div class="task-priority"><span class="pri-${tk.priority}">${priLabel[tk.priority]||tk.priority}</span></div>
-    </div>`).join('');
+// ── NEW DEAL ──────────────────────────────────────────────────────────────────
+function openNewDeal(type) {
+  selectedAgentForDeal = null;
+  if (type==='rent') {
+    ['rd-client','rd-note'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
+    const cl=document.getElementById('rd-client-list'); if(cl) cl.innerHTML='';
+    const pr=document.getElementById('rd-property'); if(pr) pr.value='';
+    const st=document.getElementById('rd-status'); if(st) st.value='new_lead';
+    const ai=document.getElementById('rd-agent-info'); if(ai) ai.style.display='none';
+    ['rd-booking-block','rd-checkin-block','rd-checkout-block'].forEach(id=>{const e=document.getElementById(id);if(e)e.style.display='none';});
+    openModal('deal-modal-rent');
+  } else {
+    ['sd-client','sd-amount','sd-note'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
+    const cl=document.getElementById('sd-client-list'); if(cl) cl.innerHTML='';
+    const cs=document.getElementById('sd-client-selected'); if(cs) cs.style.display='none';
+    const pt=document.getElementById('sd-prop-type'); if(pt) pt.value='';
+    const psw=document.getElementById('sd-prop-select-wrap'); if(psw) psw.style.display='none';
+    const rw=document.getElementById('sd-reassign-wrap'); if(rw) rw.style.display='none';
+    const ai=document.getElementById('sd-agent-info'); if(ai) ai.style.display='none';
+    openModal('deal-modal-sale');
+  }
 }
-function toggleTask(i) { tasks[i].done = !tasks[i].done; renderTasks(); }
 
-// ── RENDER LEADS ──────────────────────────────────────────────────────────────
+function createDealRent() {
+  const client   = document.getElementById('rd-client')?.value.trim();
+  const property = document.getElementById('rd-property')?.value;
+  const status   = document.getElementById('rd-status')?.value||'new_lead';
+  if (!client)   { showToast('⚠️ Укажите клиента'); return; }
+  if (!property) { showToast('⚠️ Выберите объект'); return; }
+  const finalStatus = selectedAgentForDeal ? 'negotiation' : status;
+  const newDeal = {
+    id: Math.max(...dealsData.rent.map(d=>d.id),20)+1,
+    t: `${property.split(',')[0]} → ${client.split(' ')[0]}`,
+    c: client, p:'฿ —', d:new Date().toLocaleDateString('ru').slice(0,5),
+    stage:finalStatus, dealType:'rent',
+    agent: selectedAgentForDeal ? {...selectedAgentForDeal} : null,
+  };
+  dealsData.rent.push(newDeal);
+  selectedAgentForDeal=null;
+  closeModal('deal-modal-rent');
+  renderKanban();
+  showToast(`✅ Сделка создана: ${newDeal.t}${finalStatus==='negotiation'?' → Переговоры':''}`);
+}
+
+function createDealSale() {
+  const client  = document.getElementById('sd-client')?.value.trim();
+  const propType = document.getElementById('sd-prop-type')?.value;
+  if (!client)   { showToast('⚠️ Укажите клиента из базы'); return; }
+  if (!propType) { showToast('⚠️ Выберите тип недвижимости'); return; }
+  let propName = propType==='reassign' ? (document.getElementById('sd-reassign-name')?.value||'Переуступка')
+               : (document.getElementById('sd-prop-select')?.value||propType);
+  const finalStatus = selectedAgentForDeal ? 'negotiation':'new_lead';
+  const newDeal = {
+    id: Math.max(...dealsData.sale.map(d=>d.id),10)+1,
+    t: `${propName.split(',')[0]} → ${client.split(' ')[0]}`,
+    c: client, p: document.getElementById('sd-amount')?.value||'฿ —',
+    d:new Date().toLocaleDateString('ru').slice(0,5),
+    stage:finalStatus, dealType:'sale',
+    agent: selectedAgentForDeal ? {...selectedAgentForDeal} : null,
+  };
+  dealsData.sale.push(newDeal);
+  selectedAgentForDeal=null;
+  closeModal('deal-modal-sale');
+  renderKanban();
+  showToast(`✅ Сделка создана: ${newDeal.t}${finalStatus==='negotiation'?' → Переговоры':''}`);
+}
+
+// ── RENT FORM STATUS CHANGE ───────────────────────────────────────────────────
+function onRentStatusChange() {
+  const status = document.getElementById('rd-status')?.value;
+  document.getElementById('rd-booking-block').style.display  = status==='booking' ?'block':'none';
+  document.getElementById('rd-checkin-block').style.display  = status==='checkin' ?'block':'none';
+  document.getElementById('rd-checkout-block').style.display = status==='checkout'?'block':'none';
+}
+
+function onSalePropTypeChange() {
+  const type = document.getElementById('sd-prop-type')?.value;
+  const sw = document.getElementById('sd-prop-select-wrap');
+  const rw = document.getElementById('sd-reassign-wrap');
+  const sel = document.getElementById('sd-prop-select');
+  const lbl = document.getElementById('sd-prop-select-label');
+  if (type==='reassign') { if(sw)sw.style.display='none'; if(rw)rw.style.display='block'; return; }
+  if(rw) rw.style.display='none';
+  const propLists = {
+    new:['ЖК Laguna Beach Resort','ЖК The Base, Паттайя','ЖК Riviera Monaco','ЖК The Riviera Jomtien'],
+    secondary:['Кондо 2BR, The Riviera','Апарт. 1BR, Джомтьен','Кондо Studio, Наклуа','Кондо 3BR, Пратамнак'],
+    house:['Дом 3BR+пул, Паттайя Восток','Вилла 4BR, Хуа Хин','Дом 2BR, Паньянг','Вилла 5BR, Банглаамунг'],
+    land:['Участок 400 м², Паттайя','Земля 800 м², Хуа Хин','Участок 1 рай, Чонбури','Земля 2 рай, Банг Ламунг'],
+  };
+  if (type && propLists[type]) {
+    if(sw) sw.style.display='block';
+    const typeName={new:'Новостройка',secondary:'Вторичка',house:'Дом',land:'Земля'};
+    if(lbl) lbl.textContent=`Выбрать объект — ${typeName[type]}`;
+    if(sel) sel.innerHTML=`<option value="">— Выбрать из базы —</option>`+propLists[type].map(p=>`<option>${p}</option>`).join('');
+  } else { if(sw) sw.style.display='none'; }
+}
+
+// ── CLIENT SUGGEST ────────────────────────────────────────────────────────────
+function searchClientSuggest(input, listId) {
+  const q = input.value.toLowerCase();
+  const list = document.getElementById(listId);
+  if (!list) return;
+  if (!q) { list.innerHTML=''; return; }
+  const matches = clientsDB.filter(c=>c.name.toLowerCase().includes(q)||c.phone.includes(q)).slice(0,6);
+  list.innerHTML = matches.length ? matches.map(c=>`
+    <div class="suggest-item" onclick="selectClient('${input.id}','${listId}','${c.name}','${c.phone}')">
+      <div style="font-weight:500">${c.name}</div>
+      <div class="sub">${c.phone} · ${c.email}</div>
+    </div>`).join('') : '';
+}
+
+function selectClient(inputId, listId, name, phone) {
+  const el = document.getElementById(inputId); if(el) el.value=name;
+  const list = document.getElementById(listId); if(list) list.innerHTML='';
+  const sel = document.getElementById('sd-client-selected');
+  if (sel) { sel.style.display='block'; sel.textContent=`✓ Выбран: ${name} · ${phone}`; }
+}
+
+// ── AGENTS ────────────────────────────────────────────────────────────────────
+let agentsData = [
+  {id:1,name:'Сомчай Виттая', phone:'+66 81 111 2233',property:'Кондо «The Base», Паттайя',commission:'3%',deals:2},
+  {id:2,name:'Анна Ли',       phone:'+66 82 333 4455',property:'Вилла Rawai, Пхукет',       commission:'฿80,000',deals:1},
+  {id:3,name:'Дмитрий Павлов',phone:'+7 916 777 8899',property:'ЖК «Laguna», Паттайя',      commission:'2.5%',deals:3},
+];
+let agentDealContext=null;
+let selectedAgentForDeal=null;
+
+function renderAgents() {
+  const q=(document.getElementById('agents-search')?.value||'').toLowerCase();
+  const data=agentsData.filter(a=>!q||a.name.toLowerCase().includes(q)||a.phone.includes(q)||a.property.toLowerCase().includes(q));
+  const el=document.getElementById('agents-table-body'); if(!el)return;
+  el.innerHTML=data.length?data.map(a=>`<tr>
+    <td><div class="flex-cell"><div class="avatar">${a.name.split(' ').map(w=>w[0]).slice(0,2).join('')}</div><span style="font-weight:500">${a.name}</span></div></td>
+    <td style="font-family:var(--mono);font-size:12px;color:var(--text2)">${a.phone}</td>
+    <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text2)">${a.property}</td>
+    <td style="font-weight:500;color:var(--amber)">${a.commission}</td>
+    <td style="font-family:var(--mono)">${a.deals}</td>
+    <td><div style="display:flex;gap:4px">
+      <button class="btn sm ghost" onclick="editAgent(${a.id})">✏️</button>
+      <button class="btn sm" style="background:var(--red-bg);color:var(--red);border-color:transparent" onclick="deleteAgent(${a.id})">Удалить</button>
+    </div></td>
+  </tr>`).join(''):`<tr><td colspan="6" style="padding:32px;text-align:center;color:var(--text3)">Агентов нет</td></tr>`;
+}
+
+function editAgent(id) {
+  const a=agentsData.find(x=>x.id===id); if(!a) return;
+  document.getElementById('ag-name').value=a.name;
+  document.getElementById('ag-phone').value=a.phone;
+  document.getElementById('ag-property').value=a.property;
+  document.getElementById('ag-commission').value=a.commission;
+  agentDealContext='standalone'; openModal('agent-modal');
+}
+
+function deleteAgent(id) {
+  if(!confirm(t('confirm_delete'))) return;
+  agentsData=agentsData.filter(a=>a.id!==id); renderAgents(); showToast('🗑 Агент удалён');
+}
+
+function openAgentModal(ctx) {
+  agentDealContext=ctx;
+  ['ag-name','ag-phone','ag-property','ag-commission'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
+  const w=document.getElementById('agent-dup-warning'); if(w) w.style.display='none';
+  openModal('agent-modal');
+}
+
+function checkAgentDuplicate() {
+  const phone=document.getElementById('ag-phone')?.value.replace(/\s/g,'');
+  if (!phone||phone.length<7) { const w=document.getElementById('agent-dup-warning');if(w)w.style.display='none'; return; }
+  const dup=agentsData.find(a=>a.phone.replace(/\s/g,'')===phone);
+  const warn=document.getElementById('agent-dup-warning');
+  if (dup) {
+    if(warn){warn.style.display='block';warn.textContent=`⚠️ Агент уже есть: ${dup.name} — ${dup.property}. Будет добавлен к сделке.`;}
+    const ne=document.getElementById('ag-name'); if(ne) ne.value=dup.name;
+    const pe=document.getElementById('ag-property'); if(pe) pe.value=dup.property;
+    const ce=document.getElementById('ag-commission'); if(ce) ce.value=dup.commission;
+  } else { if(warn) warn.style.display='none'; }
+}
+
+function saveAgent() {
+  const name=document.getElementById('ag-name')?.value.trim();
+  const phone=document.getElementById('ag-phone')?.value.trim();
+  const property=document.getElementById('ag-property')?.value.trim();
+  const comm=document.getElementById('ag-commission')?.value.trim();
+  if (!name){showToast('⚠️ Укажите ФИО');return;}
+  if (!phone){showToast('⚠️ Укажите телефон');return;}
+  if (!property){showToast('⚠️ Укажите объект');return;}
+  const dup=agentsData.find(a=>a.phone.replace(/\s/g,'')===(phone||'').replace(/\s/g,''));
+  let agent=dup||{id:agentsData.length+1,name,phone,property,commission:comm,deals:0};
+  if (!dup) agentsData.push(agent);
+  selectedAgentForDeal=agent;
+  closeModal('agent-modal');
+  if (agentDealContext==='rent') {
+    const info=document.getElementById('rd-agent-info');
+    if(info){info.style.display='block';info.innerHTML=`🤝 <b>${agent.name}</b> · ${agent.phone}<br>📍 ${agent.property}`;}
+    const st=document.getElementById('rd-status'); if(st){st.value='negotiation';onRentStatusChange();}
+  } else if (agentDealContext==='sale') {
+    const info=document.getElementById('sd-agent-info');
+    if(info){info.style.display='block';info.innerHTML=`🤝 <b>${agent.name}</b> · ${agent.phone}<br>📍 ${agent.property}`;}
+  } else { renderAgents(); }
+  showToast(`✅ Агент «${agent.name}» ${dup?'добавлен к сделке':'сохранён'}`);
+}
+
+// ── RENDER CLIENTS ────────────────────────────────────────────────────────────
+const rentStatusMap={new:'🆕 Новый',negotiation:'🗣️ Переговоры',booking:'🔒 Бронь',moved_in:'✅ Заехал',moved_out:'🚪 Выехал',deferred:'⏸️ Отложен',advance:'💵 Аванс',deposit:'🏦 Депозит',done:'✅ Выполнено',warm:'🌡️ Тёплый'};
+const rentStatusBadge={new:'new',negotiation:'warm',booking:'warm',moved_in:'active',moved_out:'cold',deferred:'cold',advance:'hot',deposit:'blue',done:'active',warm:'warm'};
+const saleStatusMap=rentStatusMap;
+const saleStatusBadge=rentStatusBadge;
+
+function clientRow(c,statusMap,statusBadge) {
+  const st=statusMap[c.status]||c.status;
+  const bd=statusBadge[c.status]||'new';
+  return `<tr onclick="showToast('👤 ${c.name}')">
+    <td><div class="flex-cell"><div class="avatar">${c.name.split(' ').map(w=>w[0]).slice(0,2).join('')}</div><div>
+      <div class="cell-name">${c.name}</div><div class="cell-sub">${c.email}</div>
+    </div></div></td>
+    <td style="font-family:var(--mono);font-size:12px;color:var(--text2)">${c.phone}</td>
+    <td style="max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text2)">${c.request}</td>
+    <td style="font-family:var(--mono);font-size:12px;font-weight:500">${c.budget}</td>
+    <td><span class="badge ${bd}">${st}</span></td>
+    <td><span class="badge ${(c.source||'').toLowerCase()}">${c.source}</span></td>
+    <td onclick="event.stopPropagation()"><div style="display:flex;gap:3px">
+      <button class="btn sm ghost" onclick="quickSend('whatsapp','${c.name}','${c.phone}')">📱</button>
+      <button class="btn sm ghost" onclick="quickSend('telegram','${c.name}','${c.phone}')">✈️</button>
+      <button class="btn sm ghost" onclick="quickSend('email','${c.name}','${c.email}')">📧</button>
+    </div></td>
+    <td onclick="event.stopPropagation()"><div style="display:flex;gap:4px;align-items:center">
+      <button class="btn sm ghost" onclick="openDeferred('${c.name}')">⏸️</button>
+      <button class="btn sm ghost" onclick="showToast('✏️ ${c.name}')">✏️</button>
+      <button class="btn sm" style="background:var(--red-bg);color:var(--red);border-color:transparent" onclick="confirmDeleteClient('${c.name}')">${t('btn_delete')}</button>
+    </div></td>
+  </tr>`;
+}
+
+function renderRentClients() {
+  const q=(document.getElementById('rent-search')?.value||'').toLowerCase();
+  const st=document.getElementById('rent-status')?.value||'';
+  const sr=document.getElementById('rent-source')?.value||'';
+  const data=clientsDB.filter(c=>(!q||c.name.toLowerCase().includes(q)||c.request.toLowerCase().includes(q))&&(!st||c.status===st)&&(!sr||c.source===sr));
+  const el=document.getElementById('rent-clients-body'); if(el) el.innerHTML=data.map(c=>clientRow(c,rentStatusMap,rentStatusBadge)).join('');
+}
+function renderSaleClients() {
+  const q=(document.getElementById('sale-search')?.value||'').toLowerCase();
+  const st=document.getElementById('sale-status')?.value||'';
+  const sr=document.getElementById('sale-source')?.value||'';
+  const data=clientsDB.filter(c=>(!q||c.name.toLowerCase().includes(q)||c.request.toLowerCase().includes(q))&&(!st||c.status===st)&&(!sr||c.source===sr));
+  const el=document.getElementById('sale-clients-body'); if(el) el.innerHTML=data.map(c=>clientRow(c,saleStatusMap,saleStatusBadge)).join('');
+}
+function confirmDeleteClient(name) {
+  if(confirm(t('confirm_delete')+'\n\n'+name)) showToast('🗑 '+name+' — удалён');
+}
+
+// ── RENDER PROPERTIES ─────────────────────────────────────────────────────────
+const properties = [
+  {emoji:'🏖️',title_ru:'Вилла у моря, 3 спальни', loc:'Паттайя, Джомтьен', type:'Villa',    deal:'sale',price:'฿ 14,500,000',beds:3,baths:3,sqm:280,avito:true, fb:true, color:'linear-gradient(135deg,#1e3a5f,#2563eb)'},
+  {emoji:'🏙️',title_ru:'Кондо в центре',           loc:'Бангкок, Сукхумвит',type:'Condo',    deal:'sale',price:'฿ 6,200,000', beds:2,baths:2,sqm:65, avito:false,fb:true, color:'linear-gradient(135deg,#1a1a2e,#6366f1)'},
+  {emoji:'🌴',title_ru:'Студия Ocean View',         loc:'Паттайя, Пратамнак',type:'Apartment',deal:'rent',price:'฿ 22,000/мес',beds:0,baths:1,sqm:35, avito:true, fb:false,color:'linear-gradient(135deg,#0f4c75,#1b6ca8)'},
+  {emoji:'🌺',title_ru:'Вилла с бассейном, Пхукет',loc:'Пхукет, Раваи',    type:'Villa',    deal:'sale',price:'฿ 18,900,000',beds:4,baths:4,sqm:350,avito:false,fb:true, color:'linear-gradient(135deg,#1a3a2a,#2d6a4f)'},
+  {emoji:'🏝️',title_ru:'Бунгало на берегу, Самуи', loc:'Самуи, Чавенг',    type:'Villa',    deal:'rent',price:'฿ 85,000/мес',beds:3,baths:2,sqm:180,avito:false,fb:true, color:'linear-gradient(135deg,#3d1a00,#d97706)'},
+  {emoji:'🏗️',title_ru:'Таунхаус, Чиангмай',       loc:'Чиангмай, Нимман', type:'Townhouse',deal:'sale',price:'฿ 5,800,000', beds:3,baths:3,sqm:160,avito:true, fb:false,color:'linear-gradient(135deg,#1a1a1a,#4a4a4a)'},
+];
+function renderProperties() {
+  const propCard=(p)=>`<div class="prop-card" onclick="showToast('🏠 ${p.title_ru}')">
+    <div class="prop-thumb" style="background:${p.color}">
+      <span class="prop-thumb-badge badge ${p.deal}">${t(p.deal==='sale'?'type_sale':'type_rent')}</span>
+      <span style="font-size:40px">${p.emoji}</span>
+      <span class="prop-thumb-price">${p.price}</span>
+    </div>
+    <div class="prop-body">
+      <div class="prop-title">${p.title_ru}</div>
+      <div class="prop-loc">📍 ${p.loc} · <span style="color:var(--text3)">${p.type}</span></div>
+      <div class="prop-specs">
+        ${p.beds>0?`<span class="prop-spec">🛏 ${p.beds}</span>`:''}
+        <span class="prop-spec">🚿 ${p.baths}</span>
+        <span class="prop-spec">📐 ${p.sqm} м²</span>
+      </div>
+      <div class="prop-integrations">
+        ${p.avito?`<span class="badge avito" style="font-size:10px">🅰️ Авито</span>`:''}
+        ${p.fb?`<span class="badge fb" style="font-size:10px">📘 Facebook</span>`:''}
+      </div>
+    </div>
+  </div>`;
+  const saleEl=document.getElementById('prop-grid-sale');
+  const rentEl=document.getElementById('prop-grid-rent');
+  if(saleEl) saleEl.innerHTML=properties.filter(p=>p.deal==='sale').map(propCard).join('');
+  if(rentEl)  rentEl.innerHTML=properties.filter(p=>p.deal==='rent').map(propCard).join('');
+}
+
+// ── TASKS ─────────────────────────────────────────────────────────────────────
+let tasks = [
+  {title:'Позвонить Chen Wei — условия сделки',   due:'Сегодня, 11:00',priority:'high',  done:false,overdue:false,client:'Chen Wei'},
+  {title:'Отправить договор Müller',               due:'Сегодня, 13:00',priority:'high',  done:false,overdue:false,client:'A. Müller'},
+  {title:'Показ виллы Anderson на Самуи',          due:'Вчера, 16:00',  priority:'high',  done:false,overdue:true, client:'J. Anderson'},
+  {title:'Follow-up: Козлов — апарты Джомтьен',   due:'30 апр, 10:00', priority:'normal',done:false,overdue:true, client:'Козлов'},
+  {title:'Встреча с застройщиком Laguna Pattaya',  due:'Завтра, 15:00', priority:'normal',done:false,overdue:false,client:''},
+  {title:'Обновить листинг: Вилла Пхукет на Авито',due:'4 мая',        priority:'low',   done:false,overdue:false,client:''},
+  {title:'Звонок Wiriyakit — финальное предложение',due:'Сегодня, 17:00',priority:'normal',done:true,overdue:false,client:'S. Wiriyakit'},
+];
+
+function renderTasks() {
+  const priL={high:lang==='ru'?'Высокий':lang==='th'?'สูง':'High',normal:lang==='ru'?'Обычный':lang==='th'?'ปกติ':'Normal',low:lang==='ru'?'Низкий':lang==='th'?'ต่ำ':'Low'};
+  const ovL=lang==='ru'?'⚠ Просрочено: ':lang==='th'?'⚠ เกินกำหนด: ':'⚠ Overdue: ';
+  const el=document.getElementById('tasks-list'); if(!el) return;
+  el.innerHTML=tasks.map((tk,i)=>`<div class="task-item ${tk.done?'done':''}">
+    <div class="task-check ${tk.done?'checked':''}" onclick="toggleTask(${i})">${tk.done?'✓':''}</div>
+    <div class="task-body">
+      <div class="task-title">${tk.title}</div>
+      <div class="task-meta">
+        <span class="${tk.overdue?'overdue':''}">${tk.overdue?ovL:''}${tk.due}</span>
+        ${tk.client?`<span>· ${tk.client}</span>`:''}
+        ${tk.autoCreated?'<span style="font-size:10px;background:var(--blue-bg);color:var(--blue);padding:1px 6px;border-radius:20px;margin-left:4px">авто</span>':''}
+      </div>
+    </div>
+    <div class="task-priority"><span class="pri-${tk.priority}">${priL[tk.priority]||tk.priority}</span></div>
+  </div>`).join('');
+}
+function toggleTask(i){tasks[i].done=!tasks[i].done;renderTasks();}
+
+// ── REMINDERS ─────────────────────────────────────────────────────────────────
+const reminders=[
+  {client:'Андрей Козлов',  phone:'+7 916 555-12-34',source:'Авито',   type:'rent',days:3,action:'Связаться в WhatsApp, уточнить параметры'},
+  {client:'Siriporn Kaew',  phone:'+66 81 234 5678', source:'Сайт',    type:'sale',days:5,action:'Позвонить, уточнить бюджет'},
+  {client:'@user_pattaya',  phone:'Telegram',        source:'Telegram',type:'rent',days:2,action:'Написать в TG, предложить варианты'},
+  {client:'Неизвестный',    phone:'+7 999 111-22-33',source:'Facebook',type:'rent',days:4,action:'FB Messenger, уточнить условия'},
+];
+const srcIcon={Avito:'🅰️',Facebook:'📘',Telegram:'✈️',LINE:'💚',Сайт:'🌐',site:'🌐',avito:'🅰️',facebook:'📘',telegram:'✈️'};
+
+function renderReminders() {
+  const el=document.getElementById('reminders-list'); if(!el) return;
+  const cL=lang==='ru'?'Связаться с':lang==='th'?'ติดต่อ':'Contact';
+  const dL=(d)=>lang==='ru'?`Статус «Новый» ${d} дн.`:lang==='th'?`ใหม่ ${d} วัน`:`New ${d} days`;
+  el.innerHTML=reminders.map(r=>`<div class="task-item">
+    <div style="width:36px;height:36px;border-radius:var(--radius);background:var(--red-bg);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">🔔</div>
+    <div class="task-body">
+      <div class="task-title">${cL} <b>${r.client}</b></div>
+      <div class="task-meta">
+        <span class="overdue">${dL(r.days)}</span>
+        <span>· ${srcIcon[r.source]||''} ${r.source}</span>
+        <span>· <span class="badge ${r.type==='rent'?'rent':'sale'}" style="font-size:10px;padding:1px 6px">${t(r.type==='rent'?'type_rent':'type_sale')}</span></span>
+      </div>
+      <div style="font-size:12px;color:var(--text2);margin-top:4px">📋 ${r.action}</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:4px;flex-shrink:0">
+      <button class="btn sm ghost" onclick="quickSend('whatsapp','${r.client}','${r.phone}')">📱 WA</button>
+      <button class="btn sm ghost" onclick="quickSend('telegram','${r.client}','${r.phone}')">✈️ TG</button>
+    </div>
+  </div>`).join('');
+}
+
+// ── LEADS ─────────────────────────────────────────────────────────────────────
+let leadsData=[
+  {id:1,source:'avito',   type:'rent',name:'Андрей Козлов', contact:'+7 916 555-12-34',msg:'Ищу квартиру у моря, аренда',date:'02.05 09:14'},
+  {id:2,source:'facebook',type:'sale',name:'Emma Thompson',  contact:'FB Messenger',    msg:'Looking for villa to buy',   date:'02.05 08:30'},
+  {id:3,source:'telegram',type:'rent',name:'@user_pattaya',  contact:'Telegram',        msg:'Есть квартиры в аренду?',    date:'01.05 22:45'},
+  {id:4,source:'site',    type:'sale',name:'Siriporn Kaew',  contact:'+66 81 234 5678', msg:'ต้องการซื้อคอนโด',          date:'01.05 18:20'},
+  {id:5,source:'avito',   type:'rent',name:'Дмитрий Орлов',  contact:'+7 999 888-77-66',msg:'Долгосрочная аренда виллы', date:'01.05 15:10'},
+];
+
 function renderLeads() {
-  const srcLabel = { avito:'🅰️ Авито', facebook:'📘 Facebook', telegram:'✈️ Telegram', line:'💚 LINE', site:`🌐 ${lang==='ru'?'Сайт':lang==='th'?'เว็บไซต์':'Website'}` };
-  const convertLabel = t('btn_convert');
-  const deleteLabel  = t('btn_delete');
-  const typeRent = t('type_rent');
-  const typeSale = t('type_sale');
-  document.getElementById('leads-body').innerHTML = leadsData.map(l=>`<tr>
+  const srcLabel={avito:'🅰️ Авито',facebook:'📘 Facebook',telegram:'✈️ Telegram',line:'💚 LINE',site:'🌐 Сайт'};
+  const convL=t('btn_convert'); const delL=t('btn_delete');
+  const typeRent=t('type_rent'); const typeSale=t('type_sale');
+  const el=document.getElementById('leads-body'); if(!el) return;
+  el.innerHTML=leadsData.map(l=>`<tr>
     <td><span class="badge ${l.source==='facebook'?'fb':l.source==='telegram'?'tg':l.source}">${srcLabel[l.source]||l.source}</span></td>
     <td><span class="badge ${l.type==='rent'?'rent':'sale'}">${l.type==='rent'?typeRent:typeSale}</span></td>
     <td style="font-weight:500">${l.name}</td>
@@ -3069,330 +3008,345 @@ function renderLeads() {
     <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text2);font-size:12px">${l.msg}</td>
     <td style="color:var(--text3);font-size:11px;font-family:var(--mono)">${l.date}</td>
     <td><div style="display:flex;gap:4px">
-      <button class="btn sm primary" onclick="convertLead(${l.id})">${convertLabel}</button>
-      <button class="btn sm" style="background:var(--red-bg);color:var(--red);border-color:transparent" onclick="deleteLead(${l.id})">${deleteLabel}</button>
+      <button class="btn sm primary" onclick="convertLead(${l.id})">${convL}</button>
+      <button class="btn sm" style="background:var(--red-bg);color:var(--red);border-color:transparent" onclick="deleteLead(${l.id})">${delL}</button>
     </div></td>
   </tr>`).join('');
-  // Update page title/subtitle
-  const ptEl = document.getElementById('pt-leads');
-  const subEl = document.getElementById('sub-leads');
-  if (ptEl)  ptEl.textContent  = t('page_leads_title');
-  if (subEl) subEl.textContent = leadsData.length + ' ' + t('page_leads_sub');
+  const ptEl=document.getElementById('pt-leads'); if(ptEl) ptEl.textContent=t('page_leads_title');
+  const subEl=document.getElementById('sub-leads'); if(subEl) subEl.textContent=leadsData.length+' '+t('page_leads_sub');
+}
+
+function renderLeadsByType(type,bodyId,subId) {
+  const el=document.getElementById(bodyId); if(!el) return;
+  const srcLabel={avito:'🅰️ Авито',facebook:'📘 Facebook',telegram:'✈️ Telegram',line:'💚 LINE',site:'🌐 Сайт'};
+  const data=leadsData.filter(l=>l.type===type);
+  const convL=t('btn_convert'); const delL=t('btn_delete');
+  el.innerHTML=data.map(l=>`<tr>
+    <td><span class="badge ${l.source==='facebook'?'fb':l.source==='telegram'?'tg':l.source}">${srcLabel[l.source]||l.source}</span></td>
+    <td style="font-weight:500">${l.name}</td>
+    <td style="font-size:12px;color:var(--text2);font-family:var(--mono)">${l.contact}</td>
+    <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text2);font-size:12px">${l.msg}</td>
+    <td style="color:var(--text3);font-size:11px;font-family:var(--mono)">${l.date}</td>
+    <td><div style="display:flex;gap:4px">
+      <button class="btn sm primary" onclick="convertLead(${l.id})">${convL}</button>
+      <button class="btn sm" style="background:var(--red-bg);color:var(--red);border-color:transparent" onclick="deleteLead(${l.id})">${delL}</button>
+    </div></td>
+  </tr>`).join('')||`<tr><td colspan="6" style="text-align:center;padding:24px;color:var(--text3)">${lang==='ru'?'Нет заявок':'No leads'}</td></tr>`;
+  const sub=document.getElementById(subId); if(sub) sub.textContent=data.length+(lang==='ru'?' заявок':' leads');
 }
 
 function convertLead(id) {
-  const l = leadsData.find(x=>x.id===id);
-  if (!l) return;
-  const typeLabel = l.type==='rent' ? t('type_rent') : t('type_sale');
-  showToast(`✅ ${l.name} → ${lang==='ru'?'добавлен как клиент':lang==='th'?'เพิ่มเป็นลูกค้า':'added as client'} (${typeLabel})`);
-  leadsData = leadsData.filter(x=>x.id!==id);
-  renderLeads();
+  const l=leadsData.find(x=>x.id===id); if(!l) return;
+  showToast(`✅ ${l.name} → добавлен (${t(l.type==='rent'?'type_rent':'type_sale')})`);
+  leadsData=leadsData.filter(x=>x.id!==id); renderLeads();
 }
-
 function deleteLead(id) {
-  if (!confirm(t('confirm_delete'))) return;
-  leadsData = leadsData.filter(x=>x.id!==id);
-  renderLeads();
-  showToast(lang==='ru'?'🗑 Заявка удалена':lang==='th'?'🗑 ลบแล้ว':'🗑 Lead deleted');
+  if(!confirm(t('confirm_delete'))) return;
+  leadsData=leadsData.filter(x=>x.id!==id); renderLeads();
+  showToast(lang==='ru'?'🗑 Заявка удалена':'🗑 Deleted');
 }
 
-// ── RENDER REMINDERS ──────────────────────────────────────────────────────────
-function renderReminders() {
-  const el = document.getElementById('reminders-list');
-  if (!el) return;
-  const contactLabel = lang==='ru'?'Связаться с':lang==='th'?'ติดต่อ':'Contact';
-  const newDaysLabel = (d) => lang==='ru'?`В статусе «Новый» уже ${d} дн.`:lang==='th'?`สถานะ «ใหม่» ${d} วัน`:`In 'New' status ${d} days`;
-  el.innerHTML = reminders.map(r=>`
-    <div class="task-item">
-      <div style="width:36px;height:36px;border-radius:var(--radius);background:var(--red-bg);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">🔔</div>
-      <div class="task-body">
-        <div class="task-title">${contactLabel} <b>${r.client}</b></div>
-        <div class="task-meta">
-          <span class="overdue">${newDaysLabel(r.days)}</span>
-          <span>· ${srcIcon[r.source]||''} ${r.source}</span>
-          <span>· <span class="badge ${r.type==='rent'?'rent':'sale'}" style="font-size:10px;padding:1px 6px">${t(r.type==='rent'?'type_rent':'type_sale')}</span></span>
-        </div>
-        <div style="font-size:12px;color:var(--text2);margin-top:4px">📋 ${r.action}</div>
-        <div style="font-size:12px;color:var(--text3);margin-top:2px">📞 ${r.phone}</div>
-      </div>
-      <div style="display:flex;flex-direction:column;gap:4px;flex-shrink:0">
-        <button class="btn sm ghost" onclick="quickSend('whatsapp','${r.client}','${r.phone}')">📱 WA</button>
-        <button class="btn sm ghost" onclick="quickSend('telegram','${r.client}','${r.phone}')">✈️ TG</button>
-      </div>
-    </div>`).join('');
+// ── DEFERRED / BROADCAST / QUICK SEND ────────────────────────────────────────
+function openDeferred(name) {
+  document.getElementById('deferred-client-name').textContent='👤 '+name;
+  document.getElementById('deferred-date').value='';
+  document.getElementById('deferred-reason').value='';
+  document.getElementById('deferred-comment').value='';
+  openModal('deferred-modal');
+}
+function saveDeferred() {
+  const date=document.getElementById('deferred-date')?.value;
+  const reason=document.getElementById('deferred-reason')?.value;
+  if(!date){showToast('⚠️ Укажите дату');return;}
+  closeModal('deferred-modal');
+  showToast(`⏸️ Отложен до ${date}${reason?' · '+reason:''}`);
+}
+
+function quickSend(channel,name,contact) {
+  const ch={whatsapp:'WhatsApp',telegram:'Telegram',email:'Email',sms:'SMS'}[channel]||channel;
+  openModal('broadcast-modal');
+  showToast(`📱 Быстрое сообщение → ${name} через ${ch}`);
+}
+
+// ── BROADCAST ────────────────────────────────────────────────────────────────
+let selectedChannel='whatsapp';
+const channelColors={whatsapp:'#25D366',telegram:'#29B6F6',email:'#4E8EF7',sms:'#A78BFA'};
+const channelNames={whatsapp:'WhatsApp',telegram:'Telegram',email:'Email',sms:'SMS'};
+const templates={
+  new_obj:'Здравствуйте, {name}!\n\nПоступил новый объект, соответствующий вашим критериям.\n\n🏠 Объект: [НАЗВАНИЕ]\n📍 Локация: [МЕСТО]\n💰 Цена: [ЦЕНА]\n\nС уважением, {manager}\nAzimut Realty',
+  price_drop:'Добрый день, {name}!\n\nСнижение цены на объект:\n📉 Новая цена: [ЦЕНА]\n\n{manager} | Azimut Realty',
+  follow:'Добрый день, {name}!\n\nКак продвигается поиск? Готовы помочь!\n\n{manager} | Azimut Realty',
+  promo:'Здравствуйте, {name}!\n\n🎁 Специальное предложение месяца:\n[ОПИСАНИЕ]\n\n{manager} | Azimut Realty',
+};
+function selectChannel(el,ch) {
+  selectedChannel=ch;
+  document.querySelectorAll('.channel-btn').forEach(b=>{b.style.border='1px solid var(--border)';b.style.background='var(--bg3)';b.querySelector('span:last-child').style.color='var(--text2)';});
+  el.style.border=`2px solid ${channelColors[ch]}`;
+  el.style.background=`${channelColors[ch]}18`;
+  el.querySelector('span:last-child').style.color=channelColors[ch];
+}
+function applyTemplate() {
+  const key=document.getElementById('broadcast-template')?.value;
+  if(key&&templates[key]) document.getElementById('broadcast-text').value=templates[key];
+}
+function previewBroadcast() {
+  const txt=document.getElementById('broadcast-text')?.value;
+  if(!txt){showToast('⚠️ Введите текст');return;}
+  alert('Предпросмотр:\n\n'+txt.replace('{name}','Александр').replace('{manager}','Михаил А.'));
+}
+function sendBroadcast() {
+  const txt=document.getElementById('broadcast-text')?.value;
+  if(!txt){showToast('⚠️ Введите текст');return;}
+  closeModal('broadcast-modal');
+  showToast(`📣 Рассылка через ${channelNames[selectedChannel]} запущена!`);
+  setTimeout(()=>showToast('✅ Рассылка завершена'),3000);
+}
+
+// ── PIPELINE ─────────────────────────────────────────────────────────────────
+function renderPipeline() {
+  const stageL={new_lead:'Новая заявка',negotiation:'Переговоры',offer:'Предложение',viewing:'Просмотр',booking:'Бронирование',checkin:'Заезд',contract:'Договор',checkout:'Выезд',closed_won:'Закрыто'};
+  ['sale','rent'].forEach(type=>{
+    const deals=dealsData[type].filter(d=>d.stage!=='lost');
+    const byStage={};
+    deals.forEach(d=>{byStage[d.stage]=(byStage[d.stage]||0)+1;});
+    const el=document.getElementById(`pl-${type}-stages`); if(!el) return;
+    el.innerHTML=Object.entries(byStage).map(([stage,cnt])=>`<div class="dash-row">
+      <div class="dash-row-info"><div class="dash-row-title">${stageL[stage]||stage}</div></div>
+      <div><span class="badge new" style="font-size:11px">${cnt} сдел${cnt===1?'ка':cnt<5?'ки':'ок'}</span></div>
+    </div>`).join('')||'<div style="padding:16px;text-align:center;color:var(--text3)">Нет данных</div>';
+  });
+  const pendingComm=[...dealsData.sale,...dealsData.rent].filter(d=>d.contract&&d.contract.commReceived===false).length;
+  const el=document.getElementById('pl-comm-pend'); if(el) el.textContent=pendingComm;
+}
+
+// ── ADMIN ─────────────────────────────────────────────────────────────────────
+const adminUsers=[
+  {name:'Абакумов Михаил',role:'admin',   deals:9, clients:11,active:true},
+  {name:'Алина Козлова',  role:'manager', deals:5, clients:6, active:true},
+  {name:'Наталья С.',     role:'manager', deals:3, clients:5, active:true},
+  {name:'Игорь В.',       role:'director',deals:0, clients:0, active:false},
+];
+const adminLogs=[
+  {time:'02.05 11:42',user:'Абакумов М.',action:'Создана сделка',        obj:'Вилла → Chen Wei'},
+  {time:'02.05 11:30',user:'Козлова А.', action:'Добавлен клиент',       obj:'Андрей Козлов'},
+  {time:'02.05 10:55',user:'Абакумов М.',action:'Заявка конвертирована', obj:'Emma Thompson → Клиент'},
+  {time:'02.05 10:20',user:'Наталья С.', action:'Сделка перемещена',     obj:'Mitchell: Переговоры'},
+  {time:'01.05 18:34',user:'Козлова А.', action:'Клиент отложен',        obj:'Дмитрий Орлов до 15.06'},
+  {time:'01.05 17:10',user:'Абакумов М.',action:'Договор сохранён',      obj:'Таунхаус → Müller'},
+  {time:'01.05 16:00',user:'Наталья С.', action:'Задача выполнена',      obj:'Показ виллы Anderson'},
+];
+function renderAdminDashboard() {
+  const up=document.getElementById('admin-users-preview');
+  if(up) up.innerHTML=adminUsers.map(u=>`<div class="dash-row"><div class="avatar" style="width:24px;height:24px;font-size:10px">${u.name.split(' ').map(w=>w[0]).join('').slice(0,2)}</div><div class="dash-row-info"><div class="dash-row-title" style="font-size:12px">${u.name}</div></div><span class="badge ${u.role==='admin'?'hot':u.role==='director'?'active':'new'}" style="font-size:10px">${u.role==='admin'?'⚡ Адм':u.role==='director'?'👑 Дир':'👤 Мен'}</span></div>`).join('');
+  const lp=document.getElementById('admin-logs-preview');
+  if(lp) lp.innerHTML=adminLogs.slice(0,4).map(l=>`<div class="dash-row"><div style="font-size:11px;color:var(--text3);font-family:var(--mono);width:80px;flex-shrink:0">${l.time}</div><div class="dash-row-info"><div class="dash-row-title" style="font-size:12px">${l.action}</div><div class="dash-row-sub">${l.obj}</div></div><div style="font-size:11px;color:var(--text2)">${l.user}</div></div>`).join('');
+}
+function renderAdminReports() {
+  const srcData=[{src:'🅰️ Авито',cnt:21,pct:45},{src:'📘 Facebook',cnt:14,pct:30},{src:'✈️ Telegram',cnt:12,pct:25},{src:'🌐 Сайт',cnt:0,pct:0}];
+  const manD=[{name:'Абакумов М.',deals:9,closed:2,conv:'22%'},{name:'Козлова А.',deals:5,closed:1,conv:'20%'},{name:'Наталья С.',deals:3,closed:0,conv:'0%'}];
+  const el=(id)=>document.getElementById(id);
+  if(el('rep-sources')) el('rep-sources').innerHTML=srcData.map(s=>`<div class="dash-row"><div class="dash-row-info"><div class="dash-row-title">${s.src}</div></div><div style="flex:1;margin:0 12px"><div style="height:6px;background:var(--bg3);border-radius:4px;overflow:hidden"><div style="height:100%;width:${s.pct}%;background:var(--blue);border-radius:4px"></div></div></div><div style="font-size:12px;font-weight:600;font-family:var(--mono);width:30px;text-align:right">${s.cnt}</div></div>`).join('');
+  if(el('rep-managers')) el('rep-managers').innerHTML=manD.map(m=>`<div class="dash-row"><div class="avatar" style="width:24px;height:24px;font-size:10px">${m.name.split(' ').map(w=>w[0]).join('').slice(0,2)}</div><div class="dash-row-info"><div class="dash-row-title">${m.name}</div><div class="dash-row-sub">${m.deals} сд · ${m.closed} закр</div></div><span class="badge new" style="font-size:11px">${m.conv}</span></div>`).join('');
+  ['sale','rent'].forEach(type=>{
+    const deals=dealsData[type];
+    const byStage={};
+    deals.forEach(d=>{if(d.stage!=='lost') byStage[d.stage]=(byStage[d.stage]||0)+1;});
+    const stL={new_lead:'Новая заявка',negotiation:'Переговоры',booking:'Бронирование',checkin:'Заезд',contract:'Договор',checkout:'Выезд',offer:'Предложение',viewing:'Просмотр',closed_won:'Закрыто'};
+    const repEl=el(`rep-${type}-stages`);
+    if(repEl) repEl.innerHTML=Object.entries(byStage).map(([s,c])=>`<div class="dash-row"><div class="dash-row-info"><div class="dash-row-title">${stL[s]||s}</div></div><span class="badge new" style="font-size:11px">${c}</span></div>`).join('')||'<div style="padding:16px;color:var(--text3);font-size:12px;text-align:center">Нет данных</div>';
+  });
+  if(el('rep-lost')) el('rep-lost').innerHTML='<div style="padding:16px;color:var(--text3);font-size:12px;text-align:center">Нет потерянных сделок</div>';
+  if(el('rep-commissions')) el('rep-commissions').innerHTML=[...dealsData.sale,...dealsData.rent].filter(d=>d.contract||d.rentContract).map(d=>`<div class="dash-row"><div class="dash-row-info"><div class="dash-row-title" style="font-size:12px">${d.t}</div></div><span class="badge new" style="font-size:10px">📄 Договор</span></div>`).join('')||'<div style="padding:16px;color:var(--text3);font-size:12px;text-align:center">Нет договоров</div>';
+}
+function renderAdminUsers() {
+  const roleL={admin:'⚡ Администратор',director:'👑 Директор',manager:'👤 Менеджер'};
+  const el=document.getElementById('admin-users-table'); if(!el) return;
+  el.innerHTML=adminUsers.map(u=>`<tr>
+    <td><div class="flex-cell"><div class="avatar">${u.name.split(' ').map(w=>w[0]).join('').slice(0,2)}</div><span style="font-weight:500">${u.name}</span></div></td>
+    <td><span class="badge ${u.role==='admin'?'hot':u.role==='director'?'active':'new'}">${roleL[u.role]}</span></td>
+    <td style="font-family:var(--mono)">${u.deals}</td>
+    <td style="font-family:var(--mono)">${u.clients}</td>
+    <td><span class="badge ${u.active?'active':'cold'}">${u.active?'● Активен':'○ Неактивен'}</span></td>
+    <td><button class="btn sm ghost" onclick="showToast('✏️ ${u.name}')">✏️</button></td>
+  </tr>`).join('');
+}
+function renderAdminLogs() {
+  const el=document.getElementById('admin-logs-table'); if(!el) return;
+  el.innerHTML=adminLogs.map(l=>`<tr>
+    <td style="font-size:11px;font-family:var(--mono);color:var(--text3)">${l.time}</td>
+    <td style="font-size:12px;color:var(--text2)">${l.user}</td>
+    <td style="font-weight:500">${l.action}</td>
+    <td style="font-size:12px;color:var(--text2)">${l.obj}</td>
+  </tr>`).join('');
+}
+
+// ── ACCORDION ─────────────────────────────────────────────────────────────────
+function toggleGroup(group) {
+  const body=document.getElementById('body-'+group);
+  const hdr=document.getElementById('grp-'+group);
+  if(!body||!hdr) return;
+  const c=body.classList.contains('collapsed');
+  body.classList.toggle('collapsed',!c);
+  hdr.classList.toggle('collapsed',!c);
+}
+
+// ── RENDER SIDEBAR ────────────────────────────────────────────────────────────
+function renderSidebar() {
+  const subLabels={
+    'nav-dashboard':   lang==='ru'?'Дашборд':lang==='th'?'แดชบอร์ด':'Dashboard',
+    'nav-tasks':       lang==='ru'?'Задачи':lang==='th'?'งาน':'Tasks',
+    'nav-reminders':   lang==='ru'?'Напоминания':lang==='th'?'การแจ้งเตือน':'Reminders',
+    'nav-agents':      lang==='ru'?'Агенты':lang==='th'?'ตัวแทน':'Agents',
+    'nav-leads-sale':  lang==='ru'?'Заявки':lang==='th'?'ลีด':'Leads',
+    'nav-clients-sale':lang==='ru'?'Клиенты':lang==='th'?'ลูกค้า':'Clients',
+    'nav-properties-sale':lang==='ru'?'Объекты':lang==='th'?'อสังหาฯ':'Properties',
+    'nav-deals-sale':  lang==='ru'?'Сделки':lang==='th'?'ดีล':'Deals',
+    'nav-leads-rent':  lang==='ru'?'Заявки':lang==='th'?'ลีด':'Leads',
+    'nav-clients-rent':lang==='ru'?'Клиенты':lang==='th'?'ลูกค้า':'Clients',
+    'nav-properties-rent':lang==='ru'?'Объекты':lang==='th'?'อสังหาฯ':'Properties',
+    'nav-deals-rent':  lang==='ru'?'Сделки':lang==='th'?'ดีล':'Deals',
+    'nav-settings':    lang==='ru'?'Настройки':lang==='th'?'ตั้งค่า':'Settings',
+    'nav-logout':      lang==='ru'?'Выйти':lang==='th'?'ออกจากระบบ':'Logout',
+    'lbl-conn':        lang==='ru'?'Подключения':lang==='th'?'การเชื่อมต่อ':'Connections',
+    'nav-admin-lbl':   lang==='ru'?'Панель админа':'Admin Panel',
+    'nav-reports-lbl': lang==='ru'?'Все отчёты':'All Reports',
+    'nav-users-lbl':   lang==='ru'?'Пользователи':'Users',
+    'nav-integr-lbl':  lang==='ru'?'Интеграции':'Integrations',
+    'nav-logs-lbl':    lang==='ru'?'Логи':'Activity Logs',
+    'nav-pipeline-lbl':'Pipeline',
+  };
+  Object.entries(subLabels).forEach(([id,txt])=>{const e=document.getElementById(id);if(e)e.textContent=txt;});
+  const sL=document.getElementById('lbl-sale'); if(sL) sL.textContent=lang==='ru'?'Продажа':lang==='th'?'ขาย':'Sale';
+  const rL=document.getElementById('lbl-rent'); if(rL) rL.textContent=lang==='ru'?'Аренда':lang==='th'?'เช่า':'Rent';
+}
+
+// ── ROLE SYSTEM ───────────────────────────────────────────────────────────────
+let currentRole='admin';
+function setRole(role) {
+  currentRole=role;
+  document.getElementById('role-menu').style.display='none';
+  const labels={manager:lang==='ru'?'Менеджер':'Manager',director:lang==='ru'?'Директор':'Director',admin:lang==='ru'?'Администратор':'Admin'};
+  document.getElementById('user-role-label').textContent=labels[role]||role;
+  const avatar=document.querySelector('.user-avatar');
+  if(avatar) avatar.style.background=role==='admin'?'linear-gradient(135deg,#F59E0B,#EF4444)':role==='director'?'linear-gradient(135deg,#10B981,#3B82F6)':'linear-gradient(135deg,var(--blue),#6366F1)';
+  const pipelineItem=document.getElementById('nav-pipeline-item');
+  const showPipeline=role==='director'||role==='admin';
+  pipelineItem.style.display=showPipeline?'flex':'none';
+  if(showPipeline){pipelineItem.style.background='rgba(52,211,153,0.08)';pipelineItem.style.borderRadius='var(--radius)';const pl=document.getElementById('nav-pipeline-lbl');if(pl)pl.style.color='var(--green)';}
+  const adminSection=document.getElementById('nav-admin-section');
+  if(adminSection) adminSection.style.display=role==='admin'?'block':'none';
+  const toasts={manager:'👤 Менеджер',director:'👑 Директор — Pipeline доступен',admin:'⚡ Администратор — полный доступ'};
+  showToast(toasts[role]);
+}
+function toggleRoleMenu() {
+  const m=document.getElementById('role-menu'); m.style.display=m.style.display==='none'?'block':'none';
+}
+document.addEventListener('click',e=>{
+  if(!e.target.closest('.user-chip')) {const m=document.getElementById('role-menu');if(m) m.style.display='none';}
+  if(e.target.classList.contains('modal-overlay')) e.target.classList.remove('open');
+});
+
+// ── NAVIGATION ────────────────────────────────────────────────────────────────
+function openModal(id){const el=document.getElementById(id);if(el)el.classList.add('open');}
+function closeModal(id){const el=document.getElementById(id);if(el)el.classList.remove('open');}
+function openClientModal(type){openModal('client-modal');setTimeout(()=>{const s=document.getElementById('f-c-deal-type');if(s){s.value=type;onDealTypeChange();}},50);}
+
+function goPage(name) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  const page=document.getElementById('page-'+name);
+  if(page) page.classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n=>{if(n.getAttribute('onclick')===`goPage('${name}')`) n.classList.add('active');});
+  if(['leads-sale','clients-sale','properties-sale','deals-sale'].includes(name)){document.getElementById('body-sale')?.classList.remove('collapsed');document.getElementById('grp-sale')?.classList.remove('collapsed');}
+  if(['leads-rent','clients-rent','properties-rent','deals-rent'].includes(name)){document.getElementById('body-rent')?.classList.remove('collapsed');document.getElementById('grp-rent')?.classList.remove('collapsed');}
+  if(name==='dashboard')      renderDashboard();
+  if(name==='clients-rent')   renderRentClients();
+  if(name==='clients-sale')   renderSaleClients();
+  if(name==='reminders')      renderReminders();
+  if(name==='leads')          renderLeads();
+  if(name==='leads-sale')     renderLeadsByType('sale','leads-sale-body','sub-leads-sale');
+  if(name==='leads-rent')     renderLeadsByType('rent','leads-rent-body','sub-leads-rent');
+  if(name==='properties-sale'||name==='properties-rent') renderProperties();
+  if(name==='deals-sale'||name==='deals-rent') renderKanban();
+  if(name==='tasks')          renderTasks();
+  if(name==='agents')         renderAgents();
+  if(name==='pipeline'){if(currentRole==='manager'){showToast('🔒 Только для директора и выше');return;}renderPipeline();}
+  if(['admin','admin-reports','admin-users','admin-integrations','admin-logs'].includes(name)){
+    if(currentRole!=='admin'){showToast('🔒 Только для администратора');return;}
+    if(name==='admin')          renderAdminDashboard();
+    if(name==='admin-reports')  renderAdminReports();
+    if(name==='admin-users')    renderAdminUsers();
+    if(name==='admin-logs')     renderAdminLogs();
+  }
+}
+
+// ── SETLANG ───────────────────────────────────────────────────────────────────
+function setLang(l) {
+  lang=l;
+  document.documentElement.lang=l;
+  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.textContent===l.toUpperCase()));
+  renderSidebar(); renderDashboard(); renderRentClients(); renderSaleClients();
+  renderLeads(); renderTasks(); renderReminders(); renderProperties(); renderKanban();
 }
 
 // ── DASHBOARD ─────────────────────────────────────────────────────────────────
 function renderDashboard() {
-  const noNew = lang==='ru'?'Нет новых':lang==='th'?'ไม่มีใหม่':'No new';
-  const contactLabel = lang==='ru'?'Связаться:':lang==='th'?'ติดต่อ:':'Contact:';
-  const newDays = (d) => lang==='ru'?`Статус «Новый» ${d} дн.`:lang==='th'?`ใหม่ ${d} วัน`:`New ${d} days`;
-
-  document.getElementById('dash-tasks').innerHTML = tasks.filter(tk=>!tk.done).slice(0,4).map(tk=>`
-    <div class="dash-row">
-      <span style="font-size:16px">${tk.overdue?'⚠️':tk.priority==='high'?'🔴':'🟡'}</span>
-      <div class="dash-row-info">
-        <div class="dash-row-title">${tk.title}</div>
-        <div class="dash-row-sub ${tk.overdue?'overdue':''}">${tk.due}${tk.client?' · '+tk.client:''}</div>
-      </div>
-    </div>`).join('');
-
-  document.getElementById('dash-reminders').innerHTML = reminders.slice(0,4).map(r=>`
-    <div class="dash-row" onclick="goPage('reminders')">
-      <span style="font-size:16px">🔔</span>
-      <div class="dash-row-info">
-        <div class="dash-row-title">${contactLabel} ${r.client}</div>
-        <div class="dash-row-sub overdue">${newDays(r.days)} · ${r.source}</div>
-      </div>
-      <div class="dash-row-right">
-        <span class="badge ${r.type==='rent'?'rent':'sale'}" style="font-size:10px">${t(r.type==='rent'?'type_rent':'type_sale')}</span>
-      </div>
-    </div>`).join('');
-
-  const rentLeadsHtml = leadsData.filter(l=>l.type==='rent').map(l=>`
-    <div class="dash-row" onclick="goPage('leads')">
-      <span style="font-size:16px">${srcIcon[l.source]||'📥'}</span>
-      <div class="dash-row-info">
-        <div class="dash-row-title">${l.name}</div>
-        <div class="dash-row-sub">${l.msg.slice(0,45)}${l.msg.length>45?'...':''}</div>
-      </div>
-      <div class="dash-row-right"><div class="dash-row-date">${l.date}</div></div>
-    </div>`).join('');
-  document.getElementById('dash-rent-leads').innerHTML = rentLeadsHtml ||
-    `<div class="empty-state" style="padding:20px"><div class="empty-icon">📥</div>${noNew}</div>`;
-
-  const saleLeadsHtml = leadsData.filter(l=>l.type==='sale').map(l=>`
-    <div class="dash-row" onclick="goPage('leads')">
-      <span style="font-size:16px">${srcIcon[l.source]||'📥'}</span>
-      <div class="dash-row-info">
-        <div class="dash-row-title">${l.name}</div>
-        <div class="dash-row-sub">${l.msg.slice(0,45)}${l.msg.length>45?'...':''}</div>
-      </div>
-      <div class="dash-row-right"><div class="dash-row-date">${l.date}</div></div>
-    </div>`).join('');
-  document.getElementById('dash-sale-leads').innerHTML = saleLeadsHtml ||
-    `<div class="empty-state" style="padding:20px"><div class="empty-icon">📥</div>${noNew}</div>`;
-
-  // Update dashboard card titles
-  const dashTitles = {
-    'dash-tasks':      ()=>t('deals_today'),
-    'dash-reminders':  ()=>t('deals_reminder'),
-    'dash-rent-leads': ()=>t('new_leads_rent'),
-    'dash-sale-leads': ()=>t('new_leads_sale'),
-  };
-  document.querySelectorAll('.dash-card-head span:first-child').forEach((el,i) => {
-    const keys = Object.values(dashTitles);
-    if (keys[i]) el.textContent = keys[i]();
-  });
-}
-
-// ── NAV ───────────────────────────────────────────────────────────────────────
-function goPage(name) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  const page = document.getElementById('page-' + name);
-  if (page) page.classList.add('active');
-  // Highlight matching nav item
-  document.querySelectorAll('.nav-item').forEach(n => {
-    if (n.getAttribute('onclick') === `goPage('${name}')`) n.classList.add('active');
-  });
-  // Auto-expand accordion group
-  if (['leads-sale','clients-sale','properties-sale','deals-sale'].includes(name)) {
-    document.getElementById('body-sale')?.classList.remove('collapsed');
-    document.getElementById('grp-sale')?.classList.remove('collapsed');
-  }
-  if (['leads-rent','clients-rent','properties-rent','deals-rent'].includes(name)) {
-    document.getElementById('body-rent')?.classList.remove('collapsed');
-    document.getElementById('grp-rent')?.classList.remove('collapsed');
-  }
-  // Render page content
-  if (name === 'dashboard')        renderDashboard();
-  if (name === 'clients-rent')     renderRentClients();
-  if (name === 'clients-sale')     renderSaleClients();
-  if (name === 'reminders')        renderReminders();
-  if (name === 'leads' || name === 'leads-sale') renderLeadsByType('sale', 'leads-sale-body', 'sub-leads-sale');
-  if (name === 'leads' || name === 'leads-rent') renderLeadsByType('rent', 'leads-rent-body', 'sub-leads-rent');
-  if (name === 'leads')            renderLeads();
-  if (name === 'properties-sale' || name === 'properties-rent') renderProperties();
-  if (name === 'agents') renderAgents();
-  if (name === 'deals-sale' || name === 'deals-rent') renderKanban();
-  if (name === 'pipeline') {
-    if (currentRole === 'manager') { showToast('🔒 Доступ только для директора и выше'); return; }
-    renderPipeline();
-  }
-  if (name === 'admin' || name === 'admin-reports' || name === 'admin-users' ||
-      name === 'admin-integrations' || name === 'admin-logs') {
-    if (currentRole !== 'admin') { showToast('🔒 Доступ только для администратора'); return; }
-    if (name === 'admin')              renderAdminDashboard();
-    if (name === 'admin-reports')      renderAdminReports();
-    if (name === 'admin-users')        renderAdminUsers();
-    if (name === 'admin-logs')         renderAdminLogs();
-  }
-}
-
-// ── MODAL ─────────────────────────────────────────────────────────────────────
-function openModal(id)  { document.getElementById(id).classList.add('open'); }
-function closeModal(id) { document.getElementById(id).classList.remove('open'); }
-document.addEventListener('click', e => { if (e.target.classList.contains('modal-overlay')) e.target.classList.remove('open'); });
-
-function saveClient() {
-  closeModal('client-modal');
-  showToast('✅ Клиент успешно добавлен!');
+  const noNew=lang==='ru'?'Нет новых':'No new';
+  const cL=lang==='ru'?'Связаться:':'Contact:';
+  const nD=(d)=>lang==='ru'?`Новый ${d} дн.`:`New ${d} days`;
+  const el=(id)=>document.getElementById(id);
+  if(el('dash-tasks')) el('dash-tasks').innerHTML=tasks.filter(tk=>!tk.done).slice(0,4).map(tk=>`<div class="dash-row"><span style="font-size:16px">${tk.overdue?'⚠️':tk.priority==='high'?'🔴':'🟡'}</span><div class="dash-row-info"><div class="dash-row-title">${tk.title}</div><div class="dash-row-sub ${tk.overdue?'overdue':''}">${tk.due}${tk.client?' · '+tk.client:''}</div></div></div>`).join('');
+  if(el('dash-reminders')) el('dash-reminders').innerHTML=reminders.slice(0,4).map(r=>`<div class="dash-row" onclick="goPage('reminders')"><span style="font-size:16px">🔔</span><div class="dash-row-info"><div class="dash-row-title">${cL} ${r.client}</div><div class="dash-row-sub overdue">${nD(r.days)} · ${r.source}</div></div><span class="badge ${r.type==='rent'?'rent':'sale'}" style="font-size:10px">${t(r.type==='rent'?'type_rent':'type_sale')}</span></div>`).join('');
+  const rentH=leadsData.filter(l=>l.type==='rent').map(l=>`<div class="dash-row" onclick="goPage('leads')"><span style="font-size:16px">${srcIcon[l.source]||'📥'}</span><div class="dash-row-info"><div class="dash-row-title">${l.name}</div><div class="dash-row-sub">${l.msg.slice(0,45)}</div></div><div class="dash-row-right"><div class="dash-row-date">${l.date}</div></div></div>`).join('');
+  if(el('dash-rent-leads')) el('dash-rent-leads').innerHTML=rentH||`<div class="empty-state" style="padding:20px"><div class="empty-icon">📥</div>${noNew}</div>`;
+  const saleH=leadsData.filter(l=>l.type==='sale').map(l=>`<div class="dash-row" onclick="goPage('leads')"><span style="font-size:16px">${srcIcon[l.source]||'📥'}</span><div class="dash-row-info"><div class="dash-row-title">${l.name}</div><div class="dash-row-sub">${l.msg.slice(0,45)}</div></div><div class="dash-row-right"><div class="dash-row-date">${l.date}</div></div></div>`).join('');
+  if(el('dash-sale-leads')) el('dash-sale-leads').innerHTML=saleH||`<div class="empty-state" style="padding:20px"><div class="empty-icon">📥</div>${noNew}</div>`;
 }
 
 // ── TOAST ─────────────────────────────────────────────────────────────────────
 let toastTimer;
 function showToast(msg) {
-  const t = document.querySelector('.toast');
-  if (t) t.remove();
+  const t=document.querySelector('.toast'); if(t) t.remove();
   clearTimeout(toastTimer);
-  const el = document.createElement('div');
-  el.className = 'toast';
-  el.textContent = msg;
+  const el=document.createElement('div'); el.className='toast'; el.textContent=msg;
   document.body.appendChild(el);
-  toastTimer = setTimeout(() => el.remove(), 3000);
+  toastTimer=setTimeout(()=>el.remove(),3500);
 }
 
-// ── DEAL TYPE / STATUS LOGIC ──────────────────────────────────────────────────
-const statusesByDeal = {
-  rent: [
-    { value: 'new',      label: '🆕 Новый' },
-    { value: 'booking',  label: '🔒 Бронь' },
-    { value: 'done',     label: '✅ Выполнено' },
-  ],
-  sale: [
-    { value: 'warm',     label: '🌡️ Тёплый' },
-    { value: 'advance',  label: '💵 Внесён аванс' },
-    { value: 'deposit',  label: '🏦 Депозит' },
-    { value: 'done',     label: '✅ Выполнено' },
-  ],
-};
-
+// ── CLIENT FORM LOGIC ─────────────────────────────────────────────────────────
 function onDealTypeChange() {
-  const type    = document.getElementById('f-c-deal-type').value;
-  const wrap    = document.getElementById('f-c-status-wrap');
-  const sel     = document.getElementById('f-c-status');
-  const booking = document.getElementById('f-c-booking-wrap');
-
-  if (!type) {
-    wrap.style.display    = 'none';
-    booking.style.display = 'none';
-    return;
-  }
-
-  // Заполняем статусы по типу
-  sel.innerHTML = statusesByDeal[type]
-    .map(s => `<option value="${s.value}">${s.label}</option>`)
-    .join('');
-
-  wrap.style.display    = 'block';
-  booking.style.display = 'none'; // сброс при смене типа
+  const type=document.getElementById('f-c-deal-type')?.value;
+  const wrap=document.getElementById('f-c-status-wrap');
+  const sel=document.getElementById('f-c-status');
+  const booking=document.getElementById('f-c-booking-wrap');
+  if(!type){if(wrap)wrap.style.display='none';if(booking)booking.style.display='none';return;}
+  const statuses={
+    rent:[{value:'new',label:'🆕 Новый'},{value:'booking',label:'🔒 Бронь'},{value:'done',label:'✅ Выполнено'}],
+    sale:[{value:'warm',label:'🌡️ Тёплый'},{value:'advance',label:'💵 Внесён аванс'},{value:'deposit',label:'🏦 Депозит'},{value:'done',label:'✅ Выполнено'}],
+  };
+  if(sel) sel.innerHTML=(statuses[type]||[]).map(s=>`<option value="${s.value}">${s.label}</option>`).join('');
+  if(wrap) wrap.style.display='block';
+  if(booking) booking.style.display='none';
 }
-
 function onStatusChange() {
-  const status  = document.getElementById('f-c-status').value;
-  const type    = document.getElementById('f-c-deal-type').value;
-  const booking = document.getElementById('f-c-booking-wrap');
-  // Показываем поля брони только для аренды со статусом "Бронь"
-  booking.style.display = (type === 'rent' && status === 'booking') ? 'block' : 'none';
+  const status=document.getElementById('f-c-status')?.value;
+  const type=document.getElementById('f-c-deal-type')?.value;
+  const booking=document.getElementById('f-c-booking-wrap');
+  if(booking) booking.style.display=(type==='rent'&&status==='booking')?'block':'none';
 }
-
-// ── BROADCAST ────────────────────────────────────────────────────────────────
-const channelNames = { whatsapp:'WhatsApp', telegram:'Telegram', email:'Email', sms:'SMS' };
-const channelColors = { whatsapp:'#25D366', telegram:'#29B6F6', email:'#4E8EF7', sms:'#A78BFA' };
-let selectedChannel = 'whatsapp';
-
-function selectChannel(el, ch) {
-  selectedChannel = ch;
-  document.querySelectorAll('.channel-btn').forEach(b => {
-    b.style.border = '1px solid var(--border)';
-    b.style.background = 'var(--bg3)';
-    b.querySelector('span:last-child').style.color = 'var(--text2)';
-  });
-  el.style.border = `2px solid ${channelColors[ch]}`;
-  el.style.background = `${channelColors[ch]}18`;
-  el.querySelector('span:last-child').style.color = channelColors[ch];
-}
-
-const templates = {
-  new_obj:    'Здравствуйте, {name}!\n\nСпешим сообщить о новом поступлении, которое соответствует вашим критериям поиска.\n\n🏠 Объект: [НАЗВАНИЕ]\n📍 Локация: [МЕСТО]\n💰 Цена: [ЦЕНА]\n\nГотовы организовать просмотр в удобное для вас время.\n\nС уважением, {manager}\nAzimut Realty',
-  price_drop: 'Добрый день, {name}!\n\nХотим сообщить о снижении цены на объект, который вас интересовал:\n\n📉 Новая цена: [ЦЕНА] (было [СТАРАЯ ЦЕНА])\n🏠 [НАЗВАНИЕ ОБЪЕКТА]\n\nСвяжитесь с нами — предложение ограничено!\n\n{manager} | Azimut Realty',
-  follow:     'Добрый день, {name}!\n\nКак продвигается поиск недвижимости? Мы подобрали несколько новых вариантов в рамках вашего бюджета {budget}.\n\nПишите — всегда рады помочь!\n\n{manager} | Azimut Realty',
-  promo:      'Здравствуйте, {name}!\n\nСпециально для вас — эксклюзивное предложение этого месяца:\n\n🎁 [ОПИСАНИЕ АКЦИИ]\n\nОбращайтесь — будем рады помочь с выбором!\n\n{manager} | Azimut Realty',
-};
-
-function applyTemplate() {
-  const key = document.getElementById('broadcast-template').value;
-  if (key && templates[key]) {
-    document.getElementById('broadcast-text').value = templates[key];
-  }
-}
-
-function previewBroadcast() {
-  const txt = document.getElementById('broadcast-text').value;
-  if (!txt.trim()) { showToast('⚠️ Введите текст сообщения'); return; }
-  const preview = txt
-    .replace('{name}', 'Александр Петров')
-    .replace('{budget}', '$250–400k')
-    .replace('{manager}', 'Михаил А.');
-  alert(`Предпросмотр для «Александр Петров»:\n\n${preview}`);
-}
-
-function sendBroadcast() {
-  const txt = document.getElementById('broadcast-text').value;
-  if (!txt.trim()) { showToast('⚠️ Введите текст сообщения'); return; }
-  closeModal('broadcast-modal');
-  const ch = channelNames[selectedChannel];
-  showToast(`📣 Рассылка через ${ch} запущена! Отправляем 247 сообщений...`);
-  setTimeout(() => showToast(`✅ Рассылка завершена: 247 сообщений через ${ch}`), 3000);
-}
-
-function quickSend(channel, name, contact) {
-  const ch = channelNames[channel];
-  const msg = `Отправляем сообщение клиенту ${name} (${contact}) через ${ch}`;
-  openModal('broadcast-modal');
-  selectChannel(document.querySelectorAll('.channel-btn')[['whatsapp','telegram','email','sms'].indexOf(channel)], channel);
-  document.getElementById('broadcast-text').value = `Здравствуйте, ${name}!\n\n`;
-  showToast(`📱 Быстрое сообщение → ${name} через ${ch}`);
-}
-
-// ── DEFERRED ──────────────────────────────────────────────────────────────────
-function openDeferred(name) {
-  document.getElementById('deferred-client-name').textContent = '👤 ' + name;
-  document.getElementById('deferred-date').value = '';
-  document.getElementById('deferred-reason').value = '';
-  document.getElementById('deferred-comment').value = '';
-  openModal('deferred-modal');
-}
-
-function saveDeferred() {
-  const date   = document.getElementById('deferred-date').value;
-  const reason = document.getElementById('deferred-reason').value;
-  if (!date) { showToast('⚠️ Укажите дату'); return; }
-  closeModal('deferred-modal');
-  showToast(`⏸️ Клиент отложен до ${date}${reason?' · '+reason:''}`);
-}
-
-// ── OPEN CLIENT MODAL WITH PRESET DEAL TYPE ───────────────────────────────────
-function openClientModal(dealType) {
-  openModal('client-modal');
-  setTimeout(() => {
-    const sel = document.getElementById('f-c-deal-type');
-    if (sel) { sel.value = dealType; onDealTypeChange(); }
-  }, 50);
-}
+function saveClient() { closeModal('client-modal'); showToast('✅ Клиент добавлен!'); }
 
 // ── INIT ──────────────────────────────────────────────────────────────────────
 renderSidebar();
-// Михаил — администратор по умолчанию
 setRole('admin');
+renderRentClients();
 renderSaleClients();
 renderProperties();
 renderKanban();
 renderTasks();
 renderLeads();
-renderLeadsByType('sale', 'leads-sale-body', 'sub-leads-sale');
-renderLeadsByType('rent', 'leads-rent-body', 'sub-leads-rent');
+renderLeadsByType('sale','leads-sale-body','sub-leads-sale');
+renderLeadsByType('rent','leads-rent-body','sub-leads-rent');
 renderReminders();
 renderDashboard();
 </script>
