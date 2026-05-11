@@ -51,6 +51,12 @@ body {
   flex-direction: column;
 }
 
+.role-opt {
+  padding: 8px 10px; border-radius: var(--radius); cursor: pointer;
+  font-size: 13px; color: var(--text2); transition: background 0.15s;
+}
+.role-opt:hover { background: var(--bg3); color: var(--text); }
+
 .nav-group-header {
   display: flex; align-items: center; justify-content: space-between;
   padding: 8px 10px; border-radius: var(--radius);
@@ -612,9 +618,18 @@ tbody tr:hover td { background: var(--bg3); }
     <div class="notif-btn" onclick="showToast('📬 2 новых лида с Авито')">
       🔔<div class="notif-dot"></div>
     </div>
-    <div class="user-chip">
+    <div class="user-chip" onclick="toggleRoleMenu()" style="position:relative">
       <div class="user-avatar">МА</div>
-      <div class="user-name">Михаил А.</div>
+      <div>
+        <div class="user-name">Михаил А.</div>
+        <div style="font-size:10px;color:var(--text3)" id="user-role-label">Менеджер</div>
+      </div>
+      <!-- Role switcher dropdown (demo only) -->
+      <div id="role-menu" style="display:none;position:absolute;top:42px;right:0;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:6px;min-width:160px;z-index:50;box-shadow:0 8px 24px rgba(0,0,0,0.4)">
+        <div style="font-size:10px;color:var(--text3);padding:4px 8px 6px;text-transform:uppercase;letter-spacing:0.06em">Роль (демо)</div>
+        <div class="role-opt" onclick="setRole('manager')">👤 Менеджер</div>
+        <div class="role-opt" onclick="setRole('director')">👑 Директор</div>
+      </div>
     </div>
   </div>
 </div>
@@ -695,6 +710,9 @@ tbody tr:hover td { background: var(--bg3); }
     </div>
 
     <div class="nav-section">
+      <div class="nav-item" id="nav-pipeline-item" style="display:none" onclick="goPage('pipeline')">
+        <span class="nav-ico">📈</span><span id="nav-pipeline-lbl">Pipeline</span>
+      </div>
       <div class="nav-item" onclick="showToast('⚙️ Настройки...')">
         <span class="nav-ico">⚙️</span><span id="nav-settings">Настройки</span>
       </div>
@@ -958,7 +976,7 @@ tbody tr:hover td { background: var(--bg3); }
       <div class="page-head">
         <div>
           <div class="page-title">💰 Сделки — Продажа</div>
-          <div class="page-subtitle" id="sub-deals-sale">Pipeline $2.4M</div>
+          <div class="page-subtitle" id="sub-deals-sale">Активных сделок: 4</div>
         </div>
         <div class="head-actions">
           <button class="btn primary" onclick="openNewDeal('sale')">+ Новая сделка</button>
@@ -1076,6 +1094,54 @@ tbody tr:hover td { background: var(--bg3); }
             </tr></thead>
             <tbody id="leads-body"></tbody>
           </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── PIPELINE (Director only) ──────────────────────────────────────── -->
+    <div id="page-pipeline" class="page">
+      <div class="page-head">
+        <div>
+          <div class="page-title">📈 Pipeline</div>
+          <div class="page-subtitle">Финансовая сводка · только для директора</div>
+        </div>
+      </div>
+      <div class="stats-row">
+        <div class="stat-card green">
+          <div class="stat-icon green">💰</div>
+          <div class="stat-label">Pipeline — Продажа</div>
+          <div class="stat-value green" id="pl-sale">$2.4M</div>
+          <div class="stat-sub">в активных сделках</div>
+        </div>
+        <div class="stat-card blue">
+          <div class="stat-icon blue">🔑</div>
+          <div class="stat-label">Pipeline — Аренда</div>
+          <div class="stat-value blue" id="pl-rent">฿138k/мес</div>
+          <div class="stat-sub">в активных сделках</div>
+        </div>
+        <div class="stat-card amber">
+          <div class="stat-icon amber">⏳</div>
+          <div class="stat-label">Комиссий ожидается</div>
+          <div class="stat-value amber" id="pl-comm-pend">2</div>
+          <div class="stat-sub">договор без оплаты</div>
+        </div>
+        <div class="stat-card green">
+          <div class="stat-icon green">🏆</div>
+          <div class="stat-label">Закрыто в этом месяце</div>
+          <div class="stat-value green" id="pl-closed">$220k</div>
+          <div class="stat-sub">2 сделки</div>
+        </div>
+      </div>
+      <div class="page-body">
+        <div class="dash-grid">
+          <div class="dash-card">
+            <div class="dash-card-head"><span>💰 Сделки Продажа — по стадиям</span></div>
+            <div class="dash-card-body" id="pl-sale-stages"></div>
+          </div>
+          <div class="dash-card">
+            <div class="dash-card-head"><span>🔑 Сделки Аренда — по стадиям</span></div>
+            <div class="dash-card-body" id="pl-rent-stages"></div>
+          </div>
         </div>
       </div>
     </div>
@@ -1356,11 +1422,6 @@ tbody tr:hover td { background: var(--bg3); }
   </div>
 </div>
 
-      <button class="btn" onclick="closeModal('deferred-modal')">Отмена</button>
-      <button class="btn primary" onclick="saveDeferred()">⏸️ Отложить</button>
-    </div>
-  </div>
-</div>
 
 <!-- ── CONTRACT MODAL ────────────────────────────────────────────────────── -->
 <div class="modal-overlay" id="contract-modal">
@@ -1735,7 +1796,74 @@ function renderSaleClients() {
   document.getElementById('sale-clients-body').innerHTML = data.map(c=>clientRow(c,saleStatusMap,saleStatusBadge)).join('');
 }
 
-// ── ACCORDION ─────────────────────────────────────────────────────────────────
+// ── ROLE SYSTEM ───────────────────────────────────────────────────────────────
+let currentRole = 'manager'; // 'manager' | 'director'
+
+function setRole(role) {
+  currentRole = role;
+  currentRole = role;
+  document.getElementById('role-menu').style.display = 'none';
+  document.getElementById('user-role-label').textContent =
+    role === 'director' ? (lang==='ru'?'Директор':lang==='th'?'ผู้อำนวยการ':'Director')
+                       : (lang==='ru'?'Менеджер':lang==='th'?'ผู้จัดการ':'Manager');
+  // Show/hide Pipeline nav item
+  const pipelineItem = document.getElementById('nav-pipeline-item');
+  pipelineItem.style.display = role === 'director' ? 'flex' : 'none';
+  // If director — highlight with subtle indicator
+  if (role === 'director') {
+    pipelineItem.style.background = 'rgba(52,211,153,0.08)';
+    pipelineItem.style.borderRadius = 'var(--radius)';
+    pipelineItem.querySelector('span:last-child').style.color = 'var(--green)';
+  }
+  showToast(role === 'director'
+    ? '👑 Режим: Директор — Pipeline доступен'
+    : '👤 Режим: Менеджер — Pipeline скрыт');
+}
+
+function toggleRoleMenu() {
+  const m = document.getElementById('role-menu');
+  m.style.display = m.style.display === 'none' ? 'block' : 'none';
+}
+
+// Close role menu on outside click
+document.addEventListener('click', e => {
+  const chip = e.target.closest('.user-chip');
+  if (!chip) document.getElementById('role-menu').style.display = 'none';
+});
+
+// ── RENDER PIPELINE ───────────────────────────────────────────────────────────
+function renderPipeline() {
+  const stageLabels = {
+    new_lead:'Новая заявка', negotiation:'Переговоры', offer:'Предложение',
+    viewing:'Просмотр', contract:'Договор', closed_won:'Закрыто'
+  };
+
+  ['sale','rent'].forEach(type => {
+    const deals = dealsData[type].filter(d => d.stage !== 'lost');
+    const byStage = {};
+    deals.forEach(d => { byStage[d.stage] = (byStage[d.stage]||0) + 1; });
+    const el = document.getElementById(`pl-${type}-stages`);
+    if (!el) return;
+    el.innerHTML = Object.entries(byStage).map(([stage, cnt]) => `
+      <div class="dash-row">
+        <div class="dash-row-info">
+          <div class="dash-row-title">${stageLabels[stage]||stage}</div>
+        </div>
+        <div class="dash-row-right">
+          <div class="dash-row-val" style="font-size:13px">${cnt} сдел${cnt===1?'ка':cnt<5?'ки':'ок'}</div>
+        </div>
+      </div>`).join('') ||
+      '<div style="padding:16px;text-align:center;color:var(--text3);font-size:13px">Нет активных сделок</div>';
+  });
+
+  // Pending commissions
+  const pendingComm = [...dealsData.sale, ...dealsData.rent]
+    .filter(d => d.contract && d.contract.commReceived === false).length;
+  const elComm = document.getElementById('pl-comm-pend');
+  if (elComm) elComm.textContent = pendingComm;
+}
+
+
 function toggleGroup(group) {
   const body = document.getElementById('body-' + group);
   const hdr  = document.getElementById('grp-' + group);
@@ -2309,6 +2437,10 @@ function goPage(name) {
   if (name === 'leads')            renderLeads();
   if (name === 'properties-sale' || name === 'properties-rent') renderProperties();
   if (name === 'deals-sale' || name === 'deals-rent') renderKanban();
+  if (name === 'pipeline') {
+    if (currentRole !== 'director') { showToast('🔒 Доступ только для директора'); return; }
+    renderPipeline();
+  }
 }
 
 // ── MODAL ─────────────────────────────────────────────────────────────────────
